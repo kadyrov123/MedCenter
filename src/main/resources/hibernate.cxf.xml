@@ -1,0 +1,34 @@
+<?xml version='1.0' encoding='utf-8'?>
+<!DOCTYPE hibernate-configuration PUBLIC
+    "-//Hibernate/Hibernate Configuration DTD//EN"
+    "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<hibernate-configuration>
+  <session-factory>
+    <property name="connection.url">jdbc:postgresql://localhost:5432/medcenter</property>
+    <property name="connection.driver_class">org.postgresql.Driver</property>
+    <mapping class="com.example.medcenter.entity.DiseaseEntity"/>
+      <mapping class="com.example.medcenter.entity.DoctorsFeaturesEntity"/>
+      <mapping class="com.example.medcenter.entity.IntervalEntity"/>
+      <mapping class="com.example.medcenter.entity.QueueEntity"/>
+      <mapping class="com.example.medcenter.entity.UsersEntity"/>
+      <mapping class="entity.DiseaseEntity"/>
+      <mapping class="entity.DoctorsFeaturesEntity"/>
+      <mapping class="entity.DoctorsFeaturesTypesEntity"/>
+      <mapping class="entity.DoctorsTypeEntity"/>
+      <mapping class="entity.IntervalEntity"/>
+      <mapping class="entity.QueueEntity"/>
+      <mapping class="entity.RoleEntity"/>
+      <mapping class="entity.UsersEntity"/>
+    <mapping class="com.example.medcenter.entity.DoctorsFeaturesTypesEntity"/>
+    <mapping class="com.example.medcenter.entity.DoctorsTypeEntity"/>
+    <mapping class="com.example.medcenter.entity.RoleEntity"/>
+    <mapping class="com.example.medcenter.entity.IntervalEntity22"/>
+    <mapping class="com.example.medcenter.entity.QueueEntity22"/>
+    <mapping class="com.example.medcenter.entity.UsersEntity22"/>
+    <!-- <property name="connection.username"/> -->
+    <!-- <property name="connection.password"/> -->
+
+    <!-- DB schema will be updated if needed -->
+    <!-- <property name="hibernate.hbm2ddl.auto">update</property> -->
+  </session-factory>
+</hibernate-configuration>

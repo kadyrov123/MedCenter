@@ -1,0 +1,22 @@
+package com.example.medcenter.service;
+
+import com.example.medcenter.dto.DoctorDTO;
+import com.example.medcenter.dto.TimeDTO;
+import com.example.medcenter.dto.TimetableDTO;
+import com.example.medcenter.entity.UsersEntity;
+
+import java.util.Date;
+import java.util.List;
+
+public interface DoctorsService {
+    List<DoctorDTO> getDoctors();
+    DoctorDTO getDoctorById(long id);
+    DoctorDTO getDoctorByType(String type);
+
+    void saveDoctor(DoctorDTO doctorDTO);
+    void updateDoctor(DoctorDTO doctorDTO);
+
+    List<TimetableDTO> getTimetableByDoctorId(long doctorId);
+    List<TimeDTO> getTimetableByDoctorIdAndDate(long doctorId, Date date);
+
+}
