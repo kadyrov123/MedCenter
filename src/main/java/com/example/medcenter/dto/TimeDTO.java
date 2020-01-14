@@ -6,6 +6,8 @@ public class TimeDTO {
     int order;
     String time;
     boolean isFree;
+    int status;
+
 
     public TimeDTO(){}
 
@@ -32,5 +34,13 @@ public class TimeDTO {
 
     public void setFree(boolean free) {
         isFree = free;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 }

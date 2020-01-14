@@ -79,6 +79,7 @@ public class DoctorsServiceImpl implements DoctorsService {
             timeDTO.setOrder(order);
             timeDTO.setTime(possibleTimes.get(i)+" - "+possibleTimes.get(i+1));
             timeDTO.setFree(true);
+            timeDTO.setStatus(1);
             order++;
             timeList.add(timeDTO);
         }
@@ -88,7 +89,10 @@ public class DoctorsServiceImpl implements DoctorsService {
             if (queueEntity.getIntervalId() == doctorsFeatures.getIntervalId()){
                 for(TimeDTO timeDTO : timeList){
                     if(queueEntity.getOrder() == timeDTO.getOrder()){
-                        timeDTO.setFree(false);
+                        timeDTO.setStatus(queueEntity.getStatus());
+                        if(queueEntity.getStatus() <= 2) {
+                            timeDTO.setFree(false);
+                        }
                     }
                 }
             }

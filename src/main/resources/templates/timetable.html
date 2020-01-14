@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en"   xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:sec="http://www.thymleaf.org/thymleaf-extras-springsecurity5" xmlns:th="http://www.w3.org/1999/xhtml">
+<head>
+<title>Table V04</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js}"></script>
+<!--===============================================================================================-->
+<link rel="icon" type="image/png" th:href="@{/images/icons/favicon.ico}"/>
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" th:href="@{/vendor/animate/animate.css}">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" th:href="@{/vendor/select2/select2.min.css}">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" th:href="@{/vendor/perfect-scrollbar/perfect-scrollbar.css}">
+<!--===============================================================================================-->
+<link rel="stylesheet" type="text/css" th:href="@{/css/util.css}">
+<link rel="stylesheet" type="text/css" th:href="@{/css/main.css}">
+<!--===============================================================================================-->
+
+</head>
+<body>
+
+<div class="limiter">
+<div class="container-table100">
+<div class="wrap-table100">
+
+
+
+<div class="table100 ver3 m-b-110">
+<div class="table100-head">
+    <table >
+        <thead id="timetableThead">
+<!--            <tr class="row100 head" >-->
+<!--                <th class="cell100 cell100Header" >#</th>-->
+<!--                <th class="cell100 cell100Header" th:text="${timetable[0].date}">07/01/20</th>-->
+<!--                <th class="cell100 cell100Header" th:text="${timetable[1].date}">08/01/20</th>-->
+<!--                <th class="cell100 cell100Header" th:text="${timetable[2].date}">09/01/20</th>-->
+<!--                <th class="cell100 cell100Header" th:text="${timetable[3].date}">10/01/20</th>-->
+<!--                <th class="cell100 cell100Header" th:text="${timetable[4].date}">11/01/20</th>-->
+<!--                <th class="cell100 cell100Header" th:text="${timetable[5].date}">12/01/20</th>-->
+<!--            </tr>-->
+        </thead>
+    </table>
+</div>
+
+<div class="table100-body js-pscroll">
+<table>
+    <tbody id="timetableTbody" >
+<!--        <tr class="row100 body" th:each="list, timeState : ${time.timeList}">-->
+<!--            <td class="cell100 cell100ID">1</td>-->
+<!--&lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${list.time}">9:00 - 10:00</label></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${timetableState.index}">9:00 - 10:00</label></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${timeState.index}">9:00 - 10:00</label></td>&ndash;&gt;-->
+<!--            <td class="cell100 "><label class="timeLabel" th:each="list, timeState : ${time.timeList}" th:text="${list.time}">9:00 - 10:00</label></td>-->
+<!--            <td class="cell100 "><label class="timeLabel" th:each="list, timeState : ${time.timeList}" th:text="${timeState.index}">9:00 - 10:00</label></td>-->
+<!--            <td class="cell100 "><label class="timeLabel" th:each="list, timeState : ${time.timeList}" th:text="${timeState.count}">9:00 - 10:00</label></td>-->
+<!--&lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${time[iter].time}">9:00 - 10:00</label></td>&ndash;&gt;-->
+<!--&lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${time[iter].time}">9:00 - 10:00</label></td>&ndash;&gt;-->
+<!--        </tr>-->
+
+<!--        <tr class="row100 body">-->
+<!--            <td class="cell100 cell100ID">2</td>-->
+<!--            <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--            <td class="cell100 "><label class="timeLabel unableTimeLabel">9:00 - 10:00</label></td>-->
+<!--            <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--            <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--            <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--            <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--        </tr>-->
+
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">3</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">4</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">5</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">6</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">7</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">8</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">9</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">10</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">11</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">12</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">13</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">14</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">15</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">16</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">17</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+<!--<tr class="row100 body">-->
+<!--<td class="cell100 cell100ID">18</td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--<td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--</tr>-->
+
+
+</tbody>
+</table>
+</div>
+<!-- <button id="submitTime">Submit</button> -->
+</div>
+<button id="submitTime">Submit</button>
+
+
+
+</div>
+</div>
+</div>
+
+<script th:inline="javascript">
+
+    var timetable = [[${timetable}]];
+    // alert(username.timeList);
+    console.log(timetable[0].timeList[0].time);
+    console.log(timetable[0].timeList.length);
+    console.log(timetable[0].date);
+
+    window.onload = fillTimetable();
+    function fillTimetable() {
+
+        // var table = document.getElementById("timetable");
+        var theadTR = document.createElement("tr");
+        theadTR.setAttribute("class","row100 head");
+        document.getElementById("timetableThead").appendChild(theadTR);
+        for(var i=0 ; i<7 ; i++){
+            if(i==0){
+                var th = document.createElement("th");
+                th.setAttribute("class", "cell100 cell100Header indexColumn");
+                th.appendChild(document.createTextNode("#"));
+            }
+            else {
+                var th = document.createElement("th");
+                th.setAttribute("class", "cell100 cell100Header dateCell");
+                th.appendChild(document.createTextNode(timetable[0].date));
+            }
+            theadTR.appendChild(th);
+        }
+        // var tableHeader = document.getElementById("timetableThead");
+        // tableHeader.appendChild(theadTR);
+
+        var index=1;
+        var tbody = document.getElementById("timetableTbody");
+        for(var j=0 ; j<timetable[0].timeList.length ; j++){
+            var tr = document.createElement("tr");
+            tr.setAttribute("class","row100 body");
+            for(var i=0 ; i<7 ; i++) {
+                if(i==0){
+                    var td = document.createElement("td");
+                    td.setAttribute("class" , "cell100 indexColumn");
+                    td.appendChild(document.createTextNode(j+1));
+                }
+                else{
+                    var td = document.createElement("td");
+                    var label = document.createElement("label");
+                    label.setAttribute("class" , "timeLabel");
+                    td.setAttribute("class" , "cell100 timeCell");
+                    label.appendChild(document.createTextNode(timetable[i-1].timeList[j].time));
+                    td.appendChild(label);
+                }
+                tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+        }
+    }
+
+</script>
+
+<script type="text/javascript">
+    $( document ).ready(function() {
+        $(".timeLabel").click( function(){
+            $(".timeLabel").removeClass("selectedTimeLabel");
+            $(this).addClass("selectedTimeLabel");
+        })
+
+        $(".unableTimeLabel").click( function(){
+// $(".timeLabel").removeClass("selectedTimeLabel");
+// $(this).addClass("selectedTimeLabel");
+            alert("Obed");
+        })
+
+
+    })
+</script>
+
+<style type="text/css">
+    table th{
+        /*padding: 10px;*/
+        text-align: center;
+
+    }
+    .table100-body{
+        max-height: 300px;
+    }
+
+
+
+    .cell100{
+        width: 10% !important;
+        padding: 0px 0px !important;
+        text-align: center;
+    }
+
+    .indexColumn{
+        width: 3% !important;
+    }
+
+    .timeLabel:hover{
+        background-color: #00ad5f;
+        color: white;
+        padding :10px;
+        border-radius: 20px;
+
+    }
+    .timeLabel{
+        padding :10px;
+        border-radius: 20px;
+        display: inline-block;
+        text-align: center;
+        /*margin-left: 25%;*/
+    }
+    .cell100Header{
+        padding: 10px !important;
+        text-align: center;
+    }
+    .table100-body td{
+        padding-top: 0px;
+        padding-bottom: 0px;
+    }
+    .selectedTimeLabel{
+        background-color: #00ad5f;
+        color: white;
+        padding :10px;
+        border-radius: 20px;
+    }
+    .cell100ID{
+        text-align: center;
+    }
+    #submitTime{
+        float: right;
+        padding: 10px 50px;
+        background-color: #00ad5f;
+        color: white;
+        margin-right: 10px;
+        border-radius: 10px;
+    }
+    .m-b-110{
+        margin-bottom: 10px;
+    }
+    .wrap-table100{
+        width: 90%;
+    }
+    .unableTimeLabel{
+        background-color: orange;
+        color: white;
+    }
+    .unableTimeLabel:hover{
+        background-color: orange;
+        color: white;
+    }
+
+    .timeCell{
+        margin-left: -20px !important;
+    }
+
+</style>
+
+
+
+
+<!--===============================================================================================-->
+<script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+<!--===============================================================================================-->
+<script th:src="@{/vendor/bootstrap/js/popper.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<!--===============================================================================================-->
+<script th:src="@{/vendor/select2/select2.min.js}"></script>
+<!--===============================================================================================-->
+<script th:src="@{/vendor/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+<script>
+$('.js-pscroll').each(function(){
+var ps = new PerfectScrollbar(this);
+
+$(window).on('resize', function(){
+ps.update();
+})
+});
+
+
+</script>
+<!--===============================================================================================-->
+<script th:src="@{/js/main.js}"></script>
+
+</body>
+</html>
