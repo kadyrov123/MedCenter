@@ -27,21 +27,21 @@ public class MainController {
     DoctorsFeaturesRepository doctorsFeaturesRepository;
     @Autowired
     DoctorsService doctorsService;
-//
-//    @GetMapping("/")
-//    public List<IntervalEntity> g(){
-//        return intervalRepository.findAll();
-//
-//    }
-//
-//    @GetMapping("/users")
-//    public List<UsersEntity> g2(){
-//        return usersRepository.findAll();
-//    }
-//    @GetMapping("/doctors")
-//    public List<DoctorsFeaturesEntity> g3(){
-//        return doctorsFeaturesRepository.findAll();
-//    }
+
+    @GetMapping("/")
+    public List<IntervalEntity> g(){
+        return intervalRepository.findAll();
+
+    }
+
+    @GetMapping("/users")
+    public List<UsersEntity> g2(){
+        return usersRepository.findAll();
+    }
+    @GetMapping("/doctors")
+    public List<DoctorsFeaturesEntity> g3(){
+        return doctorsFeaturesRepository.findAll();
+    }
     @GetMapping("/timeList")
     public List<TimeDTO> g4(){
         Date date = new Date();

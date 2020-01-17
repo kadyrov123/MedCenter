@@ -10,20 +10,51 @@ import java.util.Objects;
 @Entity
 @Table(name = "users", schema = "public", catalog = "medcenter")
 public class UsersEntity {
-    private long id;
-    private String name;
-    private String surname;
-    private String username;
-    private String password;
-    private String email;
-    private long roleId;
-    private Collection<DiseaseEntity> diseasesById;
-    private Collection<DoctorsFeaturesEntity> doctorsFeaturesById;
-    private Collection<QueueEntity> queuesById;
-    private RoleEntity roleById;
 
     @Id
     @Column(name = "id")
+    private long id;
+
+    @Basic
+    @Column(name = "name")
+    private String name;
+
+    @Basic
+    @Column(name = "surname")
+    private String surname;
+    @Basic
+    @Column(name = "username")
+    private String username;
+
+    @Basic
+    @Column(name = "password")
+    private String password;
+
+    @Basic
+    @Column(name = "email")
+    private String email;
+
+    @Basic
+    @Column(name = "role_id")
+    private long roleId;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usersByPatientId")
+    private Collection<DiseaseEntity> diseasesById;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usersByDoctorId")
+    private Collection<DoctorsFeaturesEntity> doctorsFeaturesById;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "usersByDoctorId")
+    private Collection<QueueEntity> queuesById;
+
+    @OneToOne
+    @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
+    private RoleEntity roleById;
+
+
     public long getId() {
         return id;
     }
@@ -32,8 +63,7 @@ public class UsersEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "name")
+
     public String getName() {
         return name;
     }
@@ -42,8 +72,7 @@ public class UsersEntity {
         this.name = name;
     }
 
-    @Basic
-    @Column(name = "surname")
+
     public String getSurname() {
         return surname;
     }
@@ -52,8 +81,7 @@ public class UsersEntity {
         this.surname = surname;
     }
 
-    @Basic
-    @Column(name = "username")
+
     public String getUsername() {
         return username;
     }
@@ -62,8 +90,6 @@ public class UsersEntity {
         this.username = username;
     }
 
-    @Basic
-    @Column(name = "password")
     public String getPassword() {
         return password;
     }
@@ -72,8 +98,7 @@ public class UsersEntity {
         this.password = password;
     }
 
-    @Basic
-    @Column(name = "email")
+
     public String getEmail() {
         return email;
     }
@@ -82,8 +107,6 @@ public class UsersEntity {
         this.email = email;
     }
 
-    @Basic
-    @Column(name = "role_id")
     public long getRoleId() {
         return roleId;
     }
@@ -111,8 +134,7 @@ public class UsersEntity {
         return Objects.hash(id, name, surname, username, password, email, roleId);
     }
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "usersByPatientId")
+
     public Collection<DiseaseEntity> getDiseasesById() {
         return diseasesById;
     }
@@ -121,8 +143,7 @@ public class UsersEntity {
         this.diseasesById = diseasesById;
     }
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "usersByDoctorId")
+
     public Collection<DoctorsFeaturesEntity> getDoctorsFeaturesById() {
         return doctorsFeaturesById;
     }
@@ -131,8 +152,7 @@ public class UsersEntity {
         this.doctorsFeaturesById = doctorsFeaturesById;
     }
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "usersByDoctorId")
+
     public Collection<QueueEntity> getQueuesById() {
         return queuesById;
     }
@@ -141,8 +161,7 @@ public class UsersEntity {
         this.queuesById = queuesById;
     }
 
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
+
     public RoleEntity getRoleById() {
         return roleById;
     }

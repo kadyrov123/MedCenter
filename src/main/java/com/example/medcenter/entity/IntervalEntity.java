@@ -7,12 +7,17 @@ import java.util.Objects;
 @Entity
 @Table(name = "interval", schema = "public", catalog = "medcenter")
 public class IntervalEntity {
-    private int id;
-    private Integer interval;
-//    private Collection<DoctorsFeaturesEntity> doctorsFeaturesById;
 
     @Id
     @Column(name = "id")
+    private int id;
+
+    @Basic
+    @Column(name = "interval")
+    private Integer interval;
+//    private Collection<DoctorsFeaturesEntity> doctorsFeaturesById;
+
+
     public int getId() {
         return id;
     }
@@ -21,8 +26,6 @@ public class IntervalEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "interval")
     public Integer getInterval() {
         return interval;
     }

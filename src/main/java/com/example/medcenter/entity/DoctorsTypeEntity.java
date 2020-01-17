@@ -6,19 +6,34 @@ import java.util.*;
 @Entity
 @Table(name = "doctors_type", schema = "public", catalog = "medcenter")
 public class DoctorsTypeEntity {
+    @Id
+    @Column(name = "id")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
+
+    @Basic
+    @Column(name = "type")
     private String type;
 //    private Collection<DoctorsFeaturesTypesEntity> doctorsFeaturesTypesById;
 
 
 
-    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
-    private List<DoctorsFeaturesEntity> doctorsFeaturesEntities;
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            },
+            mappedBy = "doctorsTypeEntities")
+    private Set<DoctorsFeaturesEntity> doctorsFeaturesEntities = new HashSet<>();
 
+    public Set<DoctorsFeaturesEntity> getDoctorsFeaturesEntities() {
+        return doctorsFeaturesEntities;
+    }
 
+    public void setDoctorsFeaturesEntities(Set<DoctorsFeaturesEntity> doctorsFeaturesEntities) {
+        this.doctorsFeaturesEntities = doctorsFeaturesEntities;
+    }
 
-    @Id
-    @Column(name = "id")
     public int getId() {
         return id;
     }
@@ -27,8 +42,6 @@ public class DoctorsTypeEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "type")
     public String getType() {
         return type;
     }

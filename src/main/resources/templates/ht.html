@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+<!--    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>-->
+    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+<!--    <script src="https://ajax.aspnetcdn.com/ajax/jQuery/jquery-3.4.1.min.js"></script>-->
+
+    <script>
+
+        $(document).ready(
+            function($) {
+
+                $("#btn-save").on("click",function() {
+
+                    var data = {};
+                    var time  = "8:00 - 9:00";
+
+                    // $("#btn-save").prop("disabled", true);
+
+                    $.ajax({
+                        type: "POST",
+                        contentType: "application/json",
+                        url: "/path-to/hosting/save",
+                        // data: JSON.stringify(data),
+                        data: time,
+                        dataType: 'json',
+                        // timeout: 600000,
+                        success: function (data) {
+                            $("#btn-update").prop("disabled", false);
+                            alert("success");
+                            //...
+                        }
+                        // error: function (e) {
+                        //     $("#btn-save").prop("disabled", false);
+                        //     alert("error ");
+                        //     //...
+                        // }
+                    });
+
+
+                });
+
+            });
+
+    </script>
+
+</head>
+<body>
+
+<!--<h1> sdfsdfsdf </h1>-->
+
+<button id="btn-save">button</button>
+
+</body>
+</html>

@@ -6,12 +6,17 @@ import java.util.Objects;
 @Entity
 @Table(name = "role", schema = "public", catalog = "medcenter")
 public class RoleEntity {
-    private long id;
-    private String role;
-//    private UsersEntity usersById;
 
     @Id
     @Column(name = "id")
+    private long id;
+
+    @Basic
+    @Column(name = "role")
+    private String role;
+//    private UsersEntity usersById;
+
+
     public long getId() {
         return id;
     }
@@ -20,8 +25,6 @@ public class RoleEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "role")
     public String getRole() {
         return role;
     }
