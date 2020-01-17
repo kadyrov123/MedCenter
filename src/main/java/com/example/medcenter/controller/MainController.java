@@ -10,13 +10,15 @@ import com.example.medcenter.repoitory.IntervalRepository;
 import com.example.medcenter.repoitory.UsersRepository;
 import com.example.medcenter.service.DoctorsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Date;
 import java.util.List;
 
-@RestController
+@Controller
 public class MainController {
 
     @Autowired
@@ -28,30 +30,30 @@ public class MainController {
     @Autowired
     DoctorsService doctorsService;
 
-    @GetMapping("/")
-    public List<IntervalEntity> g(){
-        return intervalRepository.findAll();
-
+    @RequestMapping("/")
+    public String home(){
+        return "index";
     }
 
-    @GetMapping("/users")
-    public List<UsersEntity> g2(){
-        return usersRepository.findAll();
+    @RequestMapping("/doctors")
+    public String  g2(){
+        return "02_02_doctor";
     }
-    @GetMapping("/doctors")
-    public List<DoctorsFeaturesEntity> g3(){
-        return doctorsFeaturesRepository.findAll();
-    }
-    @GetMapping("/timeList")
-    public List<TimeDTO> g4(){
-        Date date = new Date();
-        return doctorsService.getTimetableByDoctorIdAndDate((long)2 , date);
-    }
-    @GetMapping("/timetable")
-    public List<TimetableDTO> g6(){
-        Date date = new Date();
-        return doctorsService.getTimetableByDoctorId((long)2);
-    }
+
+//    @RequestMapping("/doctors")
+//    public List<DoctorsFeaturesEntity> g3(){
+//        return doctorsFeaturesRepository.findAll();
+//    }
+//    @RequestMapping("/timeList")
+//    public List<TimeDTO> g4(){
+//        Date date = new Date();
+//        return doctorsService.getTimetableByDoctorIdAndDate((long)2 , date);
+//    }
+//    @RequestMapping("/timetable")
+//    public List<TimetableDTO> g6(){
+//        Date date = new Date();
+//        return doctorsService.getTimetableByDoctorId((long)2);
+//    }
 //
 //    @GetMapping("/date")
 //    public List<TimetableDTO> g5(){

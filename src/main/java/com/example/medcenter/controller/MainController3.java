@@ -40,10 +40,10 @@ public class MainController3 {
         return "ht";
     }
 
-    @RequestMapping("/doctors")
-    public List<DoctorsFeaturesEntity> g3(){
-        return doctorsFeaturesRepository.findAll();
-    }
+//    @RequestMapping("/doctors")
+//    public List<DoctorsFeaturesEntity> g3(){
+//        return doctorsFeaturesRepository.findAll();
+//    }
 
 //    @GetMapping("/doctors")
 //    public List<DoctorsFeaturesEntity> g3(){
