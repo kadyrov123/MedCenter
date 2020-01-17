@@ -7,16 +7,36 @@ import java.util.Objects;
 @Entity
 @Table(name = "disease", schema = "public", catalog = "medcenter")
 public class DiseaseEntity {
-    private long id;
-    private Long patientId;
-    private Date date;
-    private String diagnosis;
-    private String recipe;
-    private Long doctorId;
-    private UsersEntity usersByPatientId;
 
     @Id
     @Column(name = "id")
+    private long id;
+
+    @Basic
+    @Column(name = "patient_id" ,insertable = false, updatable = false)
+    private Long patientId;
+
+    @Basic
+    @Column(name = "date")
+    private Date date;
+
+    @Basic
+    @Column(name = "diagnosis")
+    private String diagnosis;
+
+    @Basic
+    @Column(name = "recipe")
+    private String recipe;
+
+    @Basic
+    @Column(name = "doctor_id")
+    private Long doctorId;
+
+    @ManyToOne
+    @JoinColumn(name = "patient_id", referencedColumnName = "id")
+    private UsersEntity usersByPatientId;
+
+
     public long getId() {
         return id;
     }
@@ -25,8 +45,7 @@ public class DiseaseEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "patient_id" ,insertable = false, updatable = false)
+
     public Long getPatientId() {
         return patientId;
     }
@@ -35,8 +54,7 @@ public class DiseaseEntity {
         this.patientId = patientId;
     }
 
-    @Basic
-    @Column(name = "date")
+
     public Date getDate() {
         return date;
     }
@@ -45,8 +63,7 @@ public class DiseaseEntity {
         this.date = date;
     }
 
-    @Basic
-    @Column(name = "diagnosis")
+
     public String getDiagnosis() {
         return diagnosis;
     }
@@ -55,8 +72,7 @@ public class DiseaseEntity {
         this.diagnosis = diagnosis;
     }
 
-    @Basic
-    @Column(name = "recipe")
+
     public String getRecipe() {
         return recipe;
     }
@@ -65,8 +81,7 @@ public class DiseaseEntity {
         this.recipe = recipe;
     }
 
-    @Basic
-    @Column(name = "doctor_id")
+
     public Long getDoctorId() {
         return doctorId;
     }
@@ -93,8 +108,7 @@ public class DiseaseEntity {
         return Objects.hash(id, patientId, date, diagnosis, recipe, doctorId);
     }
 
-    @ManyToOne
-    @JoinColumn(name = "patient_id", referencedColumnName = "id")
+
     public UsersEntity getUsersByPatientId() {
         return usersByPatientId;
     }

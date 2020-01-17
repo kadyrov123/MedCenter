@@ -1,5 +1,7 @@
 package com.example.medcenter.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import javax.persistence.*;
 import java.sql.Time;
 import java.util.*;
@@ -7,21 +9,63 @@ import java.util.*;
 @Entity
 @Table(name = "doctors_features", schema = "public", catalog = "medcenter")
 public class DoctorsFeaturesEntity {
-    private int id;
-    private Long doctorId;
-    private Time startTime;
-    private Time endTime;
-    private Integer intervalId;
-    private String info;
-    private UsersEntity usersByDoctorId;
-    private IntervalEntity intervalByIntervalId;
-
-    @ManyToMany(mappedBy = "doctorsFeaturesEntities",fetch = FetchType.EAGER)
-    private List<DoctorsTypeEntity> doctorsTypeEntities ;
-//    private Collection<DoctorsFeaturesTypesEntity> doctorsFeaturesTypesById;
 
     @Id
     @Column(name = "id")
+//    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private int id;
+
+    @Basic
+    @Column(name = "doctor_id",insertable = false , updatable = false)
+    private Long doctorId;
+
+    @Basic
+    @Column(name = "start_time")
+    private Time startTime;
+
+    @Basic
+    @Column(name = "end_time")
+    private Time endTime;
+
+    @Basic
+    @Column(name = "interval_id" , insertable = false , updatable = false)
+    private Integer intervalId;
+
+    @Basic
+    @Column(name = "info")
+    private String info;
+
+    @ManyToOne
+    @JoinColumn(name = "doctor_id", referencedColumnName = "id")
+    private UsersEntity usersByDoctorId;
+
+    @ManyToOne
+    @JoinColumn(name = "interval_id", referencedColumnName = "id")
+    private IntervalEntity intervalByIntervalId;
+
+
+    @ManyToMany(fetch = FetchType.LAZY,
+            cascade = {
+                    CascadeType.PERSIST,
+                    CascadeType.MERGE
+            })
+    @JoinTable(name = "doctors_features_types",
+            joinColumns = { @JoinColumn(name = "doctor_id") },
+            inverseJoinColumns = { @JoinColumn(name = "type_id") })
+    @JsonIgnore
+    private Set<DoctorsTypeEntity> doctorsTypeEntities = new HashSet<>();
+//    private Collection<DoctorsFeaturesTypesEntity> doctorsFeaturesTypesById;
+
+
+    public Set<DoctorsTypeEntity> getDoctorsTypeEntities() {
+        return doctorsTypeEntities;
+    }
+
+    public void setDoctorsTypeEntities(Set<DoctorsTypeEntity> doctorsTypeEntities) {
+        this.doctorsTypeEntities = doctorsTypeEntities;
+    }
+
+
     public int getId() {
         return id;
     }
@@ -30,8 +74,6 @@ public class DoctorsFeaturesEntity {
         this.id = id;
     }
 
-    @Basic
-    @Column(name = "doctor_id",insertable = false , updatable = false)
     public Long getDoctorId() {
         return doctorId;
     }
@@ -40,8 +82,7 @@ public class DoctorsFeaturesEntity {
         this.doctorId = doctorId;
     }
 
-    @Basic
-    @Column(name = "start_time")
+
     public Time getStartTime() {
         return startTime;
     }
@@ -50,8 +91,6 @@ public class DoctorsFeaturesEntity {
         this.startTime = startTime;
     }
 
-    @Basic
-    @Column(name = "end_time")
     public Time getEndTime() {
         return endTime;
     }
@@ -60,8 +99,6 @@ public class DoctorsFeaturesEntity {
         this.endTime = endTime;
     }
 
-    @Basic
-    @Column(name = "interval_id" , insertable = false , updatable = false)
     public Integer getIntervalId() {
         return intervalId;
     }
@@ -70,8 +107,6 @@ public class DoctorsFeaturesEntity {
         this.intervalId = intervalId;
     }
 
-    @Basic
-    @Column(name = "info")
     public String getInfo() {
         return info;
     }
@@ -98,8 +133,6 @@ public class DoctorsFeaturesEntity {
         return Objects.hash(id, doctorId, startTime, endTime, intervalId, info);
     }
 
-    @ManyToOne
-    @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     public UsersEntity getUsersByDoctorId() {
         return usersByDoctorId;
     }
@@ -108,8 +141,7 @@ public class DoctorsFeaturesEntity {
         this.usersByDoctorId = usersByDoctorId;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "interval_id", referencedColumnName = "id")
+
     public IntervalEntity getIntervalByIntervalId() {
         return intervalByIntervalId;
     }
