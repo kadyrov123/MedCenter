@@ -15,13 +15,13 @@ public class QueueController {
     @Autowired
     DoctorsService doctorsService;
 
-    @RequestMapping("/queue")
-    public String a(ModelMap modelMap){
-        Date date = new Date();
-        modelMap.addAttribute("timetable",doctorsService.getTimetableByDoctorId((long)2));
-        modelMap.addAttribute("queueObject",new QueueEntity());
-        return "timetable";
-    }
+//    @RequestMapping("/queue")
+//    public String a(ModelMap modelMap){
+//        Date date = new Date();
+//        modelMap.addAttribute("timetable",doctorsService.getTimetableByDoctorId((long)2));
+//        modelMap.addAttribute("queueObject",new QueueEntity());
+//        return "timetable";
+//    }
 
     @RequestMapping(value = "/queue/save", method = RequestMethod.POST)
     @ResponseBody

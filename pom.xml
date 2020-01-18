@@ -76,6 +76,12 @@
             <version>2.2.1.RELEASE</version>
         </dependency>
 
+        <dependency>
+            <groupId>org.thymeleaf</groupId>
+            <artifactId>thymeleaf</artifactId>
+            <version>${thymeleaf.version}</version>
+        </dependency>
+
 <!--        <dependency>-->
 <!--            <groupId>org.thymeleaf</groupId>-->
 <!--            <artifactId>thymeleaf</artifactId>-->
