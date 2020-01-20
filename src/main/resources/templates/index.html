@@ -333,12 +333,12 @@
 							<input type="text" class="form-control" name="phone" placeholder="Phone " onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone'" >
 							<input type="email" class="form-control" name="email" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'" >
 							<div class="form-select" id="service-select">
-								<select>
-									<option data-display="">Doctor</option>
-									<option value="1">Doctor 1</option>
-									<option value="2">Doctor 2</option>
-									<option value="3">Doctor 3</option>
-									<option value="4">Doctor 4</option>
+								<select th:each="doctor : ${doctors}">
+<!--									<option data-display="" >Doctor</option>-->
+									<option value="1" th:text="${doctor.usersByDoctorId.name + ': ' + doctor.usersByDoctorId.surname}">Doctor 1</option>
+<!--									<option value="2">Doctor 2</option>-->
+<!--									<option value="3">Doctor 3</option>-->
+<!--									<option value="4">Doctor 4</option>-->
 								</select>
 							</div>
 							<button  data-toggle="modal" data-target="#exampleModalCenter" class="primary-btn text-uppercase">Select date and time</button>
