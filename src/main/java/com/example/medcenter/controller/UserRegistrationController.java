@@ -3,7 +3,7 @@ package com.example.medcenter.controller;
 
 import javax.validation.Valid;
 
-import com.example.medcenter.dto.UserRegistrationDto;
+import com.example.medcenter.dto.UserRegistrationDTO;
 import com.example.medcenter.entity.UsersEntity;
 import com.example.medcenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -25,8 +25,8 @@ public class UserRegistrationController {
     private UserService userService;
 
     @ModelAttribute("user")
-    public UserRegistrationDto userRegistrationDto() {
-        return new UserRegistrationDto();
+    public UserRegistrationDTO userRegistrationDto() {
+        return new UserRegistrationDTO();
     }
 
     @GetMapping
@@ -35,12 +35,13 @@ public class UserRegistrationController {
     }
 
     @PostMapping
-//    public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDto userDto, BindingResult result){
-    public String registerUserAccount(@ModelAttribute("user")  UserRegistrationDto userDto, BindingResult result){
+//    public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDTO userDto, BindingResult result){
+    public String registerUserAccount(@ModelAttribute("user")  UserRegistrationDTO userDto, BindingResult result){
 
         UsersEntity existing = userService.findByUsername(userDto.getUsername());
-        System.out.println(existing.getUsername());
+
         if (existing != null){
+//            System.out.println(existing.getUsername());
             result.rejectValue("email", null, "There is already an account registered with that email");
         }
 

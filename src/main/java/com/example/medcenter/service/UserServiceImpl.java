@@ -1,7 +1,7 @@
 package com.example.medcenter.service;
 
 
-import com.example.medcenter.dto.UserRegistrationDto;
+import com.example.medcenter.dto.UserRegistrationDTO;
 import com.example.medcenter.entity.RoleEntity;
 import com.example.medcenter.entity.UsersEntity;
 import com.example.medcenter.repoitory.RoleRepository;
@@ -32,7 +32,7 @@ public class UserServiceImpl implements UserService {
         return userRepository.findUsersEntityByUsername(username);
     }
 
-    public UsersEntity save(UserRegistrationDto registration){
+    public UsersEntity save(UserRegistrationDTO registration){
         UsersEntity user = new UsersEntity();
         user.setName(registration.getFirstName());
         user.setSurname(registration.getLastName());

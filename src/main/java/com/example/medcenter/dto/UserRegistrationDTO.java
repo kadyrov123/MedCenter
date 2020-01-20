@@ -15,7 +15,7 @@ import javax.validation.constraints.NotEmpty;
 @FieldMatch.List({
         @FieldMatch(first = "password", second = "confirmPassword", message = "The password fields must match")
 })
-public class UserRegistrationDto {
+public class UserRegistrationDTO {
 
     @NotEmpty
     private String firstName;
