@@ -33,7 +33,10 @@ public class MainController {
     DoctorsService doctorsService;
 
     @RequestMapping("/")
-    public String home(){
+    public String home(ModelMap modelMap){
+        Date date = new Date();
+        modelMap.addAttribute("timetable",doctorsService.getTimetableByDoctorId((long)2));
+        modelMap.addAttribute("queueObject",new QueueEntity());
         return "index";
     }
 

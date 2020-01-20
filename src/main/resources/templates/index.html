@@ -35,7 +35,194 @@
 		<link rel="stylesheet" th:href="@{/css/owl.carousel.css}">
 		<link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
 		<link rel="stylesheet" th:href="@{/css/main.css}">
-	</head>
+
+	<script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js}"></script>
+	<!--    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
+
+	<!--===============================================================================================-->
+	<link rel="icon" type="image/png" th:href="@{/images/icons/timetable-favicon.ico}"/>
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/vendor/animate/animate.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/vendor/select2/select2.min.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/vendor/perfect-scrollbar/perfect-scrollbar.css}">
+	<!--===============================================================================================-->
+	<link rel="stylesheet" type="text/css" th:href="@{/css/timetable-util.css}">
+	<link rel="stylesheet" type="text/css" th:href="@{/css/timetable-main.css}">
+	<!--===============================================================================================-->
+
+
+
+	<script th:inline="javascript">
+
+		$( document ).ready(function() {
+
+		var timetable = [[${timetable}]];
+		// alert(username.timeList);
+		console.log(timetable);
+		console.log(timetable[0].timeList.length);
+		console.log(timetable[0].dateString);
+
+		window.onload = fillTimetable();
+		function fillTimetable() {
+
+			// var table = document.getElementById("timetable");
+			var theadTR = document.createElement("tr");
+			theadTR.setAttribute("class","row100 head");
+			document.getElementById("timetableThead").appendChild(theadTR);
+			for(var i=0 ; i<7 ; i++){
+				if(i==0){
+					var th = document.createElement("th");
+					th.setAttribute("class", "cell100 cell100Header indexColumn");
+					th.appendChild(document.createTextNode("#"));
+				}
+				else {
+					var th = document.createElement("th");
+					th.setAttribute("class", "cell100 cell100Header dateCell");
+					th.appendChild(document.createTextNode(timetable[i-1].dateString));
+				}
+				theadTR.appendChild(th);
+			}
+			// var tableHeader = document.getElementById("timetableThead");
+			// tableHeader.appendChild(theadTR);
+
+			var index=1;
+			var tbody = document.getElementById("timetableTbody");
+			for(var j=0 ; j<timetable[0].timeList.length ; j++){
+				var tr = document.createElement("tr");
+				tr.setAttribute("class","row100 body");
+				for(var i=0 ; i<7 ; i++) {
+					if(i==0){
+						var td = document.createElement("td");
+						td.setAttribute("class" , "cell100 indexColumn");
+						td.appendChild(document.createTextNode(j+1));
+					}
+					else{
+						var td = document.createElement("td");
+						var label = document.createElement("label");
+						label.setAttribute("class" , "timeLabel");
+						td.setAttribute("class" , "cell100 timeCell");
+						label.appendChild(document.createTextNode(timetable[i-1].timeList[j].time));
+						td.appendChild(label);
+					}
+					tr.appendChild(td);
+				}
+				tbody.appendChild(tr);
+			}
+		}
+
+		})
+
+	</script>
+
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			$(".timeLabel").click( function(){
+				$(".timeLabel").removeClass("selectedTimeLabel");
+				$(this).addClass("selectedTimeLabel");
+			})
+
+			$(".unableTimeLabel").click( function(){
+// $(".timeLabel").removeClass("selectedTimeLabel");
+// $(this).addClass("selectedTimeLabel");
+				alert("Obed");
+			})
+
+
+		})
+	</script>
+
+	<style type="text/css">
+		table th{
+			/*padding: 10px;*/
+			text-align: center;
+
+		}
+		.table100-body{
+			max-height: 300px;
+		}
+
+
+
+		.cell100{
+			width: 10% !important;
+			padding: 0px 0px !important;
+			text-align: center;
+		}
+
+		.indexColumn{
+			width: 3% !important;
+		}
+
+		.timeLabel:hover{
+			background-color: #00ad5f;
+			color: white;
+			padding :10px;
+			border-radius: 20px;
+
+		}
+		.timeLabel{
+			padding :10px;
+			border-radius: 20px;
+			display: inline-block;
+			text-align: center;
+			/*margin-left: 25%;*/
+		}
+		.cell100Header{
+			padding: 10px !important;
+			text-align: center;
+		}
+		.table100-body td{
+			padding-top: 0px;
+			padding-bottom: 0px;
+		}
+		.selectedTimeLabel{
+			background-color: #00ad5f;
+			color: white;
+			padding :10px;
+			border-radius: 20px;
+		}
+		.cell100ID{
+			text-align: center;
+		}
+		#submitTime{
+			float: right;
+			padding: 10px 50px;
+			background-color: #00ad5f;
+			color: white;
+			margin-right: 10px;
+			border-radius: 10px;
+		}
+		.m-b-110{
+			margin-bottom: 10px;
+		}
+		.wrap-table100{
+			width: 90%;
+		}
+		.unableTimeLabel{
+			background-color: orange;
+			color: white;
+		}
+		.unableTimeLabel:hover{
+			background-color: orange;
+			color: white;
+		}
+
+		.timeCell{
+			margin-left: -20px !important;
+		}
+
+	</style>
+
+
+
+
+</head>
 	<body>
 
 
@@ -142,19 +329,19 @@
 					<div class="col-lg-6 col-md-6 appointment-right pt-60 pb-60">
 						<form class="form-wrap" action="#">
 							<h3 class="pb-20 text-center mb-30">Book an Appointment</h3>
-							<input type="text" class="form-control" name="name" placeholder="Patient Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Patient Name'" >
+							<input type="text" class="form-control" name="name" placeholder="Patient Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Fullname'" >
 							<input type="text" class="form-control" name="phone" placeholder="Phone " onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone'" >
 							<input type="email" class="form-control" name="email" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'" >
-							<input id="datepicker1" name="dop" class="dates form-control"  placeholder="Date of Birth" type="text">
 							<div class="form-select" id="service-select">
 								<select>
-									<option data-display="">Disease Type</option>
-									<option value="1">Type One</option>
-									<option value="2">Type Two</option>
-									<option value="3">Type Three</option>
-									<option value="4">Type Four</option>
+									<option data-display="">Doctor</option>
+									<option value="1">Doctor 1</option>
+									<option value="2">Doctor 2</option>
+									<option value="3">Doctor 3</option>
+									<option value="4">Doctor 4</option>
 								</select>
 							</div>
+							<button  data-toggle="modal" data-target="#exampleModalCenter" class="primary-btn text-uppercase">Select date and time</button>
 							<input id="datepicker2" class="dates form-control"  placeholder="appointment Date" type="text">
 							<textarea name="messege" class="" rows="5" placeholder="Messege" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Messege'"></textarea>
 							<button class="primary-btn text-uppercase">Confirm Booking</button>
@@ -164,6 +351,94 @@
 			</div>
 		</section>
 		<!-- End appointment Area -->
+
+<!--	  Date and Time modal =============================-->
+	  <div class="modal fade bd-example-modal-lg" id="exampleModalCenter" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+		  <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+			  <div class="modal-content">
+				  <div class="modal-header">
+					  <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
+					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+						  <span aria-hidden="true">&times;</span>
+					  </button>
+				  </div>
+				  <div class="modal-body">
+
+<!--					Table    ===================-->
+
+						  <div class="table100 ver3 m-b-110">
+							  <div class="table100-head">
+								  <table >
+									  <thead id="timetableThead">
+<!--									              <tr class="row100 head" >-->
+<!--									                  <th class="cell100 cell100Header" >#</th>-->
+<!--									                  <th class="cell100 cell100Header">07/01/20</th>-->
+<!--									                  <th class="cell100 cell100Header">08/01/20</th>-->
+<!--									                  <th class="cell100 cell100Header">09/01/20</th>-->
+<!--									                  <th class="cell100 cell100Header">10/01/20</th>-->
+<!--									                  <th class="cell100 cell100Header">11/01/20</th>-->
+<!--									                  <th class="cell100 cell100Header">12/01/20</th>-->
+<!--									              </tr>-->
+									  </thead>
+								  </table>
+							  </div>
+
+							  <div class="table100-body js-pscroll">
+								  <table>
+									  <tbody id="timetableTbody" >
+<!--									          <tr class="row100 body">-->
+<!--									              <td class="cell100 cell100ID">1</td>-->
+<!--									  &lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${list.time}">9:00 - 10:00</label></td>&ndash;&gt;-->
+<!--									  &lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${timetableState.index}">9:00 - 10:00</label></td>&ndash;&gt;-->
+<!--									  &lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${timeState.index}">9:00 - 10:00</label></td>&ndash;&gt;-->
+<!--									              <td class="cell100 "><label class="timeLabel" >9:00 - 10:00</label></td>-->
+<!--									              <td class="cell100 "><label class="timeLabel" >9:00 - 10:00</label></td>-->
+<!--									              <td class="cell100 "><label class="timeLabel" >9:00 - 10:00</label></td>-->
+<!--									  &lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${time[iter].time}">9:00 - 10:00</label></td>&ndash;&gt;-->
+<!--									  &lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${time[iter].time}">9:00 - 10:00</label></td>&ndash;&gt;-->
+<!--									          </tr>-->
+
+<!--									          <tr class="row100 body">-->
+<!--									              <td class="cell100 cell100ID">2</td>-->
+<!--									              <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--									              <td class="cell100 "><label class="timeLabel unableTimeLabel">9:00 - 10:00</label></td>-->
+<!--									              <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--									              <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--									              <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--									              <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--									          </tr>-->
+
+<!--									  <tr class="row100 body">-->
+<!--									  <td class="cell100 cell100ID">3</td>-->
+<!--									  <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--									  <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--									  <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--									  <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--									  <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--									  <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
+<!--									  </tr>-->
+
+
+
+
+									  </tbody>
+								  </table>
+							  </div>
+							  <!-- <button id="submitTime">Submit</button> -->
+						  </div>
+
+<!--					  ==========================-->
+
+				  </div>
+				  <div class="modal-footer">
+					  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+					  <button type="button" class="btn btn-primary">Save changes</button>
+				  </div>
+			  </div>
+		  </div>
+	  </div>
+
+<!--	  =================================================-->
 
 		<!-- Start facilities Area -->
 		<section class="facilities-area section-gap">
@@ -625,5 +900,31 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		<script th:src="@{/js/owl.carousel.min.js}"></script>
 		<script th:src="@{/js/mail-script.js}"></script>
 		<script th:src="@{/js/main.js}"></script>
+
+
+
+	  <!--===============================================================================================-->
+	  <script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+	  <!--===============================================================================================-->
+	  <script th:src="@{/vendor/bootstrap/js/popper.js}"></script>
+	  <script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+	  <!--===============================================================================================-->
+	  <script th:src="@{/vendor/select2/select2.min.js}"></script>
+	  <!--===============================================================================================-->
+	  <script th:src="@{/vendor/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+	  <script>
+		  $('.js-pscroll').each(function(){
+			  var ps = new PerfectScrollbar(this);
+
+			  $(window).on('resize', function(){
+				  ps.update();
+			  })
+		  });
+
+
+	  </script>
+	  <!--===============================================================================================-->
+	  <script th:src="@{/js/timetable-main.js}"></script>
+
 	</body>
 </html>

@@ -1,5 +1,6 @@
 package com.example.medcenter.dto;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -8,7 +9,9 @@ public class TimetableDTO {
     long doctorId;
     List<TimeDTO> timeList;
     Date date;
+    String dateString;
 
+    private static SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
     public int getId() {
         return id;
     }
@@ -38,6 +41,15 @@ public class TimetableDTO {
     }
 
     public void setDate(Date date) {
+        this.dateString = dateFormat.format(date);
         this.date = date;
+    }
+
+    public String getDateString() {
+        return dateString;
+    }
+
+    public void setDateString(String dateString) {
+        this.dateString = dateString;
     }
 }
