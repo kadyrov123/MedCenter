@@ -12,6 +12,7 @@ import com.example.medcenter.repoitory.UsersRepository;
 import com.example.medcenter.service.DoctorsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -93,6 +94,11 @@ public class MainController {
         modelMap.addAttribute("timetable",doctorsService.getTimetableByDoctorId((long)2));
         modelMap.addAttribute("queueObject",new QueueEntity());
         return "timetable";
+    }
+
+    @GetMapping("/login")
+    public String login(Model model) {
+        return "login";
     }
 
 

@@ -9,11 +9,20 @@ public class RoleEntity {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Basic
     @Column(name = "role")
     private String role;
+
+    public RoleEntity(String role) {
+        this.role = role;
+    }
+
+    public RoleEntity(){ }
+
+
 //    private UsersEntity usersById;
 
 

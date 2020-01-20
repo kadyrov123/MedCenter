@@ -10,6 +10,7 @@ public class IntervalEntity {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private int id;
 
     @Basic

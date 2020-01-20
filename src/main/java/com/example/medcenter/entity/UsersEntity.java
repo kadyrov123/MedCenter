@@ -13,6 +13,7 @@ public class UsersEntity {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Basic
@@ -50,9 +51,19 @@ public class UsersEntity {
     @OneToMany(mappedBy = "usersByDoctorId")
     private Collection<QueueEntity> queuesById;
 
-    @OneToOne
-    @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
-    private RoleEntity roleById;
+
+    @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "users_roles",
+            joinColumns = @JoinColumn(
+                    name = "user_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(
+                    name = "role_id", referencedColumnName = "id"))
+    private Collection<RoleEntity> roles;
+
+//    @OneToOne
+//    @JoinColumn(name = "id", referencedColumnName = "id", nullable = false)
+//    private RoleEntity roleById;
 
 
     public long getId() {
@@ -162,11 +173,20 @@ public class UsersEntity {
     }
 
 
-    public RoleEntity getRoleById() {
-        return roleById;
+    public Collection<RoleEntity> getRoles() {
+        return roles;
     }
 
-    public void setRoleById(RoleEntity roleById) {
-        this.roleById = roleById;
+    public void setRoles(Collection<RoleEntity> roles) {
+        this.roles = roles;
     }
+
+
+//    public RoleEntity getRoleById() {
+//        return roleById;
+//    }
+//
+//    public void setRoleById(RoleEntity roleById) {
+//        this.roleById = roleById;
+//    }
 }

@@ -10,6 +10,7 @@ public class DiseaseEntity {
 
     @Id
     @Column(name = "id")
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
 
     @Basic
