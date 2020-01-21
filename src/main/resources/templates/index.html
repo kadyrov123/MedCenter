@@ -22,6 +22,7 @@
 	<title>Medical</title>
 
 	<link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+	<script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
 		<!--
 		CSS
 		============================================= -->
@@ -55,87 +56,6 @@
 	<link rel="stylesheet" type="text/css" th:href="@{/css/timetable-util.css}">
 	<link rel="stylesheet" type="text/css" th:href="@{/css/timetable-main.css}">
 	<!--===============================================================================================-->
-
-
-
-	<script th:inline="javascript">
-
-		$( document ).ready(function() {
-
-		var timetable = [[${timetable}]];
-		// alert(username.timeList);
-		console.log(timetable);
-		console.log(timetable[0].timeList.length);
-		console.log(timetable[0].dateString);
-
-		window.onload = fillTimetable();
-		function fillTimetable() {
-
-			// var table = document.getElementById("timetable");
-			var theadTR = document.createElement("tr");
-			theadTR.setAttribute("class","row100 head");
-			document.getElementById("timetableThead").appendChild(theadTR);
-			for(var i=0 ; i<7 ; i++){
-				if(i==0){
-					var th = document.createElement("th");
-					th.setAttribute("class", "cell100 cell100Header indexColumn");
-					th.appendChild(document.createTextNode("#"));
-				}
-				else {
-					var th = document.createElement("th");
-					th.setAttribute("class", "cell100 cell100Header dateCell");
-					th.appendChild(document.createTextNode(timetable[i-1].dateString));
-				}
-				theadTR.appendChild(th);
-			}
-			// var tableHeader = document.getElementById("timetableThead");
-			// tableHeader.appendChild(theadTR);
-
-			var index=1;
-			var tbody = document.getElementById("timetableTbody");
-			for(var j=0 ; j<timetable[0].timeList.length ; j++){
-				var tr = document.createElement("tr");
-				tr.setAttribute("class","row100 body");
-				for(var i=0 ; i<7 ; i++) {
-					if(i==0){
-						var td = document.createElement("td");
-						td.setAttribute("class" , "cell100 indexColumn");
-						td.appendChild(document.createTextNode(j+1));
-					}
-					else{
-						var td = document.createElement("td");
-						var label = document.createElement("label");
-						label.setAttribute("class" , "timeLabel");
-						td.setAttribute("class" , "cell100 timeCell");
-						label.appendChild(document.createTextNode(timetable[i-1].timeList[j].time));
-						td.appendChild(label);
-					}
-					tr.appendChild(td);
-				}
-				tbody.appendChild(tr);
-			}
-		}
-
-		})
-
-	</script>
-
-	<script type="text/javascript">
-		$( document ).ready(function() {
-			$(".timeLabel").click( function(){
-				$(".timeLabel").removeClass("selectedTimeLabel");
-				$(this).addClass("selectedTimeLabel");
-			})
-
-			$(".unableTimeLabel").click( function(){
-// $(".timeLabel").removeClass("selectedTimeLabel");
-// $(this).addClass("selectedTimeLabel");
-				alert("Obed");
-			})
-
-
-		})
-	</script>
 
 	<style type="text/css">
 		table th{
@@ -218,9 +138,6 @@
 		}
 
 	</style>
-
-
-
 
 </head>
 	<body>
@@ -327,25 +244,72 @@
 						</ul>
 					</div>
 					<div class="col-lg-6 col-md-6 appointment-right pt-60 pb-60">
-						<form class="form-wrap" action="#">
-							<h3 class="pb-20 text-center mb-30">Book an Appointment</h3>
-							<input type="text" class="form-control" name="name" placeholder="Patient Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Fullname'" >
-							<input type="text" class="form-control" name="phone" placeholder="Phone " onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone'" >
-							<input type="email" class="form-control" name="email" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'" >
-							<div class="form-select" id="service-select">
-								<select th:each="doctor : ${doctors}">
-<!--									<option data-display="" >Doctor</option>-->
-									<option value="1" th:text="${doctor.usersByDoctorId.name + ': ' + doctor.usersByDoctorId.surname}">Doctor 1</option>
-<!--									<option value="2">Doctor 2</option>-->
-<!--									<option value="3">Doctor 3</option>-->
-<!--									<option value="4">Doctor 4</option>-->
-								</select>
+<!--						<form>-->
+
+<!--							<div class="form-group">-->
+<!--								<label for="inputAddress2">Address 2</label>-->
+<!--								<input type="text" class="form-control" id="inputAddress2" placeholder="Apartment, studio, or floor">-->
+<!--							</div>-->
+							<div class="form-row">
+
+<!--								<div class="form-group col-md-10">-->
+<!--									<label for="inputState">Выберите врача</label>-->
+<!--									<select id="inputState" th:each="doctor: ${doctors}" class="form-control">-->
+<!--										<option th:value="${doctor.id}"  th:text="${doctor.doctorsTypeEntities[0].type + ': ' + doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}" ></option>-->
+<!--									</select>-->
+<!--								</div>-->
+
+								<div class="form-group col-md-10">
+									<label for="selectDoctor">Выберите врача</label>
+									<select id="selectDoctor"  class="form-control">
+<!--										<option th:value="${doctor.id}"  th:text="${doctor.doctorsTypeEntities[0].type + ': ' + doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}" ></option>-->
+										<option value="1">doctor : a b</option>
+										<option value="2">doctor : ac d</option>
+									</select>
+								</div>
+
 							</div>
-							<button  data-toggle="modal" data-target="#exampleModalCenter" class="primary-btn text-uppercase">Select date and time</button>
-							<input id="datepicker2" class="dates form-control"  placeholder="appointment Date" type="text">
-							<textarea name="messege" class="" rows="5" placeholder="Messege" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Messege'"></textarea>
-							<button class="primary-btn text-uppercase">Confirm Booking</button>
-						</form>
+
+							<div class="form-row">
+								<div class="form-group col-md-6">
+									<button type="button" onclick="toggleTimetableModal()" id="selectDateTime"  class="btn btn-primary">Выберите дату и время</button>
+<!--									<button id="selectDateTime"  data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-primary">Выберите дату и время</button>-->
+<!--									<button  >Выберите дату и время</button>-->
+									<i class="fa fa-check-circle" style="font-size:30px;color:limegreen"></i>
+								</div>
+<!--								<div class="form-group col-md-2">-->
+<!--									<i class="fa fa-check-circle" style="font-size:48px;color:red"></i>-->
+<!--								</div>-->
+							</div>
+
+
+
+<!--							<div class="form-group">-->
+<!--								<div class="form-check">-->
+<!--									<input class="form-check-input" type="checkbox" id="gridCheck">-->
+<!--									<label class="form-check-label" for="gridCheck">-->
+<!--										Check me out-->
+<!--									</label>-->
+<!--								</div>-->
+<!--							</div>-->
+							<button type="button" id="saveToQueue"   class="btn btn-primary">Записаться на прием</button>
+<!--						</form>-->
+
+<!--						<form class="form-wrap" action="#">-->
+<!--							<h3 class="pb-20 text-center mb-30">Book an Appointment</h3>-->
+<!--							<input type="text" class="form-control" name="name" placeholder="Patient Name" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Fullname'" >-->
+<!--							<input type="text" class="form-control" name="phone" placeholder="Phone " onfocus="this.placeholder = ''" onblur="this.placeholder = 'Phone'" >-->
+<!--							<input type="email" class="form-control" name="email" placeholder="Email Address" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Email Address'" >-->
+<!--							<div class="form-select" id="service-select">-->
+<!--								<select id="selectDoctor" th:each="doctor : ${doctors}">-->
+<!--									<option value="1" th:text="${doctor.usersByDoctorId.name + ': ' + doctor.usersByDoctorId.surname}">Doctor 1</option>-->
+<!--								</select>-->
+<!--							</div>-->
+<!--							<button  data-toggle="modal" data-target="#exampleModalCenter" class="primary-btn text-uppercase">Select date and time</button>-->
+<!--							<input id="datepicker2" class="dates form-control"  placeholder="appointment Date" type="text">-->
+<!--							<textarea name="messege" class="" rows="5" placeholder="Messege" onfocus="this.placeholder = ''" onblur="this.placeholder = 'Messege'"></textarea>-->
+<!--							<button class="primary-btn text-uppercase">Confirm Booking</button>-->
+<!--						</form>-->
 					</div>
 				</div>
 			</div>
@@ -885,7 +849,252 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 		<!-- End footer Area -->
 
 
-		<script th:src="@{/js/vendor/jquery-2.2.4.min.js}"></script>
+
+
+
+
+	  <script >
+
+		  var timetable ;
+		  function toggleTimetableModal() {
+			  // alert("clicked");
+			  $('#exampleModalCenter').modal('toggle');
+			  return false;
+		  }
+
+		  // function saveToQueue(){
+          //
+			//   var queue ={"doctorId":2 , "userId":3 , "date":"20-01-2020" , "order":1 , "time":"8:00-8:20"};
+          //
+			//   $.ajax({
+			// 	  url : '/queue/save',
+			// 	  type: 'POST',
+			// 	  dataType: 'json',
+			// 	  contentType: 'application/json',
+			// 	  // mimeType: 'application/json',
+			// 	  // data : ({
+			// 		//   doctorId:2,
+			// 		//   userId:3,
+			// 		//   date:"queue[2]",
+			// 		//   time:"queue[4]",
+			// 		//   order:1
+			// 	  // }),
+			// 	  data : JSON.stringify(queue),
+			// 	  success: function (data) {
+			// 		  alert("success");
+          //
+			// 		  return false;
+          //
+			// 		  // timetable = data;
+			// 		  //
+			// 		  // console.log(timetable);
+			// 		  //
+			// 		  // fillTimetable();
+          //
+			// 	  },
+			// 	  error: function (e) {
+			// 		  alert("error "+e.state());
+			// 		  return false;
+			// 	  }
+			//   });
+		  // }
+
+		  $( document ).ready(function() {
+
+			  // timetable  = [[${timetable}]];
+			  // alert(username.timeList);
+			  // console.log(timetable);
+			  // console.log(timetable[0].timeList.length);
+			  // console.log(timetable[0].dateString);
+
+			  // window.onload = fillTimetable();
+
+			  function fillTimetable() {
+				  console.log("fiiling timtable");
+				  // var table = document.getElementById("timetable");
+				  var theadTR = document.createElement("tr");
+				  theadTR.setAttribute("class","row100 head");
+				  document.getElementById("timetableThead").appendChild(theadTR);
+				  for(var i=0 ; i<7 ; i++){
+					  if(i==0){
+						  var th = document.createElement("th");
+						  th.setAttribute("class", "cell100 cell100Header indexColumn");
+						  th.appendChild(document.createTextNode("#"));
+					  }
+					  else {
+						  var th = document.createElement("th");
+						  th.setAttribute("class", "cell100 cell100Header dateCell");
+						  th.appendChild(document.createTextNode(timetable[i-1].dateString));
+					  }
+					  theadTR.appendChild(th);
+				  }
+				  // var tableHeader = document.getElementById("timetableThead");
+				  // tableHeader.appendChild(theadTR);
+
+				  var index=1;
+				  var tbody = document.getElementById("timetableTbody");
+				  for(var j=0 ; j<timetable[0].timeList.length ; j++){
+					  var tr = document.createElement("tr");
+					  tr.setAttribute("class","row100 body");
+					  for(var i=0 ; i<7 ; i++) {
+						  if(i==0){
+							  var td = document.createElement("td");
+							  td.setAttribute("class" , "cell100 indexColumn");
+							  td.appendChild(document.createTextNode(j+1));
+						  }
+						  else{
+							  var td = document.createElement("td");
+							  var label = document.createElement("label");
+							  label.setAttribute("class" , "timeLabel");
+							  label.setAttribute("onclick" , "timeLabelClick()");
+							  td.setAttribute("class" , "cell100 timeCell");
+							  label.appendChild(document.createTextNode(timetable[i-1].timeList[j].time));
+							  td.appendChild(label);
+						  }
+						  tr.appendChild(td);
+					  }
+					  tbody.appendChild(tr);
+				  }
+			  }
+
+			  $("#selectDoctor").on("change" , function (){
+				  sendDoctorId();
+			  });
+			  sendDoctorId();
+
+			  function sendDoctorId() {
+				  var e = document.getElementById("selectDoctor");
+				  var doctorId = e.options[e.selectedIndex].value;
+				  var doctorFullname = e.options[e.selectedIndex].text;
+
+				  $.ajax({
+					  url : 'getTimetableByDoctorId',
+					  type: 'GET',
+					  dataType: 'json',
+					  contentType: 'application/json',
+					  mimeType: 'application/json',
+					  data : ({
+						  doctorId: 2
+					  }),
+					  success: function (data) {
+						  // alert("success");
+
+						  timetable = data;
+
+						  console.log(timetable);
+
+						  fillTimetable();
+
+					  }
+				  });
+			  }
+
+
+			  $("#saveToQueue").on("click" , function () {
+                  saveToQueue();
+              })
+
+
+              function saveToQueue() {
+                  var e = document.getElementById("selectDoctor");
+                  var doctorId = e.options[e.selectedIndex].value;
+                  var doctorFullname = e.options[e.selectedIndex].text;
+
+                  $.ajax({
+                      url : 'queue/save',
+                      type: 'GET',
+                      // dataType: 'json',
+                      contentType: 'application/json',
+                      // mimeType: 'application/json',
+                      data : ({
+                          doctorId: 2,
+                          userId: 2,
+                          time:"8:00-9:00",
+                          date:"sdf",
+                          order: 3
+                      }),
+                      success: function (data) {
+                          alert("success");
+                          console.log(data)
+
+                          // timetable = data;
+                          //
+                          // console.log(timetable);
+                          //
+                          // fillTimetable();
+
+                      },
+                      error: function (data) {
+                          console.log("status "+data.status);
+                          console.log("message "+data.message);
+                          console.log("state "+data.state);
+
+
+                          // timetable = data;
+                          //
+                          // console.log(timetable);
+                          //
+                          // fillTimetable();
+
+                      }
+                  });
+              }
+
+
+
+
+			  // alert(timetable);
+			  // if(timetable == null){
+			  //     fillTimetable();
+			  // }
+
+			  // function timeLabelClick(){
+			  // 	alert("sdfsdfs");
+				//   $(".timeLabel").removeClass("selectedTimeLabel");
+				//   $(this).addClass("selectedTimeLabel");
+			  // }
+
+			  $(".unableTimeLabel").click( function(){
+				  alert("sdfsdfs");
+// $(".timeLabel").removeClass("selectedTimeLabel");
+// $(this).addClass("selectedTimeLabel");
+				  alert("Obed");
+			  });
+
+		  })
+
+
+		  function timeLabelClick(){
+			  // alert("sdfsdfs");
+			  $(".timeLabel").removeClass("selectedTimeLabel");
+			  $(this).addClass("selectedTimeLabel");
+		  }
+
+	  </script>
+
+<!--	  <script type="text/javascript">-->
+<!--		  $( document ).ready(function() {-->
+<!--			  $(".timeLabel").click( function(){-->
+<!--				  $(".timeLabel").removeClass("selectedTimeLabel");-->
+<!--				  $(this).addClass("selectedTimeLabel");-->
+<!--			  });-->
+
+<!--			  $(".unableTimeLabel").click( function(){-->
+<!--// $(".timeLabel").removeClass("selectedTimeLabel");-->
+<!--// $(this).addClass("selectedTimeLabel");-->
+<!--				  alert("Obed");-->
+<!--			  });-->
+
+
+<!--		  })-->
+<!--	  </script>-->
+
+
+
+
+
+
+	  <script th:src="@{/js/vendor/jquery-2.2.4.min.js}"></script>
 		<script th:src="@{/js/popper.min.js}"></script>
 		<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
 		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>

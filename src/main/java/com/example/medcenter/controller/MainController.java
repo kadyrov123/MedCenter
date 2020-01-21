@@ -36,7 +36,7 @@ public class MainController {
     @RequestMapping("/")
     public String home(ModelMap modelMap){
         Date date = new Date();
-        modelMap.addAttribute("timetable",doctorsService.getTimetableByDoctorId((long)2));
+//        modelMap.addAttribute("timetable",doctorsService.getTimetableByDoctorId((long)2));
         modelMap.addAttribute("queueObject",new QueueEntity());
         modelMap.addAttribute("doctors",doctorsFeaturesRepository.findAll());
         return "index";
