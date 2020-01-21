@@ -36,7 +36,7 @@ public class UserRegistrationController {
 
     @PostMapping
 //    public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDTO userDto, BindingResult result){
-    public String registerUserAccount(@ModelAttribute("user")  UserRegistrationDTO userDto, BindingResult result){
+    public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDTO userDto, BindingResult result){
 
         UsersEntity existing = userService.findByUsername(userDto.getUsername());
 

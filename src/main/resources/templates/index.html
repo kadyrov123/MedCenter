@@ -57,6 +57,24 @@
 	<link rel="stylesheet" type="text/css" th:href="@{/css/timetable-main.css}">
 	<!--===============================================================================================-->
 
+	<script type="text/javascript">
+		$( document ).ready(function() {
+			$(".timeLabel").click( function(){
+				$(".timeLabel").removeClass("selectedTimeLabel");
+				$(this).addClass("selectedTimeLabel");
+			});
+
+			$(".unableTimeLabel").click( function(){
+// $(".timeLabel").removeClass("selectedTimeLabel");
+// $(this).addClass("selectedTimeLabel");
+				alert("Obed");
+			});
+
+
+		})
+	</script>
+
+
 	<style type="text/css">
 		table th{
 			/*padding: 10px;*/
@@ -252,21 +270,21 @@
 <!--							</div>-->
 							<div class="form-row">
 
-<!--								<div class="form-group col-md-10">-->
-<!--									<label for="inputState">Выберите врача</label>-->
-<!--									<select id="inputState" th:each="doctor: ${doctors}" class="form-control">-->
-<!--										<option th:value="${doctor.id}"  th:text="${doctor.doctorsTypeEntities[0].type + ': ' + doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}" ></option>-->
-<!--									</select>-->
-<!--								</div>-->
-
 								<div class="form-group col-md-10">
 									<label for="selectDoctor">Выберите врача</label>
-									<select id="selectDoctor"  class="form-control">
-<!--										<option th:value="${doctor.id}"  th:text="${doctor.doctorsTypeEntities[0].type + ': ' + doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}" ></option>-->
-										<option value="1">doctor : a b</option>
-										<option value="2">doctor : ac d</option>
+									<select id="selectDoctor" th:each="doctor: ${doctors}" class="form-control">
+										<option th:value="${doctor.id}"  th:text="${doctor.doctorsTypeEntities[0].type + ': ' + doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}" ></option>
 									</select>
 								</div>
+
+<!--								<div class="form-group col-md-10">-->
+<!--									<label for="selectDoctor">Выберите врача</label>-->
+<!--									<select id="selectDoctor"  class="form-control">-->
+<!--&lt;!&ndash;										<option th:value="${doctor.id}"  th:text="${doctor.doctorsTypeEntities[0].type + ': ' + doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}" ></option>&ndash;&gt;-->
+<!--										<option value="1">doctor : a b</option>-->
+<!--										<option value="2">doctor : ac d</option>-->
+<!--									</select>-->
+<!--								</div>-->
 
 							</div>
 
@@ -901,6 +919,9 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 		  $( document ).ready(function() {
 
+
+
+
 			  // timetable  = [[${timetable}]];
 			  // alert(username.timeList);
 			  // console.log(timetable);
@@ -946,7 +967,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 							  var td = document.createElement("td");
 							  var label = document.createElement("label");
 							  label.setAttribute("class" , "timeLabel");
-							  label.setAttribute("onclick" , "timeLabelClick()");
+							  label.setAttribute("onclick" , "timeLabelClick(this)");
 							  td.setAttribute("class" , "cell100 timeCell");
 							  label.appendChild(document.createTextNode(timetable[i-1].timeList[j].time));
 							  td.appendChild(label);
@@ -992,7 +1013,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 			  $("#saveToQueue").on("click" , function () {
                   saveToQueue();
-              })
+              });
 
 
               function saveToQueue() {
@@ -1042,7 +1063,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 
 
-
 			  // alert(timetable);
 			  // if(timetable == null){
 			  //     fillTimetable();
@@ -1054,40 +1074,41 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				//   $(this).addClass("selectedTimeLabel");
 			  // }
 
+// 			  $(".unableTimeLabel").click( function(){
+// 				  alert("sdfsdfs");
+// // $(".timeLabel").removeClass("selectedTimeLabel");
+// // $(this).addClass("selectedTimeLabel");
+// 				  alert("Obed");
+// 			  });
+
+		  })
+
+
+		  function timeLabelClick(label){
+			  // alert("sdfsdfs");
+			  // console.log("selected");
+			  $(".timeLabel").removeClass("selectedTimeLabel");
+			  $(label).addClass("selectedTimeLabel");
+		  }
+
+	  </script>
+
+	  <script type="text/javascript">
+		  $( document ).ready(function() {
+			  $(".timeLabel").click( function(){
+				  $(".timeLabel").removeClass("selectedTimeLabel");
+				  $(this).addClass("selectedTimeLabel");
+			  });
+
 			  $(".unableTimeLabel").click( function(){
-				  alert("sdfsdfs");
 // $(".timeLabel").removeClass("selectedTimeLabel");
 // $(this).addClass("selectedTimeLabel");
 				  alert("Obed");
 			  });
 
+
 		  })
-
-
-		  function timeLabelClick(){
-			  // alert("sdfsdfs");
-			  $(".timeLabel").removeClass("selectedTimeLabel");
-			  $(this).addClass("selectedTimeLabel");
-		  }
-
 	  </script>
-
-<!--	  <script type="text/javascript">-->
-<!--		  $( document ).ready(function() {-->
-<!--			  $(".timeLabel").click( function(){-->
-<!--				  $(".timeLabel").removeClass("selectedTimeLabel");-->
-<!--				  $(this).addClass("selectedTimeLabel");-->
-<!--			  });-->
-
-<!--			  $(".unableTimeLabel").click( function(){-->
-<!--// $(".timeLabel").removeClass("selectedTimeLabel");-->
-<!--// $(this).addClass("selectedTimeLabel");-->
-<!--				  alert("Obed");-->
-<!--			  });-->
-
-
-<!--		  })-->
-<!--	  </script>-->
 
 
 
