@@ -9,5 +9,5 @@ import java.util.List;
 
 @Repository
 public interface QueueRepository extends JpaRepository<QueueEntity, Long> {
-    List<QueueEntity> findQueueEntitiesByDateAndDoctorId(Date date , long doctorId);
+    List<QueueEntity> findQueueEntitiesByDateAndDoctorId(Date date , int doctorId);
 }

@@ -23,7 +23,7 @@ public class QueueEntity {
 
     @Basic
     @Column(name = "doctor_id" , insertable = false , updatable = false)
-    private Long doctorId;
+    private Integer doctorId;
 
     @Basic
     @Column(name = "date")
@@ -47,7 +47,7 @@ public class QueueEntity {
 
     @ManyToOne
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
-    private UsersEntity usersByDoctorId;
+    private DoctorsFeaturesEntity doctorFeaturesByDoctorId;
 
     @ManyToOne
     @JoinColumn(name = "interval_id", referencedColumnName = "id")
@@ -78,11 +78,11 @@ public class QueueEntity {
         this.userId = userId;
     }
 
-    public Long getDoctorId() {
+    public Integer getDoctorId() {
         return doctorId;
     }
 
-    public void setDoctorId(Long doctorId) {
+    public void setDoctorId(Integer doctorId) {
         this.doctorId = doctorId;
     }
 
@@ -147,12 +147,12 @@ public class QueueEntity {
         return Objects.hash(id, talon, userId, doctorId, date, queueOrder, time, intervalId, status);
     }
 
-    public UsersEntity getUsersByDoctorId() {
-        return usersByDoctorId;
+    public DoctorsFeaturesEntity getDoctorFeaturesByDoctorId() {
+        return doctorFeaturesByDoctorId;
     }
 
-    public void setUsersByDoctorId(UsersEntity usersByDoctorId) {
-        this.usersByDoctorId = usersByDoctorId;
+    public void setDoctorFeaturesByDoctorId(DoctorsFeaturesEntity doctorFeaturesByDoctorId) {
+        this.doctorFeaturesByDoctorId = doctorFeaturesByDoctorId;
     }
 
     public IntervalEntity getIntervalByIntervalId() {

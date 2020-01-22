@@ -92,7 +92,7 @@ public class MainController {
     @RequestMapping("/queue")
     public String  queue(ModelMap modelMap){
         Date date = new Date();
-        modelMap.addAttribute("timetable",doctorsService.getTimetableByDoctorId((long)2));
+//        modelMap.addAttribute("timetable",doctorsService.getTimetableByDoctorId((long)2));
         modelMap.addAttribute("queueObject",new QueueEntity());
         return "timetable";
     }

@@ -7,4 +7,6 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface DoctorsFeaturesRepository extends JpaRepository<DoctorsFeaturesEntity,Integer> {
     DoctorsFeaturesEntity getDoctorsFeaturesEntityByDoctorId(long id);
+    DoctorsFeaturesEntity getDoctorsFeaturesEntityById(int id);
+//    DoctorsFeaturesEntity getDoctorsFeaturesEntityById(long id);
 }

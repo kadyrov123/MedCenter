@@ -47,9 +47,9 @@ public class UsersEntity {
     @OneToMany(mappedBy = "usersByDoctorId")
     private Collection<DoctorsFeaturesEntity> doctorsFeaturesById;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "usersByDoctorId")
-    private Collection<QueueEntity> queuesById;
+//    @JsonIgnore
+//    @OneToMany(mappedBy = "usersByDoctorId")
+//    private Collection<QueueEntity> queuesById;
 
 
     @ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
@@ -164,13 +164,13 @@ public class UsersEntity {
     }
 
 
-    public Collection<QueueEntity> getQueuesById() {
-        return queuesById;
-    }
-
-    public void setQueuesById(Collection<QueueEntity> queuesById) {
-        this.queuesById = queuesById;
-    }
+//    public Collection<QueueEntity> getQueuesById() {
+//        return queuesById;
+//    }
+//
+//    public void setQueuesById(Collection<QueueEntity> queuesById) {
+//        this.queuesById = queuesById;
+//    }
 
 
     public Collection<RoleEntity> getRoles() {

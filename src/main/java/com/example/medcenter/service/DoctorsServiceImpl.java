@@ -60,8 +60,9 @@ public class DoctorsServiceImpl implements DoctorsService {
     }
 
     @Override
-    public List<TimeDTO> getTimetableByDoctorIdAndDate(long doctorId , Date date) {
-        DoctorsFeaturesEntity doctorsFeatures = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(doctorId);
+    public List<TimeDTO> getTimetableByDoctorFeaturesIdAndDate(int doctorId , Date date) {
+        DoctorsFeaturesEntity doctorsFeatures = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctorId);
+        System.out.println("======================================== doctorFeatures" + doctorsFeatures.getEndTime());
         LocalTime startTime = doctorsFeatures.getStartTime().toLocalTime();
         LocalTime endTime = doctorsFeatures.getEndTime().toLocalTime();
         LocalTime localTime = startTime;
@@ -103,7 +104,7 @@ public class DoctorsServiceImpl implements DoctorsService {
     }
 
     @Override
-    public List<TimetableDTO> getTimetableByDoctorId(long doctorId) {
+    public List<TimetableDTO> getTimetableByDoctorFeaturesId(int doctorId) {
         List<Date> dateList = new ArrayList<>();
         Date today = new Date();
         Calendar calendar = Calendar.getInstance();
@@ -127,7 +128,7 @@ public class DoctorsServiceImpl implements DoctorsService {
             timetableDTO.setId(id);
             timetableDTO.setDate(date);
             timetableDTO.setDoctorId(doctorId);
-            timetableDTO.setTimeList(getTimetableByDoctorIdAndDate(doctorId,date));
+            timetableDTO.setTimeList(getTimetableByDoctorFeaturesIdAndDate(doctorId,date));
             timetables.add(timetableDTO);
             id++;
         }

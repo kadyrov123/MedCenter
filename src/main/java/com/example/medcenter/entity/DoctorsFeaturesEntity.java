@@ -43,6 +43,10 @@ public class DoctorsFeaturesEntity {
     @JoinColumn(name = "interval_id", referencedColumnName = "id")
     private IntervalEntity intervalByIntervalId;
 
+    @JsonIgnore
+    @OneToMany(mappedBy = "doctorFeaturesByDoctorId")
+    private Collection<QueueEntity> queueEntities;
+
 
     @ManyToMany(fetch = FetchType.LAZY,
             cascade = {

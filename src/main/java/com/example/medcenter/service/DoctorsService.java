@@ -16,7 +16,7 @@ public interface DoctorsService {
     void saveDoctor(DoctorDTO doctorDTO);
     void updateDoctor(DoctorDTO doctorDTO);
 
-    List<TimetableDTO> getTimetableByDoctorId(long doctorId);
-    List<TimeDTO> getTimetableByDoctorIdAndDate(long doctorId, Date date);
+    List<TimetableDTO> getTimetableByDoctorFeaturesId(int doctorId);
+    List<TimeDTO> getTimetableByDoctorFeaturesIdAndDate(int doctorId, Date date);
 
 }

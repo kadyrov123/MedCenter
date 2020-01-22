@@ -228,7 +228,8 @@
 						<p class="pt-10 pb-10 text-white">
 							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore  et dolore magna aliqua.
 						</p>
-						<a href="#" class="primary-btn text-uppercase">Get Started</a>
+						<a sec:authorize="isAnonymous()" th:href="@{/login}" class="primary-btn text-uppercase">Записаться на прием</a>
+						<a sec:authorize="isAuthenticated()" href="#queueSaveFormDiv" class="primary-btn text-uppercase">Записаться на прием</a>
 					</div>
 				</div>
 			</div>
@@ -238,7 +239,7 @@
 		<!-- Start appointment Area -->
 		<section class="appointment-area">
 			<div class="container">
-				<div class="row justify-content-between align-items-center pb-120 appointment-wrap">
+				<div sec:authorize="isAuthenticated()" class="row justify-content-between align-items-center pb-120 appointment-wrap">
 					<div class="col-lg-5 col-md-6 appointment-left">
 						<h1>
 							Servicing Hours
@@ -261,7 +262,7 @@
 							</li>
 						</ul>
 					</div>
-					<div class="col-lg-6 col-md-6 appointment-right pt-60 pb-60">
+					<div id="queueSaveFormDiv" class="col-lg-6 col-md-6 appointment-right pt-60 pb-60">
 <!--						<form>-->
 
 <!--							<div class="form-group">-->
@@ -293,12 +294,14 @@
 									<button type="button" onclick="toggleTimetableModal()" id="selectDateTime"  class="btn btn-primary">Выберите дату и время</button>
 <!--									<button id="selectDateTime"  data-toggle="modal" data-target="#exampleModalCenter" class="btn btn-primary">Выберите дату и время</button>-->
 <!--									<button  >Выберите дату и время</button>-->
-									<i class="fa fa-check-circle" style="font-size:30px;color:limegreen"></i>
+									<i id="isTimeSelectedIcon" class="fa fa-check-circle" style="font-size:30px;color:limegreen; display: none;"></i>
 								</div>
 <!--								<div class="form-group col-md-2">-->
 <!--									<i class="fa fa-check-circle" style="font-size:48px;color:red"></i>-->
 <!--								</div>-->
 							</div>
+
+							<input id="queueSaveFormUserInfo" type="text" th:value="${#authentication.getPrincipal().getUsername()}" style="display:none;" >
 
 
 
@@ -341,7 +344,7 @@
 				  <div class="modal-header">
 					  <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
 					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						  <span aria-hidden="true">&times;</span>
+						  <span aria-hidden="true">&times</span>
 					  </button>
 				  </div>
 				  <div class="modal-body">
@@ -413,8 +416,8 @@
 
 				  </div>
 				  <div class="modal-footer">
-					  <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-					  <button type="button" class="btn btn-primary">Save changes</button>
+					  <button id="timetableModalCloseButton" type="button" class="btn btn-secondary" data-dismiss="modal">Отмена</button>
+					  <button id="timetableModalSaveButton" type="button" class="btn btn-primary"  data-dismiss="modal">Выбрать</button>
 				  </div>
 			  </div>
 		  </div>
@@ -872,7 +875,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 
 	  <script >
-
+		  var queue = {"doctorId":-1 , "userUsername":"" , "date":"" , "order":-1 , "time":"" };
 		  var timetable ;
 		  function toggleTimetableModal() {
 			  // alert("clicked");
@@ -967,6 +970,10 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 							  var td = document.createElement("td");
 							  var label = document.createElement("label");
 							  label.setAttribute("class" , "timeLabel");
+							  label.setAttribute("data-date" , timetable[i-1].dateString);
+							  label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
+							  label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
+							  label.setAttribute("class" , "timeLabel");
 							  label.setAttribute("onclick" , "timeLabelClick(this)");
 							  td.setAttribute("class" , "cell100 timeCell");
 							  label.appendChild(document.createTextNode(timetable[i-1].timeList[j].time));
@@ -995,7 +1002,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 					  contentType: 'application/json',
 					  mimeType: 'application/json',
 					  data : ({
-						  doctorId: 2
+						  doctorId: doctorId
 					  }),
 					  success: function (data) {
 						  // alert("success");
@@ -1028,11 +1035,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
                       contentType: 'application/json',
                       // mimeType: 'application/json',
                       data : ({
-                          doctorId: 2,
-                          userId: 2,
-                          time:"8:00-9:00",
-                          date:"sdf",
-                          order: 3
+                          doctorId: queue["doctorId"],
+                          userUsername: queue["userUsername"] ,
+                          time : queue["time"],
+                          date : queue["date"],
+                          order: queue["order"]
                       }),
                       success: function (data) {
                           alert("success");
@@ -1074,21 +1081,28 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				//   $(this).addClass("selectedTimeLabel");
 			  // }
 
-// 			  $(".unableTimeLabel").click( function(){
-// 				  alert("sdfsdfs");
-// // $(".timeLabel").removeClass("selectedTimeLabel");
-// // $(this).addClass("selectedTimeLabel");
-// 				  alert("Obed");
-// 			  });
+			  $("#timetableModalSaveButton").click( function(){
+				  if(queue["time"] != ""){
+				  	$("#isTimeSelectedIcon").css("display", "inline-block");
+				  }
+			  });
+			  $("#timetableModalCloseButton").click( function(){
+				  $("#isTimeSelectedIcon").css("display", "none");
+				  queue = {"doctorId":-1 , "userUsername":"" , "date":"" , "order":-1 , "time":"" };
+			  });
 
 		  })
 
 
 		  function timeLabelClick(label){
-			  // alert("sdfsdfs");
-			  // console.log("selected");
+			  // console.log($("#queueSaveFormUserInfo").val());
 			  $(".timeLabel").removeClass("selectedTimeLabel");
 			  $(label).addClass("selectedTimeLabel");
+			  queue["time"] = $(label).text();
+			  queue["order"] = $(label).data("order");
+			  queue["date"] = $(label).data("date");
+			  queue["doctorId"] = $(label).data("doctorid");
+			  queue["userUsername"] = $("#queueSaveFormUserInfo").val();
 		  }
 
 	  </script>
