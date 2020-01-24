@@ -178,7 +178,7 @@
 		<div class="container main-menu">
 			<div class="row align-items-center justify-content-between d-flex">
 			  <div id="logo">
-				<a th:href="@{/}"><img src="img/logo.png" alt="" title="" /></a>
+				<a id="logoLink" th:href="@{/}"><img src="img/logo.png" alt="" title="" /></a>
 			  </div>
 			  <nav id="nav-menu-container">
 				<ul class="nav-menu">
@@ -344,7 +344,7 @@
 				  <div class="modal-header">
 					  <h5 class="modal-title" id="exampleModalLongTitle">Modal title</h5>
 					  <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-						  <span aria-hidden="true">&times</span>
+						  <span aria-hidden="true">&times;</span>
 					  </button>
 				  </div>
 				  <div class="modal-body">
@@ -883,42 +883,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			  return false;
 		  }
 
-		  // function saveToQueue(){
-          //
-			//   var queue ={"doctorId":2 , "userId":3 , "date":"20-01-2020" , "order":1 , "time":"8:00-8:20"};
-          //
-			//   $.ajax({
-			// 	  url : '/queue/save',
-			// 	  type: 'POST',
-			// 	  dataType: 'json',
-			// 	  contentType: 'application/json',
-			// 	  // mimeType: 'application/json',
-			// 	  // data : ({
-			// 		//   doctorId:2,
-			// 		//   userId:3,
-			// 		//   date:"queue[2]",
-			// 		//   time:"queue[4]",
-			// 		//   order:1
-			// 	  // }),
-			// 	  data : JSON.stringify(queue),
-			// 	  success: function (data) {
-			// 		  alert("success");
-          //
-			// 		  return false;
-          //
-			// 		  // timetable = data;
-			// 		  //
-			// 		  // console.log(timetable);
-			// 		  //
-			// 		  // fillTimetable();
-          //
-			// 	  },
-			// 	  error: function (e) {
-			// 		  alert("error "+e.state());
-			// 		  return false;
-			// 	  }
-			//   });
-		  // }
+
 
 		  $( document ).ready(function() {
 
@@ -969,11 +934,22 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 						  else{
 							  var td = document.createElement("td");
 							  var label = document.createElement("label");
-							  label.setAttribute("class" , "timeLabel");
-							  label.setAttribute("data-date" , timetable[i-1].dateString);
-							  label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
-							  label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
-							  label.setAttribute("class" , "timeLabel");
+							  if(timetable[i-1].timeList[j].status == 0) {
+								  label.setAttribute("class" , "timeLabel");
+								  label.setAttribute("data-date" , timetable[i-1].dateString);
+								  label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
+								  label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
+							  }
+							  else{
+								  label.setAttribute("class" , "busyTimeLabel timeLabel");
+								  label.setAttribute("style" , "background-color: lightcoral; color:white;");
+							  }
+
+							  // label.setAttribute("data-date" , timetable[i-1].dateString);
+							  // label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
+							  // label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
+							  // label.setAttribute("class" , "timeLabel");
+
 							  label.setAttribute("onclick" , "timeLabelClick(this)");
 							  td.setAttribute("class" , "cell100 timeCell");
 							  label.appendChild(document.createTextNode(timetable[i-1].timeList[j].time));
@@ -1024,48 +1000,49 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 
               function saveToQueue() {
-                  var e = document.getElementById("selectDoctor");
-                  var doctorId = e.options[e.selectedIndex].value;
-                  var doctorFullname = e.options[e.selectedIndex].text;
+				  var e = document.getElementById("selectDoctor");
+				  var doctorId = e.options[e.selectedIndex].value;
+				  var doctorFullname = e.options[e.selectedIndex].text;
+                    console.log(queue["order"]);
+                    console.log(queue["time"]);
+					if(queue["order"] !== undefined ){
+						  $.ajax({
+							  url: 'queue/save',
+							  type: 'GET',
+							  // dataType: 'json',
+							  contentType: 'application/json',
+							  // mimeType: 'application/json',
+							  data: ({
+								  doctorId: queue["doctorId"],
+								  userUsername: queue["userUsername"],
+								  time: queue["time"],
+								  date: queue["date"],
+								  order: queue["order"]
+							  }),
+							  success: function (data) {
+								  alert("success");
+								  // console.log(data);
+								  // location.reload();
+								  document.getElementById("logoLink").click();
 
-                  $.ajax({
-                      url : 'queue/save',
-                      type: 'GET',
-                      // dataType: 'json',
-                      contentType: 'application/json',
-                      // mimeType: 'application/json',
-                      data : ({
-                          doctorId: queue["doctorId"],
-                          userUsername: queue["userUsername"] ,
-                          time : queue["time"],
-                          date : queue["date"],
-                          order: queue["order"]
-                      }),
-                      success: function (data) {
-                          alert("success");
-                          console.log(data)
+								  // timetable = data;
+								  //
+								  // console.log(timetable);
+								  //
+								  // fillTimetable();
 
-                          // timetable = data;
-                          //
-                          // console.log(timetable);
-                          //
-                          // fillTimetable();
-
-                      },
-                      error: function (data) {
-                          console.log("status "+data.status);
-                          console.log("message "+data.message);
-                          console.log("state "+data.state);
-
-
-                          // timetable = data;
-                          //
-                          // console.log(timetable);
-                          //
-                          // fillTimetable();
-
-                      }
-                  });
+							  },
+							  error: function (data) {
+                                  alert("ошибка при отправлении формы");
+								  // console.log("status " + data.status);
+								  // console.log("message " + data.message);
+								  // console.log("state " + data.state);
+							  }
+						  });
+			  		}
+					else{
+					    alert("Выберите время посещения");
+                    }
               }
 
 
@@ -1082,7 +1059,8 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			  // }
 
 			  $("#timetableModalSaveButton").click( function(){
-				  if(queue["time"] != ""){
+			      // alert(queue["order"]);
+				  if(queue["order"] != undefined){
 				  	$("#isTimeSelectedIcon").css("display", "inline-block");
 				  }
 			  });

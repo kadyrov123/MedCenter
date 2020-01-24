@@ -41,14 +41,10 @@ public class QueueController {
 //    }
 
     @RequestMapping(value = "/queue/save", method = RequestMethod.GET , consumes = "application/json")
-    public @ResponseBody String saveQueue(@RequestParam int doctorId, @RequestParam String userUsername ,@RequestParam String date ,@RequestParam String time , @RequestParam int order ){
+    public String saveQueue(@RequestParam int doctorId, @RequestParam String userUsername ,@RequestParam String date ,@RequestParam String time , @RequestParam int order ){
 
         UsersEntity usersEntity = usersRepository.findUsersEntityByUsername(userUsername);
         DoctorsFeaturesEntity doctorsFeaturesEntity = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctorId);
-
-        System.out.println("=================================================="+usersEntity.getId());
-        System.out.println("=================================================="+doctorsFeaturesEntity.getIntervalId());
-        System.out.println("=================================================="+doctorsFeaturesEntity.getId());
 
         QueueEntity queue = new QueueEntity();
         queue.setDate(Date.valueOf(date));
@@ -61,16 +57,9 @@ public class QueueController {
         queue.setIntervalByIntervalId(doctorsFeaturesEntity.getIntervalByIntervalId());
         queue.setStatus(1);
 
-//        queue.getDoctorId();
-        System.out.println("=================================================="+queue.getDoctorId());
-        System.out.println("=================================================="+queue.getIntervalId());
-
         queueRepository.save(queue);
 
-//        List<TimetableDTO> timetables = doctorsService.getTimetableByDoctorId((long)2);
-
-//        System.out.println("=================================================="+queue.getTime());
-        return "timetables";
+        return "index";
     }
 
     @RequestMapping(value = "/getTimetableByDoctorId", method = RequestMethod.GET)
@@ -82,22 +71,6 @@ public class QueueController {
         return timetables;
     }
 
-//    @RequestMapping(value = "/getCharNum", method = RequestMethod.GET)
-//    public @ResponseBody TimeDTO getCharNum(@RequestBody String text) {
-//
-//        System.out.println("=================================================== TIME = "+text);
-//
-//        TimeDTO result = new TimeDTO();
-//
-//        if (text != null) {
-//            result.setTime("9:00 - 10:00");
-//            result.setFree(false);
-//            result.setStatus(1);
-//            result.setOrder(1);
-//        }
-//
-//        return result;
-//    }
 
 
 }
