@@ -76,6 +76,11 @@
 
 
 	<style type="text/css">
+
+		.header-top .align-items-center{
+			color: grey;
+		}
+
 		table th{
 			/*padding: 10px;*/
 			text-align: center;
@@ -169,9 +174,20 @@
 						<a ><span class="lnr lnr-phone-handset"></span> <span class="text"><span class="text">+953 012 3654 896</span></span></a>
 						<a ><span class="lnr lnr-envelope"></span> <span class="text"><span class="text">support@colorlib.com</span></span></a>
 					</div>
-					<div class="col-lg-6 col-sm-6 col-8 header-top-right">
-						<a href="#" class="primary-btn text-uppercase">Book Appointment</a>
+					<div sec:authorize="isAnonymous()" class="col-lg-6 col-sm-6 col-8 header-top-right">
+						<a th:href="@{/login}" class="primary-btn text-uppercase">Войти</a>
 					</div>
+<!--                    <div sec:authorize="isAuthenticated()" class="col-lg-6 col-sm-6 col-8 header-top-right">-->
+<!--						<ul class="nav-menu">-->
+<!--						<li class="menu-has-children"><a href="#" class="primary-btn text-uppercase"  th:text="${#authentication.getPrincipal().getUsername()}" >My Profile</a>-->
+<!--						<ul>-->
+<!--							<li><a th:href="@{/blog}">My Profile</a></li>-->
+<!--							<li><a th:href="@{/logout}">Logout</a></li>-->
+<!--						</ul>-->
+<!--						</li>-->
+<!--						</ul>-->
+
+<!--                    </div>-->
 				</div>
 			</div>
 		</div>
@@ -207,6 +223,15 @@
 					</ul>
 				  </li>
 				  <li><a th:href="@{/contact}">Contact</a></li>
+
+					<li sec:authorize="isAuthenticated()" class="menu-has-children"><a href=""  >My Profile</a>
+<!--					<li sec:authorize="isAuthenticated()" class="menu-has-children"><a href=""  th:text="${#authentication.getPrincipal().getUsername()}" >My Profile</a>-->
+						<ul>
+							<li><a th:href="@{/myprofile}">My Profile</a></li>
+							<li><a th:href="@{/logout}">Logout</a></li>
+						</ul>
+					</li>
+
 				</ul>
 			  </nav><!-- #nav-menu-container -->
 			</div>
@@ -1104,27 +1129,6 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 
 
-
-
-
-	  <script th:src="@{/js/vendor/jquery-2.2.4.min.js}"></script>
-		<script th:src="@{/js/popper.min.js}"></script>
-		<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
-		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
-		<script th:src="@{/js/jquery-ui.js}"></script>
-		<script th:src="@{/js/easing.min.js}"></script>
-		<script th:src="@{/js/hoverIntent.js}"></script>
-		<script th:src="@{/js/superfish.min.js}"></script>
-		<script th:src="@{/js/jquery.ajaxchimp.min.js}"></script>
-		<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
-		<script th:src="@{/js/jquery.tabs.min.js}"></script>
-		<script th:src="@{/js/jquery.nice-select.min.js}"></script>
-		<script th:src="@{/js/owl.carousel.min.js}"></script>
-		<script th:src="@{/js/mail-script.js}"></script>
-		<script th:src="@{/js/main.js}"></script>
-
-
-
 	  <!--===============================================================================================-->
 	  <script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
 	  <!--===============================================================================================-->
@@ -1147,6 +1151,25 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 	  </script>
 	  <!--===============================================================================================-->
 	  <script th:src="@{/js/timetable-main.js}"></script>
+	  <!--===============================================================================================-->
+
+
+	  <script th:src="@{/js/vendor/jquery-2.2.4.min.js}"></script>
+		<script th:src="@{/js/popper.min.js}"></script>
+		<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
+		<script th:src="@{/js/jquery-ui.js}"></script>
+		<script th:src="@{/js/easing.min.js}"></script>
+		<script th:src="@{/js/hoverIntent.js}"></script>
+		<script th:src="@{/js/superfish.min.js}"></script>
+		<script th:src="@{/js/jquery.ajaxchimp.min.js}"></script>
+		<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+		<script th:src="@{/js/jquery.tabs.min.js}"></script>
+		<script th:src="@{/js/jquery.nice-select.min.js}"></script>
+		<script th:src="@{/js/owl.carousel.min.js}"></script>
+		<script th:src="@{/js/mail-script.js}"></script>
+		<script th:src="@{/js/main.js}"></script>
+
 
 	</body>
 </html>
