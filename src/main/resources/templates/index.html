@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="fixed" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-	  xmlns:sec="http://www.w3.org/1999/xhtml">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
 <head>
 	<!-- Mobile Specific Meta -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -227,7 +227,9 @@
 					<li sec:authorize="isAuthenticated()" class="menu-has-children"><a href=""  >My Profile</a>
 <!--					<li sec:authorize="isAuthenticated()" class="menu-has-children"><a href=""  th:text="${#authentication.getPrincipal().getUsername()}" >My Profile</a>-->
 						<ul>
-							<li><a th:href="@{/myprofile}">My Profile</a></li>
+<!--							<li><a th:href="@{/user/__${@userServiceJpaImpl.findUsersByUsername(#authentication.name).getId()}__/profile}">My Profile</a></li>-->
+							<li><a th:href="@{/user/__${#authentication.getPrincipal().getUsername()}__/profile}">My Profile</a></li>
+<!--							<li><a th:href="@{/user/__${#authentication.principal.id}__/profile}">My Profile</a></li>-->
 							<li><a th:href="@{/logout}">Logout</a></li>
 						</ul>
 					</li>
