@@ -1,83 +1,66 @@
 package com.example.medcenter.service;
 
-
-import com.example.medcenter.dto.UserRegistrationDTO;
-import com.example.medcenter.entity.RoleEntity;
+import com.example.medcenter.dto.PatientVisitsDTO;
+import com.example.medcenter.entity.DoctorsFeaturesEntity;
+import com.example.medcenter.entity.DoctorsTypeEntity;
+import com.example.medcenter.entity.QueueEntity;
 import com.example.medcenter.entity.UsersEntity;
-import com.example.medcenter.repoitory.RoleRepository;
+import com.example.medcenter.repoitory.DoctorsFeaturesRepository;
+import com.example.medcenter.repoitory.QueueRepository;
 import com.example.medcenter.repoitory.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.core.userdetails.UsernameNotFoundException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import java.util.*;
-import java.util.stream.Collectors;
+import java.util.ArrayList;
+import java.util.List;
 
-@Service
+@Service("userService")
 public class UserServiceImpl implements UserService {
 
     @Autowired
-    private UsersRepository userRepository;
-    @Autowired
-    private RoleRepository roleRepository;
+    UsersRepository usersRepository;
 
     @Autowired
-    private BCryptPasswordEncoder passwordEncoder;
+    QueueRepository queueRepository;
 
-    public UsersEntity findByUsername(String username){
-        return userRepository.findUsersEntityByUsername(username);
-    }
+    @Autowired
+    DoctorsFeaturesRepository doctorsFeaturesRepository;
 
-    public UsersEntity save(UserRegistrationDTO registration){
-        UsersEntity user = new UsersEntity();
-        user.setName(registration.getFirstName());
-        user.setSurname(registration.getLastName());
-        user.setUsername(registration.getUsername());
-        user.setEmail(registration.getEmail());
-        user.setPassword(passwordEncoder.encode(registration.getPassword()));
-//        user.setRoles(Arrays.asList(new RoleEntity("ROLE_USER")));
-        return userRepository.save(user);
+    @Override
+    public UsersEntity findUserByUsername(String username) {
+        return usersRepository.findUsersEntityByUsername(username);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UsersEntity user = userRepository.findUsersEntityByUsername(username);
-        if (user == null){
-            throw new UsernameNotFoundException("Invalid username or password.");
+    public List<PatientVisitsDTO> getVisitsByUserId(long id) {
+        List<PatientVisitsDTO> visitsList = new ArrayList<>();
+        List<QueueEntity> queueEntities = queueRepository.findQueueEntitiesByUserId(id);
+
+        int order=1;
+        for(QueueEntity queue : queueEntities){
+            PatientVisitsDTO visit = new PatientVisitsDTO();
+            visit.setDate(queue.getDate().toString());
+            visit.setDoctorId(queue.getDoctorId());
+            DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(queue.getDoctorId());
+            int i=0;
+            String type = "";
+            for(DoctorsTypeEntity doctorType : doctor.getDoctorsTypeEntities()){
+                if(i==0){
+                    type += doctorType.getType();
+                }
+                else{
+                    type += (", "+doctorType.getType());
+                }
+                i++;
+            }
+            visit.setDoctorType(type);
+            visit.setDoctorFullname(doctor.getUsersByDoctorId().getName()+" "+doctor.getUsersByDoctorId().getSurname());
+            visit.setId(order);
+
+            visitsList.add(visit);
+            order++;
         }
 
-//        Collection<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
-//        if (user.getRoleById() != null) {
-//            // ROLE_USER, ROLE_ADMIN,..
-//            GrantedAuthority authority = new SimpleGrantedAuthority(user.getRoleById().getRole());
-//            grantList.add(authority);
-//
-//        }
-
-        Collection<RoleEntity> roles = new ArrayList<>();
-        roles.add(new RoleEntity());
-//        roles.add(user.getRoles());
-
-//        UserDetails userDetails =  new UserDetails(user.getUsername(), //
-//                user.getPassword(), grantList);
-//        UserDetails userDetails =  new UserDetails();
-
-//        return  userDetails;
-//        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-//                user.getPassword(),
-//                mapRolesToAuthorities((Collection<RoleEntity>) roles));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(),
-                mapRolesToAuthorities(user.getRoles()));
-    }
-
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<RoleEntity> roles){
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRole()))
-                .collect(Collectors.toList());
+        return visitsList;
     }
 }

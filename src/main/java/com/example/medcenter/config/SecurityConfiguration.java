@@ -1,6 +1,6 @@
 package com.example.medcenter.config;
 
-import com.example.medcenter.service.UserService;
+import com.example.medcenter.service.UsersDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,7 +17,7 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
-    private UserService userService;
+    private UsersDetailsService usersDetailsService;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -59,7 +59,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public DaoAuthenticationProvider authenticationProvider(){
         DaoAuthenticationProvider auth = new DaoAuthenticationProvider();
-        auth.setUserDetailsService(userService);
+        auth.setUserDetailsService(usersDetailsService);
         auth.setPasswordEncoder(passwordEncoder());
         return auth;
     }

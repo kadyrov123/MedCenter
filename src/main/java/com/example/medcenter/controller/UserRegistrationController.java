@@ -5,7 +5,7 @@ import javax.validation.Valid;
 
 import com.example.medcenter.dto.UserRegistrationDTO;
 import com.example.medcenter.entity.UsersEntity;
-import com.example.medcenter.service.UserService;
+import com.example.medcenter.service.UsersDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 public class UserRegistrationController {
 
     @Autowired
-    private UserService userService;
+    private UsersDetailsService usersDetailsService;
 
     @ModelAttribute("user")
     public UserRegistrationDTO userRegistrationDto() {
@@ -38,7 +38,7 @@ public class UserRegistrationController {
 //    public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDTO userDto, BindingResult result){
     public String registerUserAccount(@ModelAttribute("user") @Valid UserRegistrationDTO userDto, BindingResult result){
 
-        UsersEntity existing = userService.findByUsername(userDto.getUsername());
+        UsersEntity existing = usersDetailsService.findByUsername(userDto.getUsername());
 
         if (existing != null){
 //            System.out.println(existing.getUsername());
@@ -49,7 +49,7 @@ public class UserRegistrationController {
             return "registration";
         }
 
-        userService.save(userDto);
+        usersDetailsService.save(userDto);
         return "redirect:/registration?success";
     }
 

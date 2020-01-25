@@ -81,23 +81,23 @@ public class DoctorsServiceImpl implements DoctorsService {
             timeDTO.setOrder(order);
             timeDTO.setTime(possibleTimes.get(i)+" - "+possibleTimes.get(i+1));
             timeDTO.setFree(true);
-            timeDTO.setStatus(1);
+            timeDTO.setStatus(0);
             order++;
             timeList.add(timeDTO);
         }
 
         List<QueueEntity> queueEntities = queueRepository.findQueueEntitiesByDateAndDoctorId(date,doctorId);
         for(QueueEntity queueEntity : queueEntities){
-            if (queueEntity.getIntervalId() == doctorsFeatures.getIntervalId()){
+//            if (queueEntity.getIntervalId() == doctorsFeatures.getIntervalId()){
                 for(TimeDTO timeDTO : timeList){
                     if(queueEntity.getOrder() == timeDTO.getOrder()){
                         timeDTO.setStatus(queueEntity.getStatus());
-                        if(queueEntity.getStatus() <= 2) {
+                        if(queueEntity.getStatus() <= 1) {
                             timeDTO.setFree(false);
                         }
                     }
                 }
-            }
+//            }
         }
 
         return timeList;

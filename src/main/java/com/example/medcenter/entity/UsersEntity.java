@@ -36,8 +36,8 @@ public class UsersEntity {
     private String email;
 
     @Basic
-    @Column(name = "role_id")
-    private long roleId;
+    @Column(name = "pin")
+    private long pin;
 
     @JsonIgnore
     @OneToMany(mappedBy = "usersByPatientId")
@@ -118,12 +118,12 @@ public class UsersEntity {
         this.email = email;
     }
 
-    public long getRoleId() {
-        return roleId;
+    public long getPin() {
+        return pin;
     }
 
-    public void setRoleId(long roleId) {
-        this.roleId = roleId;
+    public void setPin(long pin) {
+        this.pin = pin;
     }
 
     @Override
@@ -137,12 +137,12 @@ public class UsersEntity {
                 Objects.equals(username, that.username) &&
                 Objects.equals(password, that.password) &&
                 Objects.equals(email, that.email) &&
-                Objects.equals(roleId, that.roleId);
+                Objects.equals(pin, that.pin);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(id, name, surname, username, password, email, roleId);
+        return Objects.hash(id, name, surname, username, password, email, pin);
     }
 
 
