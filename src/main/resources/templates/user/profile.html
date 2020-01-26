@@ -22,6 +22,7 @@
     <title>Medical</title>
 
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
     <!--
     CSS
     ============================================= -->
@@ -50,6 +51,8 @@
             padding: 0.25rem !important;
         }
     </style>
+
+
 </head>
 <body>
 
@@ -135,9 +138,45 @@
 <!--                <p>Tel : <p class="card-text" ></p></p>-->
         </div>
         <div class="card-footer">
-            <a href="#" class="btn btn-primary">Изменить</a>
+            <button id="userInfoChangeButton" class="btn btn-primary">Изменить</button>
             <a href="#" class="btn btn-primary">Поменять пароль</a>
         </div>
+    </div>
+
+    <div id="firstInfoCard2" class="card" style="display: none;">
+        <div class="card-header">
+            <h3>INFO</h3>
+        </div>
+        <form th:action="@{/user/update}" method="post" th:object="${user}">
+<!--        <form th:object="${user}">-->
+            <div class="card-body">
+
+                <input hidden="hidden" type="text" name="id" th:field="*{id}" th:value="${user.id}">
+                <div class="form-group">
+                    <label for="firstname">Имя :</label>
+                    <input type="text" class="form-control" id="firstname" th:field="*{name}" th:value="${user.name}">
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Фамилия :</label>
+                    <input type="text" class="form-control" id="lastname" th:field="*{surname}" th:value="${user.surname}">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email :</label>
+                    <input type="email" class="form-control" id="email" th:field="*{email}" th:value="${user.email}">
+                </div>
+                <div class="form-group">
+                    <label for="username">Имя пользователя :</label>
+                    <input type="text" name="username" class="form-control" id="username" th:field="*{username}" th:value="${user.username}">
+                </div>
+
+
+            </div>
+            <div class="card-footer">
+<!--                <a href="#" class="btn btn-primary">Сохранить</a>-->
+                <button id="userInfoFormCancelButton" type="button" class="btn btn-default">Отмена</button>
+                <button id="userInfoFormSaveButton" type="submit" class="btn btn-success">Сохранить</button>
+            </div>
+        </form>
     </div>
 
 <!--    =============-->
@@ -469,6 +508,31 @@
     </div>
 </footer>
 <!-- End footer Area -->
+
+
+<script>
+
+
+
+    $(document).ready(function(){
+
+        $("#userInfoFormSaveButton").on("click" , function(){
+            $("#firstInfoCard2").css("display","none");
+            $("#firstInfoCard").css("display","block");
+        });
+        $("#userInfoFormCancelButton").on("click" , function(){
+            $("#firstInfoCard2").css("display","none");
+            $("#firstInfoCard").css("display","block");
+        });
+        $("#userInfoChangeButton").on("click" , function(){
+            $("#firstInfoCard").css("display","none");
+            $("#firstInfoCard2").css("display","block");
+        });
+
+
+    });
+
+</script>
 
 
 <script th:src="@{/js/vendor/jquery-2.2.4.min.js}"></script>

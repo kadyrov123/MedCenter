@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -27,6 +28,14 @@ public class UserController {
         modelMap.addAttribute("user" , user);
 
         return "user/profile";
+    }
+
+    @PostMapping("/user/update")
+    public String updateUserInfo(UsersEntity user){
+//        System.out.println(user.getId());
+        user.setPassword(usersRepository.findUsersEntityById(user.getId()).getPassword());
+        usersRepository.save(user);
+        return "redirect:"+user.getUsername()+"/profile";
     }
 
 
