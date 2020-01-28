@@ -94,6 +94,7 @@ public class DoctorsServiceImpl implements DoctorsService {
                         timeDTO.setStatus(queueEntity.getStatus());
                         if(queueEntity.getStatus() <= 1) {
                             timeDTO.setFree(false);
+                            System.out.println(" Busy Queue");
                         }
                     }
                 }

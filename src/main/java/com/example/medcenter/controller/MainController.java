@@ -88,7 +88,6 @@ public class MainController {
     }
 
 
-
     @RequestMapping("/queue")
     public String  queue(ModelMap modelMap){
         Date date = new Date();

@@ -134,6 +134,12 @@
             <version>1.5.3</version>
         </dependency>
 
+<!--        thymeleaf security-->
+        <dependency>
+            <groupId>org.thymeleaf.extras</groupId>
+            <artifactId>thymeleaf-extras-springsecurity5</artifactId>
+        </dependency>
+
 
 
 

@@ -193,41 +193,57 @@
         </div>
 
 
-        <div class="card-body" th:each="visit : ${visits}">
+<!--        <div class="card-body" th:each="visit : ${visits}">-->
+<!--            <div class="card">-->
+<!--                <div class="card-header">-->
+<!--                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree" th:text="${visit.date +' => '+visit.doctorType+':'+visit.doctorFullname}" ></a>-->
+<!--                </div>-->
+<!--&lt;!&ndash;                <div th:id="${'collapseThree'+visit.id}" class="collapse" data-parent="#accordion">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <div class="card-body">&ndash;&gt;-->
+<!--&lt;!&ndash;                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--            </div>-->
+<!--&lt;!&ndash;            <div class="card">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="card-header">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree2">&ndash;&gt;-->
+<!--&lt;!&ndash;                        Collapsible Group Item #3&ndash;&gt;-->
+<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div id="collapseThree2" class="collapse" data-parent="#accordion">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <div class="card-body">&ndash;&gt;-->
+<!--&lt;!&ndash;                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            <div class="card">&ndash;&gt;-->
+<!--&lt;!&ndash;                <div class="card-header">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree3">&ndash;&gt;-->
+<!--&lt;!&ndash;                        Collapsible Group Item #3&ndash;&gt;-->
+<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                <div id="collapseThree3" class="collapse" data-parent="#accordion">&ndash;&gt;-->
+<!--&lt;!&ndash;                    <div class="card-body">&ndash;&gt;-->
+<!--&lt;!&ndash;                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&ndash;&gt;-->
+<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
+<!--&lt;!&ndash;                </div>&ndash;&gt;-->
+<!--&lt;!&ndash;            </div>&ndash;&gt;-->
+<!--        </div>-->
+
+        <div class="card-body" th:each="disease : ${diseases}">
             <div class="card">
                 <div class="card-header">
-                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree" th:text="${visit.date +' => '+visit.doctorType+':'+visit.doctorFullname}" ></a>
+                    <a class="collapsed card-link" data-toggle="collapse" th:href="'#collapseThree' + ${disease.id}" th:text="${disease.date + '=>' +disease.recipe}" ></a>
                 </div>
-<!--                <div th:id="${'collapseThree'+visit.id}" class="collapse" data-parent="#accordion">-->
-<!--                    <div class="card-body">-->
-<!--                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.-->
-<!--                    </div>-->
-<!--                </div>-->
+                <div th:id="'collapseThree' + ${disease.id}" class="collapse" data-parent="#accordion">
+                    <div class="card-body">
+                        <h5>Diagnos</h5>
+                        <p th:text="${disease.diagnosis}"></p>
+                        <h5>Recept</h5>
+                        <p th:text="${disease.recipe}"></p>
+                    </div>
+                </div>
             </div>
-<!--            <div class="card">-->
-<!--                <div class="card-header">-->
-<!--                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree2">-->
-<!--                        Collapsible Group Item #3-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--                <div id="collapseThree2" class="collapse" data-parent="#accordion">-->
-<!--                    <div class="card-body">-->
-<!--                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            <div class="card">-->
-<!--                <div class="card-header">-->
-<!--                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree3">-->
-<!--                        Collapsible Group Item #3-->
-<!--                    </a>-->
-<!--                </div>-->
-<!--                <div id="collapseThree3" class="collapse" data-parent="#accordion">-->
-<!--                    <div class="card-body">-->
-<!--                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
         </div>
 
     </div>
