@@ -179,6 +179,40 @@
         </form>
     </div>
 
+    <div id="firstInfoCard3" class="card" style="display: none;">
+        <div class="card-header">
+            <h3>INFO</h3>
+        </div>
+        <form th:action="@{/user/change_password}" method="post" th:object="${user}">
+            <!--        <form th:object="${user}">-->
+            <div class="card-body">
+                <div th:if="${param.error}">
+                    <div class="alert alert-danger">Invalid username or password.</div>
+                </div>
+                <input hidden="hidden" type="text" name="id"  th:value="${user.id}">
+                <div class="form-group">
+                    <label for="firstname">Старый пароль :</label>
+                    <input type="text" class="form-control" name="currentPassword">
+                </div>
+                <div class="form-group">
+                    <label for="lastname">Новый пароль :</label>
+                    <input type="text" class="form-control" name="newPassword">
+                </div>
+                <div class="form-group">
+                    <label for="email">Повторите новый пароль:</label>
+                    <input type="text" class="form-control" name="confirmNew">
+                </div>
+
+
+            </div>
+            <div class="card-footer">
+                <!--                <a href="#" class="btn btn-primary">Сохранить</a>-->
+                <button id="userInfoChangePasswordFormCalcel" type="button" class="btn btn-default">Отмена</button>
+                <button id="userInfoChangePasswordFormSubmit" type="submit" class="btn btn-success">Сохранить</button>
+            </div>
+        </form>
+    </div>
+
 <!--    =============-->
         <hr>
 
@@ -187,56 +221,27 @@
         <div class="card-header">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" >Список посещений</a>
+                    <a id="infoCardNavBarHeader1" class="nav-link active" >Список посещений</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " >История болезни</a>
+                    <a id="infoCardNavBarHeader2" class="nav-link " >История болезни</a>
                 </li>
             </ul>
         </div>
 
 
-<!--        <div class="card-body" th:each="visit : ${visits}">-->
-<!--            <div class="card">-->
-<!--                <div class="card-header">-->
-<!--                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree" th:text="${visit.date +' => '+visit.doctorType+':'+visit.doctorFullname}" ></a>-->
-<!--                </div>-->
-<!--&lt;!&ndash;                <div th:id="${'collapseThree'+visit.id}" class="collapse" data-parent="#accordion">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="card-body">&ndash;&gt;-->
-<!--&lt;!&ndash;                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--            </div>-->
-<!--&lt;!&ndash;            <div class="card">&ndash;&gt;-->
-<!--&lt;!&ndash;                <div class="card-header">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree2">&ndash;&gt;-->
-<!--&lt;!&ndash;                        Collapsible Group Item #3&ndash;&gt;-->
-<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                <div id="collapseThree2" class="collapse" data-parent="#accordion">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="card-body">&ndash;&gt;-->
-<!--&lt;!&ndash;                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            <div class="card">&ndash;&gt;-->
-<!--&lt;!&ndash;                <div class="card-header">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree3">&ndash;&gt;-->
-<!--&lt;!&ndash;                        Collapsible Group Item #3&ndash;&gt;-->
-<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                <div id="collapseThree3" class="collapse" data-parent="#accordion">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="card-body">&ndash;&gt;-->
-<!--&lt;!&ndash;                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--        </div>-->
-
-        <div class="card-body" th:each="disease : ${diseases}">
-            <div class="card">
+        <div id="secondInfoCardBody1" class="card-body" >
+            <div class="card" th:each="visit : ${visits}">
                 <div class="card-header">
-                    <a class="collapsed card-link" data-toggle="collapse" th:href="'#collapseThree' + ${disease.id}" th:text="${disease.date + '=>' +disease.doctorName+' '+disease.doctorSurname}" ></a>
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree" th:text="${visit.date +' => '+visit.doctorType+':'+visit.doctorFullname}" ></a>
+                </div>
+            </div>
+        </div>
+
+        <div id="secondInfoCardBody2" style="display: none;" class="card-body" >
+            <div class="card" th:each="disease : ${diseases}">
+                <div class="card-header">
+                    <a class="collapsed card-link" data-toggle="collapse" th:href="'#collapseThree' + ${disease.id}" th:text="${disease.date + ' => ' +disease.doctorName+' '+disease.doctorSurname}" ></a>
                 </div>
                 <div th:id="'collapseThree' + ${disease.id}" class="collapse" data-parent="#accordion">
                     <div class="card-body">
@@ -547,6 +552,22 @@
             $("#firstInfoCard").css("display","none");
             $("#firstInfoCard2").css("display","block");
         });
+
+        // infoCardNavBarHeader1
+
+        $("#infoCardNavBarHeader1").on("click" , function(){
+            $("#infoCardNavBarHeader2").removeClass("active");
+            $("#infoCardNavBarHeader1").addClass("active");
+            $("#secondInfoCardBody2").css("display","none");
+            $("#secondInfoCardBody1").css("display","block");
+        });
+        $("#infoCardNavBarHeader2").on("click" , function(){
+            $("#infoCardNavBarHeader1").removeClass("active");
+            $("#infoCardNavBarHeader2").addClass("active");
+            $("#secondInfoCardBody1").css("display","none");
+            $("#secondInfoCardBody2").css("display","block");
+        });
+
 
 
     });

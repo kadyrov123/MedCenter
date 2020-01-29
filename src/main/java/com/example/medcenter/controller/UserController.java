@@ -42,6 +42,19 @@ public class UserController {
         return "redirect:"+user.getUsername()+"/profile";
     }
 
+    @PostMapping("/user/changepassword")
+    public String changeUserPassword(@RequestParam String username , @RequestParam String currentPassword,
+                                     @RequestParam String newPassword,@RequestParam String confirmPassword){
+        UsersEntity user = usersRepository.findUsersEntityByUsername(username);
+        if(newPassword.equals(confirmPassword) && currentPassword.equals(user.getPassword())){
+            return "redirect:"+user.getUsername()+"/profile";
+        }
+//        System.out.println(user.getId());
+//        user.setPassword(usersRepository.findUsersEntityById(user.getId()).getPassword());
+//        usersRepository.save(user);
+        return "redirect:/user/changepassword?error";
+    }
+
 
 
 }
