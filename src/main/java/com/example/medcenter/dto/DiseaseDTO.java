@@ -3,11 +3,13 @@ package com.example.medcenter.dto;
 import java.sql.Date;
 
 public class DiseaseDTO {
-    int patientId;
+    int id;
+    long patientId;
     int doctorId;
     String patientName;
     String patientSurname;
     String patientEmail;
+    long patientPin;
     String doctorName;
     String doctorSurname;
     String doctorEmail;
@@ -18,11 +20,11 @@ public class DiseaseDTO {
     public DiseaseDTO() {
     }
 
-    public int getPatientId() {
+    public long getPatientId() {
         return patientId;
     }
 
-    public void setPatientId(int patientId) {
+    public void setPatientId(long patientId) {
         this.patientId = patientId;
     }
 
@@ -104,5 +106,21 @@ public class DiseaseDTO {
 
     public void setRecipe(String recipe) {
         this.recipe = recipe;
+    }
+
+    public long getPatientPin() {
+        return patientPin;
+    }
+
+    public void setPatientPin(long patientPin) {
+        this.patientPin = patientPin;
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
     }
 }

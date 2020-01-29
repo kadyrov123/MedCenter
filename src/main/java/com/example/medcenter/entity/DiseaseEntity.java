@@ -31,7 +31,7 @@ public class DiseaseEntity {
 
     @Basic
     @Column(name = "doctor_id")
-    private Long doctorId;
+    private int doctorId;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
@@ -83,11 +83,11 @@ public class DiseaseEntity {
     }
 
 
-    public Long getDoctorId() {
+    public int getDoctorId() {
         return doctorId;
     }
 
-    public void setDoctorId(Long doctorId) {
+    public void setDoctorId(int doctorId) {
         this.doctorId = doctorId;
     }
 

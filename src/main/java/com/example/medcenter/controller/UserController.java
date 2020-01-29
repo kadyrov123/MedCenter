@@ -3,6 +3,7 @@ package com.example.medcenter.controller;
 import com.example.medcenter.entity.UsersEntity;
 import com.example.medcenter.repoitory.DiseaseRepository;
 import com.example.medcenter.repoitory.UsersRepository;
+import com.example.medcenter.service.DiseaseService;
 import com.example.medcenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -17,18 +18,17 @@ public class UserController {
 
     @Autowired
     UserService userService;
-
     @Autowired
     UsersRepository usersRepository;
     @Autowired
-    DiseaseRepository diseaseRepository;
+    DiseaseService diseaseService;
 
     @RequestMapping("/user/{username}/profile")
     public String userProfilePage(@PathVariable("username") String username , ModelMap modelMap){
         UsersEntity user = usersRepository.findUsersEntityByUsername(username);
         System.out.println(username);
         modelMap.addAttribute("visits" , userService.getVisitsByUserId(user.getId()));
-        modelMap.addAttribute("diseases" , diseaseRepository.findDiseaseEntitiesByPatientId(user.getId()));
+        modelMap.addAttribute("diseases" , diseaseService.getDiseaseByPatientId(user.getId()));
         modelMap.addAttribute("user" , user);
 
         return "user/profile";
