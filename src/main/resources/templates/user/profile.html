@@ -179,39 +179,7 @@
         </form>
     </div>
 
-    <div id="firstInfoCard3" class="card" style="display: none;">
-        <div class="card-header">
-            <h3>INFO</h3>
-        </div>
-        <form th:action="@{/user/change_password}" method="post" th:object="${user}">
-            <!--        <form th:object="${user}">-->
-            <div class="card-body">
-                <div th:if="${param.error}">
-                    <div class="alert alert-danger">Invalid username or password.</div>
-                </div>
-                <input hidden="hidden" type="text" name="id"  th:value="${user.id}">
-                <div class="form-group">
-                    <label for="firstname">Старый пароль :</label>
-                    <input type="text" class="form-control" name="currentPassword">
-                </div>
-                <div class="form-group">
-                    <label for="lastname">Новый пароль :</label>
-                    <input type="text" class="form-control" name="newPassword">
-                </div>
-                <div class="form-group">
-                    <label for="email">Повторите новый пароль:</label>
-                    <input type="text" class="form-control" name="confirmNew">
-                </div>
 
-
-            </div>
-            <div class="card-footer">
-                <!--                <a href="#" class="btn btn-primary">Сохранить</a>-->
-                <button id="userInfoChangePasswordFormCalcel" type="button" class="btn btn-default">Отмена</button>
-                <button id="userInfoChangePasswordFormSubmit" type="submit" class="btn btn-success">Сохранить</button>
-            </div>
-        </form>
-    </div>
 
 <!--    =============-->
         <hr>

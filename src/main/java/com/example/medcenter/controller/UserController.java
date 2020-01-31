@@ -26,13 +26,13 @@ public class UserController {
     DiseaseService diseaseService;
     @Autowired
     UsersDetailsService usersDetailsService;
-//    @Autowired
-//    BCryptPasswordEncoder bCryptPasswordEncoder;
 
-    @RequestMapping("/user/{username}/profile")
-    public String userProfilePage(@PathVariable("username") String username , ModelMap modelMap){
-        UsersEntity user = usersRepository.findUsersEntityByUsername(username);
-        System.out.println(username);
+
+    @RequestMapping("/user/profile")
+    public String userProfilePage( ModelMap modelMap){
+        UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+//        UsersEntity user = usersRepository.findUsersEntityByUsername(username);
+//        System.out.println(username);
         modelMap.addAttribute("visits" , userService.getVisitsByUserId(user.getId()));
         modelMap.addAttribute("diseases" , diseaseService.getDiseaseByPatientId(user.getId()));
         modelMap.addAttribute("user" , user);
@@ -45,7 +45,7 @@ public class UserController {
 //        System.out.println(user.getId());
         user.setPassword(usersRepository.findUsersEntityById(user.getId()).getPassword());
         usersRepository.save(user);
-        return "redirect:"+user.getUsername()+"/profile";
+        return "redirect:/user/profile";
     }
 
     @PreAuthorize("hasAnyRole()")
@@ -56,7 +56,7 @@ public class UserController {
 
         if(newPassword.equals(confirmPassword) ){
             if(usersDetailsService.changePassword(currentPassword , newPassword , user)){
-                return "redirect:"+user.getUsername()+"/profile";
+                return "redirect:/user/profile";
             }
         }
         return "redirect:/user/changepassword?error";
