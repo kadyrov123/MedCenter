@@ -32,11 +32,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/fonts/**",
                         "/vendor/**",
                         "/scss/**",
-                        "/webjars/**",
-                        "/getTimetableByDoctorId",
-                        "/*",
-                        "/queue/*"
+                        "/webjars/**"
+//                        "/getTimetableByDoctorId",
+//                        "/*",
+//                        "/queue/*"
                         ).permitAll()
+                .antMatchers("/*").hasAuthority("ROLE_USER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

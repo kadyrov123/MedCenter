@@ -1,6 +1,7 @@
 package com.example.medcenter.controller;
 
 import com.example.medcenter.config.SecurityConfiguration;
+import com.example.medcenter.dto.DiseaseDTO;
 import com.example.medcenter.entity.UsersEntity;
 import com.example.medcenter.repoitory.DiseaseRepository;
 import com.example.medcenter.repoitory.UsersRepository;
@@ -35,6 +36,7 @@ public class UserController {
 //        System.out.println(username);
         modelMap.addAttribute("visits" , userService.getVisitsByUserId(user.getId()));
         modelMap.addAttribute("diseases" , diseaseService.getDiseaseByPatientId(user.getId()));
+        modelMap.addAttribute("diseaseToChange", new DiseaseDTO());
         modelMap.addAttribute("user" , user);
 
         return "user/profile";

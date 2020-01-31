@@ -9,6 +9,7 @@ import com.example.medcenter.repoitory.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -54,41 +55,75 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
     }
 
 
-    @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UsersEntity user = userRepository.findUsersEntityByUsername(username);
-        if (user == null){
-            throw new UsernameNotFoundException("Invalid username or password.");
-        }
-
-//        Collection<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
-//        if (user.getRoleById() != null) {
-//            // ROLE_USER, ROLE_ADMIN,..
-//            GrantedAuthority authority = new SimpleGrantedAuthority(user.getRoleById().getRole());
-//            grantList.add(authority);
-//
+//    @Override
+//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+//        UsersEntity user = userRepository.findUsersEntityByUsername(username);
+//        if (user == null){
+//            throw new UsernameNotFoundException("Invalid username or password.");
 //        }
-
-        Collection<RoleEntity> roles = new ArrayList<>();
-        roles.add(new RoleEntity());
-//        roles.add(user.getRoles());
-
-//        UserDetails userDetails =  new UserDetails(user.getUsername(), //
-//                user.getPassword(), grantList);
-//        UserDetails userDetails =  new UserDetails();
-
-//        return  userDetails;
+//
+////        Collection<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
+////        if (user.getRoleById() != null) {
+////            // ROLE_USER, ROLE_ADMIN,..
+////            GrantedAuthority authority = new SimpleGrantedAuthority(user.getRoleById().getRole());
+////            grantList.add(authority);
+////
+////        }
+//
+//        Collection<RoleEntity> roles = new ArrayList<>();
+//        roles.add(new RoleEntity());
+////        roles.add(user.getRoles());
+//
+////        UserDetails userDetails =  new UserDetails(user.getUsername(), //
+////                user.getPassword(), grantList);
+////        UserDetails userDetails =  new UserDetails();
+//
+////        return  userDetails;
+////        return new org.springframework.security.core.userdetails.User(user.getUsername(),
+////                user.getPassword(),
+////                mapRolesToAuthorities((Collection<RoleEntity>) roles));
 //        return new org.springframework.security.core.userdetails.User(user.getUsername(),
 //                user.getPassword(),
-//                mapRolesToAuthorities((Collection<RoleEntity>) roles));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(),
-                mapRolesToAuthorities(user.getRoles()));
+//                mapRolesToAuthorities(user.getRoles()));
+//    }
+//
+//    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<RoleEntity> roles){
+//        return roles.stream()
+//                .map(role -> new SimpleGrantedAuthority(role.getRole()))
+//                .collect(Collectors.toList());
+//    }
+
+
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        UsersEntity user = this.userRepository.findUsersEntityByUsername(userName);
+
+        if (user == null) {
+            System.out.println("User not found! " + userName);
+            throw new UsernameNotFoundException("User " + userName + " was not found in the database");
+        }
+
+        System.out.println("Found User: " + user);
+
+        // [ROLE_USER, ROLE_ADMIN,..]
+//        List<String> roleNames = this.roleDao.getRoleNames(((com.app.pharmacy.apteka.model.User) user).getId());
+
+//        List<RoleEntity> userRoles = userRoleRepository.findAllByUser(((law.advisor.model.User) user));
+        List<RoleEntity> userRoles =(List<RoleEntity>) user.getRoles();
+
+        List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
+        if (userRoles != null) {
+            for (RoleEntity userRole : userRoles) {
+                // ROLE_USER, ROLE_ADMIN,..
+                GrantedAuthority authority = new SimpleGrantedAuthority(userRole.getRole());
+                grantList.add(authority);
+            }
+        }
+
+        UserDetails userDetails = (UserDetails) new User(user.getUsername(), //
+                user.getPassword(), grantList);
+
+        return userDetails;
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<RoleEntity> roles){
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRole()))
-                .collect(Collectors.toList());
-    }
 }
