@@ -9,4 +9,6 @@ public interface UsersDetailsService extends UserDetailsService {
     UsersEntity findByUsername(String username);
 
     UsersEntity save(UserRegistrationDTO registration);
+
+    boolean changePassword(String currentPassword , String newPassword, UsersEntity usersEntity);
 }

@@ -44,6 +44,17 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
     }
 
     @Override
+    public boolean changePassword(String currentPassword , String newPassword, UsersEntity usersEntity){
+        if(passwordEncoder.matches(currentPassword , usersEntity.getPassword())){
+            usersEntity.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(usersEntity);
+            return true;
+        }
+        return false;
+    }
+
+
+    @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
         UsersEntity user = userRepository.findUsersEntityByUsername(username);
         if (user == null){

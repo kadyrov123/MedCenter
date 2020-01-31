@@ -1,17 +1,19 @@
 package com.example.medcenter.controller;
 
+import com.example.medcenter.config.SecurityConfiguration;
 import com.example.medcenter.entity.UsersEntity;
 import com.example.medcenter.repoitory.DiseaseRepository;
 import com.example.medcenter.repoitory.UsersRepository;
 import com.example.medcenter.service.DiseaseService;
 import com.example.medcenter.service.UserService;
+import com.example.medcenter.service.UsersDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
 
 @Controller
 public class UserController {
@@ -22,6 +24,10 @@ public class UserController {
     UsersRepository usersRepository;
     @Autowired
     DiseaseService diseaseService;
+    @Autowired
+    UsersDetailsService usersDetailsService;
+//    @Autowired
+//    BCryptPasswordEncoder bCryptPasswordEncoder;
 
     @RequestMapping("/user/{username}/profile")
     public String userProfilePage(@PathVariable("username") String username , ModelMap modelMap){
@@ -42,17 +48,24 @@ public class UserController {
         return "redirect:"+user.getUsername()+"/profile";
     }
 
+    @PreAuthorize("hasAnyRole()")
     @PostMapping("/user/changepassword")
-    public String changeUserPassword(@RequestParam String username , @RequestParam String currentPassword,
+    public String changeUserPassword( @RequestParam String currentPassword,
                                      @RequestParam String newPassword,@RequestParam String confirmPassword){
-        UsersEntity user = usersRepository.findUsersEntityByUsername(username);
-        if(newPassword.equals(confirmPassword) && currentPassword.equals(user.getPassword())){
-            return "redirect:"+user.getUsername()+"/profile";
+        UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        if(newPassword.equals(confirmPassword) ){
+            if(usersDetailsService.changePassword(currentPassword , newPassword , user)){
+                return "redirect:"+user.getUsername()+"/profile";
+            }
         }
-//        System.out.println(user.getId());
-//        user.setPassword(usersRepository.findUsersEntityById(user.getId()).getPassword());
-//        usersRepository.save(user);
         return "redirect:/user/changepassword?error";
+    }
+
+
+    @GetMapping("/user/changepassword")
+    public String changePasswordPage(){
+        return "user/changepassword";
     }
 
 
