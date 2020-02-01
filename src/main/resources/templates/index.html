@@ -229,7 +229,8 @@
 						<ul>
 <!--							<li><a th:href="@{/user/__${@userServiceJpaImpl.findUsersByUsername(#authentication.name).getId()}__/profile}">My Profile</a></li>-->
 <!--							<li sec:authentication="hasAuthority('USER')"><a th:href="@{/user/profile}">My Profile</a></li>-->
-							<li><a th:href="@{/user/profile}">My Profile</a></li>
+							<li sec:authorize="hasRole('ROLE_USER')" ><a th:href="@{/user/profile}">My Profile</a></li>
+							<li sec:authorize="hasRole('ROLE_DOCTOR')" ><a th:href="@{/doctor/profile}">My Profile</a></li>
 <!--							<li><a th:href="@{/user/__${#authentication.principal.id}__/profile}">My Profile</a></li>-->
 							<li><a th:href="@{/logout}">Logout</a></li>
 						</ul>
@@ -302,7 +303,7 @@
 								<div class="form-group col-md-10">
 									<label for="selectDoctor">Выберите врача</label>
 									<select id="selectDoctor" th:each="doctor: ${doctors}" class="form-control">
-										<option th:value="${doctor.id}"  th:text="${doctor.doctorsTypeEntities[0].type + ': ' + doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}" ></option>
+										<option th:value="${doctor.id}"  th:text="${doctor.getDoctorTypeString() + ' : ' + doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}" ></option>
 									</select>
 								</div>
 

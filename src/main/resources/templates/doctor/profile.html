@@ -128,63 +128,84 @@
 
 <section id="user-profile-info" style="width: 80%;">
 
-        <div id="firstInfoCard" class="card">
-            <div class="card-header">
-                <h3>INFO</h3>
-            </div>
+    <div id="firstInfoCard" class="card">
+        <div class="card-header">
+            <h3>INFO</h3>
+        </div>
+        <div class="card-body">
+            <h5 class="card-title" th:text="${doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}">Name Surname</h5>
+            <p class="card-text" th:text="${'Email :'+doctor.usersByDoctorId.email}" >Email</p>
+            <p class="card-text" th:text="${'Username : '+doctor.usersByDoctorId.username}" >Username</p>
+            <p class="card-text" th:text="${'Pin : '+doctor.usersByDoctorId.pin}" >Pin</p>
+            <p class="card-text" th:text="${'Info : '+doctor.info}" >Pin</p>
+            <p class="card-text" th:text="${'Type : '+doctor.getDoctorTypeString()}" >Pin</p>
+            <p class="card-text" th:text="${'Start time : '+doctor.startTime}" >Pin</p>
+            <p class="card-text" th:text="${'End time : '+doctor.endTime}" >Pin</p>
+            <p class="card-text" th:text="${'Interval : '+doctor.intervalByIntervalId.interval}" >Pin</p>
+            <!--                <p>Tel : <p class="card-text" ></p></p>-->
+        </div>
+        <div class="card-footer" sec:authorize="hasRole('ROLE_DOCTOR')" >
+            <button id="userInfoChangeButton" class="btn btn-primary">Изменить</button>
+            <a th:href="@{/user/changepassword}" class="btn btn-primary">Поменять пароль</a>
+        </div>
+    </div>
+
+    <div id="firstInfoCard2" class="card" style="display: none;"  sec:authorize="hasRole('ROLE_DOCTOR')">
+        <div class="card-header">
+            <h3>INFO</h3>
+        </div>
+        <form th:action="@{/doctor/update}" method="post" th:object="${doctor}">
+            <!--        <form th:object="${user}">-->
             <div class="card-body">
-                <h5 class="card-title" th:text="${user.name +' '+user.surname}">Name Surname</h5>
-                <p class="card-text" th:text="${'Email :'+user.email}" >Email</p>
-                    <p class="card-text" th:text="${'Username : '+user.username}" >Username</p>
-                    <p class="card-text" th:text="${'Pin : '+user.pin}" >Pin</p>
-    <!--                <p>Tel : <p class="card-text" ></p></p>-->
-            </div>
-            <div class="card-footer" sec:authorize="hasRole('ROLE_USER')" >
-                <button id="userInfoChangeButton" class="btn btn-primary">Изменить</button>
-                <a th:href="@{/user/changepassword}" class="btn btn-primary">Поменять пароль</a>
-            </div>
-        </div>
 
-        <div id="firstInfoCard2" class="card" style="display: none;"  sec:authorize="hasRole('ROLE_USER')">
-            <div class="card-header">
-                <h3>INFO</h3>
-            </div>
-            <form th:action="@{/user/update}" method="post" th:object="${user}">
-    <!--        <form th:object="${user}">-->
-                <div class="card-body">
-
-                    <input hidden="hidden" type="text" name="id" th:field="*{id}" th:value="${user.id}">
-                    <div class="form-group">
-                        <label for="firstname">Имя :</label>
-                        <input type="text" class="form-control" id="firstname" th:field="*{name}" th:value="${user.name}">
-                    </div>
-                    <div class="form-group">
-                        <label for="lastname">Фамилия :</label>
-                        <input type="text" class="form-control" id="lastname" th:field="*{surname}" th:value="${user.surname}">
-                    </div>
-                    <div class="form-group">
-                        <label for="email">Email :</label>
-                        <input type="email" class="form-control" id="email" th:field="*{email}" th:value="${user.email}">
-                    </div>
-                    <div class="form-group">
-                        <label for="username">Имя пользователя :</label>
-                        <input type="text" name="username" class="form-control" id="username" th:field="*{username}" th:value="${user.username}">
-                    </div>
-
-
+                <input hidden="hidden" type="text" name="id" th:field="*{id}" th:value="${doctor.usersByDoctorId.id}">
+                <div class="form-group">
+                    <label for="firstname">Имя :</label>
+                    <input type="text" class="form-control" id="firstname" th:field="*{usersByDoctorId.name}" th:value="${doctor.usersByDoctorId.name}">
                 </div>
-                <div class="card-footer">
-    <!--                <a href="#" class="btn btn-primary">Сохранить</a>-->
-                    <button id="userInfoFormCancelButton" type="button" class="btn btn-default">Отмена</button>
-                    <button id="userInfoFormSaveButton" type="submit" class="btn btn-success">Сохранить</button>
+                <div class="form-group">
+                    <label for="lastname">Фамилия :</label>
+                    <input type="text" class="form-control" id="lastname" th:field="*{usersByDoctorId.name}" th:value="${doctor.usersByDoctorId.surname}">
                 </div>
-            </form>
-        </div>
+                <div class="form-group">
+                    <label for="email">Email :</label>
+                    <input type="email" class="form-control" id="email" th:field="*{usersByDoctorId.name}" th:value="${doctor.usersByDoctorId.email}">
+                </div>
+                <div class="form-group">
+                    <label for="username">Имя пользователя :</label>
+                    <input type="text" name="username" class="form-control" id="username" th:field="*{usersByDoctorId.username}" th:value="${doctor.usersByDoctorId.username}">
+                </div>
+                <div class="form-group">
+                    <label for="username">ИНН :</label>
+                    <input type="text" name="username" class="form-control" id="pin" th:field="*{usersByDoctorId.pin}" th:value="${doctor.usersByDoctorId.pin}">
+                </div>
+                <div class="form-group">
+                    <label for="username">Имя пользователя :</label>
+                    <input type="text" name="username" class="form-control" id="info" th:field="*{info}" th:value="${doctor.info}">
+                </div>
+                <div class="form-group">
+                    <label for="username">Имя пользователя :</label>
+                    <input type="text" name="username" class="form-control" id="startTime" th:field="*{startTime}" th:value="${doctor.startTime}">
+                </div>
+                <div class="form-group">
+                    <label for="username">Имя пользователя :</label>
+                    <input type="text" name="username" class="form-control" id="endTime" th:field="*{endTime}" th:value="${doctor.endTime}">
+                </div>
+
+
+            </div>
+            <div class="card-footer">
+                <!--                <a href="#" class="btn btn-primary">Сохранить</a>-->
+                <button id="userInfoFormCancelButton" type="button" class="btn btn-default">Отмена</button>
+                <button id="userInfoFormSaveButton" type="submit" class="btn btn-success">Сохранить</button>
+            </div>
+        </form>
+    </div>
 
 
 
-<!--    =============-->
-        <hr>
+    <!--    =============-->
+    <hr>
 
     <div id="secondInfoCard" class="card">
 
@@ -210,44 +231,44 @@
 
         <div id="secondInfoCardBody2" style="display: none;" class="card-body" >
 
-<!--            <div th:each="disease : ${diseases}">-->
-<!--                    <div class="card" th:id="'accordion' + ${disease.id}" >-->
-<!--                <div class="card-header"  >-->
-<!--                    <a class="collapsed card-link" data-toggle="collapse" th:href="'#collapse1' + ${disease.id}" th:text="${disease.date + ' => ' +disease.doctorName+' '+disease.doctorSurname}" th:data-parent="'#accordion'+ ${disease.id}" ></a>-->
-<!--&lt;!&ndash;                    <a sec:authorize="hasRole('ROLE_DOCTOR')" class="collapsed card-link diseaseHistoryChangeButton" data-toggle="collapse" th:href="'#collapse2' + ${disease.id}" type="btn success-btn" >Изменить</a>&ndash;&gt;-->
-<!--                    <a class="collapsed card-link diseaseHistoryChangeButton" data-toggle="collapse" th:href="'#collapse2' + ${disease.id}" th:data-parent="'#accordion'+ ${disease.id}"  type="btn success-btn" >Изменить</a>-->
-<!--                </div>-->
-<!--                <div th:id="'collapse1' + ${disease.id}" class="collapse" >-->
-<!--                    <div  class="card-body diseaseHistoryCardBody1">-->
-<!--                        <h5>Diagnos</h5>-->
-<!--                        <p th:text="${disease.diagnosis}"></p>-->
-<!--                        <h5>Recept</h5>-->
-<!--                        <p th:text="${disease.recipe}"></p>-->
-<!--                    </div>-->
+            <!--            <div th:each="disease : ${diseases}">-->
+            <!--                    <div class="card" th:id="'accordion' + ${disease.id}" >-->
+            <!--                <div class="card-header"  >-->
+            <!--                    <a class="collapsed card-link" data-toggle="collapse" th:href="'#collapse1' + ${disease.id}" th:text="${disease.date + ' => ' +disease.doctorName+' '+disease.doctorSurname}" th:data-parent="'#accordion'+ ${disease.id}" ></a>-->
+            <!--&lt;!&ndash;                    <a sec:authorize="hasRole('ROLE_DOCTOR')" class="collapsed card-link diseaseHistoryChangeButton" data-toggle="collapse" th:href="'#collapse2' + ${disease.id}" type="btn success-btn" >Изменить</a>&ndash;&gt;-->
+            <!--                    <a class="collapsed card-link diseaseHistoryChangeButton" data-toggle="collapse" th:href="'#collapse2' + ${disease.id}" th:data-parent="'#accordion'+ ${disease.id}"  type="btn success-btn" >Изменить</a>-->
+            <!--                </div>-->
+            <!--                <div th:id="'collapse1' + ${disease.id}" class="collapse" >-->
+            <!--                    <div  class="card-body diseaseHistoryCardBody1">-->
+            <!--                        <h5>Diagnos</h5>-->
+            <!--                        <p th:text="${disease.diagnosis}"></p>-->
+            <!--                        <h5>Recept</h5>-->
+            <!--                        <p th:text="${disease.recipe}"></p>-->
+            <!--                    </div>-->
 
-<!--                </div>-->
-<!--                <div th:id="'collapse2' + ${disease.id}" class="collapse" >-->
-<!--                    <div  class="card-body diseaseHistoryCardBody2" sec:authorize="hasRole('ROLE_DOCTOR')">-->
-<!--                        <form method="post" th:href="@{/}">-->
-<!--                            <div class="card-body" th:object="${diseaseToChange}">-->
-<!--                                <div class="form-group">-->
-<!--                                    <label for="email">Диагноз :</label>-->
-<!--                                    <input type="email" class="form-control"  th:field="*{diagnosis}" th:value="${disease.diagnosis}" th:text="${disease.diagnosis}">-->
-<!--                                </div>-->
-<!--                                <div class="form-group">-->
-<!--                                    <label for="email">Диагноз :</label>-->
-<!--                                    <input type="email" class="form-control"  th:field="*{recipe}" th:value="${disease.recipe}" th:text="${disease.recipe}">-->
-<!--                                </div>-->
+            <!--                </div>-->
+            <!--                <div th:id="'collapse2' + ${disease.id}" class="collapse" >-->
+            <!--                    <div  class="card-body diseaseHistoryCardBody2" sec:authorize="hasRole('ROLE_DOCTOR')">-->
+            <!--                        <form method="post" th:href="@{/}">-->
+            <!--                            <div class="card-body" th:object="${diseaseToChange}">-->
+            <!--                                <div class="form-group">-->
+            <!--                                    <label for="email">Диагноз :</label>-->
+            <!--                                    <input type="email" class="form-control"  th:field="*{diagnosis}" th:value="${disease.diagnosis}" th:text="${disease.diagnosis}">-->
+            <!--                                </div>-->
+            <!--                                <div class="form-group">-->
+            <!--                                    <label for="email">Диагноз :</label>-->
+            <!--                                    <input type="email" class="form-control"  th:field="*{recipe}" th:value="${disease.recipe}" th:text="${disease.recipe}">-->
+            <!--                                </div>-->
 
-<!--                            </div>-->
-<!--                            <div class="card-footer">-->
-<!--                                <button id="diseaseHistoryCardBody2SaveButton"  type="submit" class="btn btn-success">Сохранить</button>-->
-<!--                            </div>-->
-<!--                        </form>-->
-<!--                    </div>-->
-<!--                </div>-->
-<!--            </div>-->
-<!--            </div>-->
+            <!--                            </div>-->
+            <!--                            <div class="card-footer">-->
+            <!--                                <button id="diseaseHistoryCardBody2SaveButton"  type="submit" class="btn btn-success">Сохранить</button>-->
+            <!--                            </div>-->
+            <!--                        </form>-->
+            <!--                    </div>-->
+            <!--                </div>-->
+            <!--            </div>-->
+            <!--            </div>-->
 
 
             <div id="accordion" >
@@ -269,7 +290,7 @@
                             </div>
                         </div>
                         <div th:id="'collapseTwo' + ${disease.id}" class="collapse" th:data-parent="'#accordion' + ${disease.id}" sec:authorize="hasRole('ROLE_DOCTOR')">
-<!--                            <div  class="card-body diseaseHistoryCardBody2" sec:authorize="hasRole('ROLE_DOCTOR')">-->
+                            <!--                            <div  class="card-body diseaseHistoryCardBody2" sec:authorize="hasRole('ROLE_DOCTOR')">-->
                             <div  class="card-body diseaseHistoryCardBody2">
                                 <form method="post" th:href="@{/}" th:object="${diseaseToChange}">
                                     <div class="card-body" >
@@ -302,6 +323,13 @@
 
 
 </section>
+
+
+
+
+
+
+
 
 <!-- Start facilities Area -->
 <!--<section class="facilities-area section-gap">-->
