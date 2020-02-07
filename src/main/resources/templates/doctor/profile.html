@@ -21,8 +21,32 @@
     <!-- Site Title -->
     <title>Medical</title>
 
+
+    <!--    <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js}"></script>-->
+    <!--    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
+
+    <!--===============================================================================================-->
+    <link rel="icon" type="image/png" th:href="@{/images/icons/timetable-favicon.ico}"/>
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/animate/animate.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/select2/select2.min.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/vendor/perfect-scrollbar/perfect-scrollbar.css}">
+    <!--===============================================================================================-->
+    <link rel="stylesheet" type="text/css" th:href="@{/css/timetable-util.css}">
+    <link rel="stylesheet" type="text/css" th:href="@{/css/timetable-main.css}">
+    <!--===============================================================================================-->
+
+
+
     <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!--    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
     <!--
     CSS
     ============================================= -->
@@ -38,6 +62,237 @@
     <link rel="stylesheet" th:href="@{/css/main.css}">
 
 
+
+    <script th:inline="javascript">
+    /*<![CDATA[*/
+
+        var timetable = [[${timetable}]];
+        console.log(timetable);
+
+
+    var queue = {"doctorId":-1 , "userUsername":"" , "date":"" , "order":-1 , "time":"" };
+    // var timetable ;
+    function toggleTimetableModal() {
+        // alert("clicked");
+        $('#exampleModalCenter').modal('toggle');
+        return false;
+    }
+
+    $( document ).ready(function() {
+
+
+
+
+        // timetable  = [[${timetable}]];
+        // alert(username.timeList);
+        // console.log(timetable);
+        // console.log(timetable[0].timeList.length);
+        // console.log(timetable[0].dateString);
+
+        // window.onload = fillTimetable();
+        fillTimetable();
+        function fillTimetable() {
+            console.log("fiiling timtable");
+            // var table = document.getElementById("timetable");
+            var theadTR = document.createElement("tr");
+            theadTR.setAttribute("class","row100 head");
+            document.getElementById("timetableThead").appendChild(theadTR);
+            for(var i=0 ; i<7 ; i++){
+                if(i==0){
+                    var th = document.createElement("th");
+                    th.setAttribute("class", "cell100 cell100Header indexColumn");
+                    th.appendChild(document.createTextNode("#"));
+                }
+                else {
+                    var th = document.createElement("th");
+                    th.setAttribute("class", "cell100 cell100Header dateCell");
+                    th.appendChild(document.createTextNode(timetable[i-1].dateString));
+                }
+                theadTR.appendChild(th);
+            }
+            // var tableHeader = document.getElementById("timetableThead");
+            // tableHeader.appendChild(theadTR);
+
+            var index=1;
+            var tbody = document.getElementById("timetableTbody");
+            for(var j=0 ; j<timetable[0].timeList.length ; j++){
+                var tr = document.createElement("tr");
+                tr.setAttribute("class","row100 body");
+                for(var i=0 ; i<7 ; i++) {
+                    if(i==0){
+                        var td = document.createElement("td");
+                        td.setAttribute("class" , "cell100 indexColumn");
+                        td.appendChild(document.createTextNode(j+1));
+                    }
+                    else{
+                        var td = document.createElement("td");
+                        var label = document.createElement("label");
+                        if(timetable[i-1].timeList[j].status == 0) {
+                            label.setAttribute("class" , "timeLabel");
+                            label.setAttribute("data-date" , timetable[i-1].dateString);
+                            label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
+                            label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
+                        }
+                        else{
+                            label.setAttribute("class" , "busyTimeLabel timeLabel");
+                            label.setAttribute("style" , "background-color: lightcoral; color:white;");
+                        }
+
+                        // label.setAttribute("data-date" , timetable[i-1].dateString);
+                        // label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
+                        // label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
+                        // label.setAttribute("class" , "timeLabel");
+
+                        label.setAttribute("onclick" , "timeLabelClick(this)");
+                        td.setAttribute("class" , "cell100 timeCell");
+                        label.appendChild(document.createTextNode(timetable[i-1].timeList[j].time));
+                        td.appendChild(label);
+                    }
+                    tr.appendChild(td);
+                }
+                tbody.appendChild(tr);
+            }
+        }
+
+        // $("#selectDoctor").on("change" , function (){
+        //     sendDoctorId();
+        // });
+        // sendDoctorId();
+        //
+        // function sendDoctorId() {
+        //     var e = document.getElementById("selectDoctor");
+        //     var doctorId = e.options[e.selectedIndex].value;
+        //     var doctorFullname = e.options[e.selectedIndex].text;
+        //
+        //     $.ajax({
+        //         url : 'getTimetableByDoctorId',
+        //         type: 'GET',
+        //         dataType: 'json',
+        //         contentType: 'application/json',
+        //         mimeType: 'application/json',
+        //         data : ({
+        //             doctorId: doctorId
+        //         }),
+        //         success: function (data) {
+        //             // alert("success");
+        //
+        //             timetable = data;
+        //
+        //             console.log(timetable);
+        //
+        //             fillTimetable();
+        //
+        //         }
+        //     });
+        // }
+
+
+        $("#saveToQueue").on("click" , function () {
+            saveToQueue();
+        });
+
+
+        function saveToQueue() {
+            var e = document.getElementById("selectDoctor");
+            var doctorId = e.options[e.selectedIndex].value;
+            var doctorFullname = e.options[e.selectedIndex].text;
+            console.log(queue["order"]);
+            console.log(queue["time"]);
+            if(queue["order"] !== undefined ){
+                $.ajax({
+                    url: 'queue/save',
+                    type: 'GET',
+                    // dataType: 'json',
+                    contentType: 'application/json',
+                    // mimeType: 'application/json',
+                    data: ({
+                        doctorId: queue["doctorId"],
+                        userUsername: queue["userUsername"],
+                        time: queue["time"],
+                        date: queue["date"],
+                        order: queue["order"]
+                    }),
+                    success: function (data) {
+                        alert("success");
+                        // console.log(data);
+                        // location.reload();
+                        document.getElementById("logoLink").click();
+
+                        // timetable = data;
+                        //
+                        // console.log(timetable);
+                        //
+                        // fillTimetable();
+
+                    },
+                    error: function (data) {
+                        alert("ошибка при отправлении формы");
+                        // console.log("status " + data.status);
+                        // console.log("message " + data.message);
+                        // console.log("state " + data.state);
+                    }
+                });
+            }
+            else{
+                alert("Выберите время посещения");
+            }
+        }
+
+
+
+        // alert(timetable);
+        // if(timetable == null){
+        //     fillTimetable();
+        // }
+
+        // function timeLabelClick(){
+        // 	alert("sdfsdfs");
+        //   $(".timeLabel").removeClass("selectedTimeLabel");
+        //   $(this).addClass("selectedTimeLabel");
+        // }
+
+        $("#timetableModalSaveButton").click( function(){
+            // alert(queue["order"]);
+            if(queue["order"] != undefined){
+                $("#isTimeSelectedIcon").css("display", "inline-block");
+            }
+        });
+        $("#timetableModalCloseButton").click( function(){
+            $("#isTimeSelectedIcon").css("display", "none");
+            queue = {"doctorId":-1 , "userUsername":"" , "date":"" , "order":-1 , "time":"" };
+        });
+
+
+        $(".timeLabel").click( function(){
+            $(".timeLabel").removeClass("selectedTimeLabel");
+            $(this).addClass("selectedTimeLabel");
+        });
+
+        $(".unableTimeLabel").click( function(){
+// $(".timeLabel").removeClass("selectedTimeLabel");
+// $(this).addClass("selectedTimeLabel");
+            alert("Obed");
+        });
+
+
+    });
+
+
+    function timeLabelClick(label){
+        // console.log($("#queueSaveFormUserInfo").val());
+        $(".timeLabel").removeClass("selectedTimeLabel");
+        $(label).addClass("selectedTimeLabel");
+        queue["time"] = $(label).text();
+        queue["order"] = $(label).data("order");
+        queue["date"] = $(label).data("date");
+        queue["doctorId"] = $(label).data("doctorid");
+        queue["userUsername"] = $("#queueSaveFormUserInfo").val();
+    }
+
+    /*]]>*/
+    </script>
+
+
     <style>
         #user-profile-info{
             width: 80%;
@@ -50,7 +305,92 @@
         #secondInfoCard .card-body{
             padding: 0.25rem !important;
         }
+
+        .header-top .align-items-center{
+            color: grey;
+        }
+
+        table th{
+            /*padding: 10px;*/
+            text-align: center;
+
+        }
+        .table100-body{
+            max-height: 300px;
+        }
+
+
+
+        .cell100{
+            width: 10% !important;
+            padding: 0px 0px !important;
+            text-align: center;
+        }
+
+        .indexColumn{
+            width: 3% !important;
+        }
+
+        .timeLabel:hover{
+            background-color: #00ad5f;
+            color: white;
+            padding :10px;
+            border-radius: 20px;
+
+        }
+        .timeLabel{
+            padding :10px;
+            border-radius: 20px;
+            display: inline-block;
+            text-align: center;
+            /*margin-left: 25%;*/
+        }
+        .cell100Header{
+            padding: 10px !important;
+            text-align: center;
+        }
+        .table100-body td{
+            padding-top: 0px;
+            padding-bottom: 0px;
+        }
+        .selectedTimeLabel{
+            background-color: #00ad5f;
+            color: white;
+            padding :10px;
+            border-radius: 20px;
+        }
+        .cell100ID{
+            text-align: center;
+        }
+        #submitTime{
+            float: right;
+            padding: 10px 50px;
+            background-color: #00ad5f;
+            color: white;
+            margin-right: 10px;
+            border-radius: 10px;
+        }
+        .m-b-110{
+            margin-bottom: 10px;
+        }
+        .wrap-table100{
+            width: 90%;
+        }
+        .unableTimeLabel{
+            background-color: orange;
+            color: white;
+        }
+        .unableTimeLabel:hover{
+            background-color: orange;
+            color: white;
+        }
+
+        .timeCell{
+            margin-left: -20px !important;
+        }
+
     </style>
+
 
 
 </head>
@@ -212,110 +552,49 @@
         <div class="card-header">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a id="infoCardNavBarHeader1" class="nav-link active" >Список посещений</a>
+                    <a id="infoCardNavBarHeader1" class="nav-link active" >Расписание</a>
                 </li>
                 <li class="nav-item">
-                    <a id="infoCardNavBarHeader2" class="nav-link " >История болезни</a>
+                    <a id="infoCardNavBarHeader2" class="nav-link " >Сегодняшние пациенты</a>
                 </li>
             </ul>
         </div>
 
 
         <div id="secondInfoCardBody1" class="card-body" >
-            <div class="card" th:each="visit : ${visits}">
-                <div class="card-header">
-                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree" th:text="${visit.date +' => '+visit.doctorType+':'+visit.doctorFullname}" ></a>
+            <div class="table100 ver3 m-b-110">
+                <div class="table100-head">
+                    <table >
+                        <thead id="timetableThead">
+
+                        </thead>
+                    </table>
                 </div>
+
+                <div class="table100-body js-pscroll">
+                    <table>
+                        <tbody id="timetableTbody" >
+
+                        </tbody>
+                    </table>
+                </div>
+                <!-- <button id="submitTime">Submit</button> -->
             </div>
         </div>
 
         <div id="secondInfoCardBody2" style="display: none;" class="card-body" >
 
-            <!--            <div th:each="disease : ${diseases}">-->
-            <!--                    <div class="card" th:id="'accordion' + ${disease.id}" >-->
-            <!--                <div class="card-header"  >-->
-            <!--                    <a class="collapsed card-link" data-toggle="collapse" th:href="'#collapse1' + ${disease.id}" th:text="${disease.date + ' => ' +disease.doctorName+' '+disease.doctorSurname}" th:data-parent="'#accordion'+ ${disease.id}" ></a>-->
-            <!--&lt;!&ndash;                    <a sec:authorize="hasRole('ROLE_DOCTOR')" class="collapsed card-link diseaseHistoryChangeButton" data-toggle="collapse" th:href="'#collapse2' + ${disease.id}" type="btn success-btn" >Изменить</a>&ndash;&gt;-->
-            <!--                    <a class="collapsed card-link diseaseHistoryChangeButton" data-toggle="collapse" th:href="'#collapse2' + ${disease.id}" th:data-parent="'#accordion'+ ${disease.id}"  type="btn success-btn" >Изменить</a>-->
-            <!--                </div>-->
-            <!--                <div th:id="'collapse1' + ${disease.id}" class="collapse" >-->
-            <!--                    <div  class="card-body diseaseHistoryCardBody1">-->
-            <!--                        <h5>Diagnos</h5>-->
-            <!--                        <p th:text="${disease.diagnosis}"></p>-->
-            <!--                        <h5>Recept</h5>-->
-            <!--                        <p th:text="${disease.recipe}"></p>-->
-            <!--                    </div>-->
-
-            <!--                </div>-->
-            <!--                <div th:id="'collapse2' + ${disease.id}" class="collapse" >-->
-            <!--                    <div  class="card-body diseaseHistoryCardBody2" sec:authorize="hasRole('ROLE_DOCTOR')">-->
-            <!--                        <form method="post" th:href="@{/}">-->
-            <!--                            <div class="card-body" th:object="${diseaseToChange}">-->
-            <!--                                <div class="form-group">-->
-            <!--                                    <label for="email">Диагноз :</label>-->
-            <!--                                    <input type="email" class="form-control"  th:field="*{diagnosis}" th:value="${disease.diagnosis}" th:text="${disease.diagnosis}">-->
-            <!--                                </div>-->
-            <!--                                <div class="form-group">-->
-            <!--                                    <label for="email">Диагноз :</label>-->
-            <!--                                    <input type="email" class="form-control"  th:field="*{recipe}" th:value="${disease.recipe}" th:text="${disease.recipe}">-->
-            <!--                                </div>-->
-
-            <!--                            </div>-->
-            <!--                            <div class="card-footer">-->
-            <!--                                <button id="diseaseHistoryCardBody2SaveButton"  type="submit" class="btn btn-success">Сохранить</button>-->
-            <!--                            </div>-->
-            <!--                        </form>-->
-            <!--                    </div>-->
-            <!--                </div>-->
-            <!--            </div>-->
-            <!--            </div>-->
-
-
-            <div id="accordion" >
-                <div th:each="disease : ${diseases}" th:id="'accordion' + ${disease.id}" >
-                    <div class="card">
-
-                        <div class="card-header">
-                            <a class=" card-link" data-toggle="collapse" th:href="'#collapseOne' + ${disease.id}"  th:text="${disease.date + ' => ' +disease.doctorName+' '+disease.doctorSurname}"></a>
-                            <a sec:authorize="hasRole('ROLE_DOCTOR')" class="collapsed card-link" data-toggle="collapse" th:href="'#collapseTwo' + ${disease.id}" >Изменить</a>
-                        </div>
-
-
-                        <div th:id="'collapseOne' + ${disease.id}" class="collapse" th:data-parent="'#accordion' + ${disease.id}"  >
-                            <div  class="card-body diseaseHistoryCardBody1">
-                                <h5>Диагноз</h5>
-                                <p th:text="${disease.diagnosis}"></p>
-                                <h5>Рецепт</h5>
-                                <p th:text="${disease.recipe}"></p>
-                            </div>
-                        </div>
-                        <div th:id="'collapseTwo' + ${disease.id}" class="collapse" th:data-parent="'#accordion' + ${disease.id}" sec:authorize="hasRole('ROLE_DOCTOR')">
-                            <!--                            <div  class="card-body diseaseHistoryCardBody2" sec:authorize="hasRole('ROLE_DOCTOR')">-->
-                            <div  class="card-body diseaseHistoryCardBody2">
-                                <form method="post" th:href="@{/}" th:object="${diseaseToChange}">
-                                    <div class="card-body" >
-                                        <div class="form-group">
-                                            <label >Диагноз :</label>
-                                            <textarea type="text"  class="form-control" name="diagnosis" th:value="${disease.diagnosis}" >[[${disease.diagnosis}]]</textarea>
-                                        </div>
-                                        <div class="form-group">
-                                            <label >Рецепт :</label>
-                                            <textarea type="text" class="form-control"  name="recipe" th:value="${disease.recipe}" >[[${disease.recipe}]]</textarea>
-                                        </div>
-
-                                    </div>
-                                    <div class="card-footer">
-                                        <button id="diseaseHistoryCardBody2SaveButton"  type="submit" class="btn btn-success">Сохранить</button>
-                                    </div>
-                                </form>
-                            </div>
-                        </div>
-
-                    </div>
+            <div class="card" th:each="patient : ${patient_list}">
+                <div class="card-header">
+                    <p th:text="${patient.queue.time +' => '}"></p>
+                        <a class="collapsed card-link" th:href="@{/user/__${patient.patient.id}__/profile}"  th:text="${patient.patient.name + ' '+ patient.patient.surname}"></a>
                 </div>
             </div>
-
-
+<!--            <div class="card" th:each="patient : ${patient_list}">-->
+<!--                <div class="card-header">-->
+<!--                    <p></p><a class="collapsed card-link" data-toggle="collapse" href="#collapseThree" th:text="${visit.date +' => '+visit.doctorType+':'+visit.doctorFullname}" ></a>-->
+<!--                </div>-->
+<!--            </div>-->
 
         </div>
 
@@ -609,7 +888,6 @@
 <script>
 
 
-
     $(document).ready(function(){
 
         $("#userInfoFormSaveButton").on("click" , function(){
@@ -656,21 +934,47 @@
 
 </script>
 
+<!--===============================================================================================-->
+<script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+<!--===============================================================================================-->
+<script th:src="@{/vendor/bootstrap/js/popper.js}"></script>
+<script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+<!--===============================================================================================-->
+<script th:src="@{/vendor/select2/select2.min.js}"></script>
+<!--===============================================================================================-->
+<script th:src="@{/vendor/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+<script>
+    $('.js-pscroll').each(function(){
+        var ps = new PerfectScrollbar(this);
 
-<script th:src="@{/js/vendor/jquery-2.2.4.min.js}"></script>
-<script th:src="@{/js/popper.min.js}"></script>
-<script th:src="@{/js/vendor/bootstrap.min.js}"></script>
-<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
-<script th:src="@{/js/jquery-ui.js}"></script>
-<script th:src="@{/js/easing.min.js}"></script>
-<script th:src="@{/js/hoverIntent.js}"></script>
-<script th:src="@{/js/superfish.min.js}"></script>
-<script th:src="@{/js/jquery.ajaxchimp.min.js}"></script>
-<script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
-<script th:src="@{/js/jquery.tabs.min.js}"></script>
-<script th:src="@{/js/jquery.nice-select.min.js}"></script>
-<script th:src="@{/js/owl.carousel.min.js}"></script>
-<script th:src="@{/js/mail-script.js}"></script>
-<script th:src="@{/js/main.js}"></script>
-</body>
+        $(window).on('resize', function(){
+            ps.update();
+        })
+    });
+
+
+</script>
+<!--===============================================================================================-->
+<script th:src="@{/js/timetable-main.js}"></script>
+<!--===============================================================================================-->
+
+
+        <script th:src="@{/js/vendor/jquery-2.2.4.min.js}"></script>
+        <script th:src="@{/js/popper.min.js}"></script>
+        <script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+        <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
+        <script th:src="@{/js/jquery-ui.js}"></script>
+        <script th:src="@{/js/easing.min.js}"></script>
+        <script th:src="@{/js/hoverIntent.js}"></script>
+        <script th:src="@{/js/superfish.min.js}"></script>
+        <script th:src="@{/js/jquery.ajaxchimp.min.js}"></script>
+        <script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+        <script th:src="@{/js/jquery.tabs.min.js}"></script>
+        <script th:src="@{/js/jquery.nice-select.min.js}"></script>
+        <script th:src="@{/js/owl.carousel.min.js}"></script>
+        <script th:src="@{/js/mail-script.js}"></script>
+        <script th:src="@{/js/main.js}"></script>
+
+
+    </body>
 </html>

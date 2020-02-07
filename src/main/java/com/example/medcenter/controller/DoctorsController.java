@@ -6,6 +6,7 @@ import com.example.medcenter.entity.UsersEntity;
 import com.example.medcenter.repoitory.DoctorsFeaturesRepository;
 import com.example.medcenter.repoitory.UsersRepository;
 import com.example.medcenter.service.DiseaseService;
+import com.example.medcenter.service.DoctorsService;
 import com.example.medcenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -29,6 +30,8 @@ public class DoctorsController {
     UserService userService;
     @Autowired
     DiseaseService diseaseService;
+    @Autowired
+    DoctorsService doctorsService;
 
 //    @RequestMapping("/doctors")
 //    public String getDoctorsList(ModelMap modelMap){
@@ -66,6 +69,8 @@ public class DoctorsController {
 //        modelMap.addAttribute("visits" , userService.getVisitsByUserId(user.getId()));
 //        modelMap.addAttribute("diseases" , diseaseService.getDiseaseByPatientId(user.getId()));
 //        modelMap.addAttribute("diseaseToChange", new DiseaseDTO());
+        modelMap.addAttribute("patient_list", doctorsService.getTodayPatientListByDoctorId(doctor.getId()));
+        modelMap.addAttribute("timetable", doctorsService.getTimetableByDoctorFeaturesId(doctor.getId()));
         modelMap.addAttribute("doctor" , doctor);
 
         return "doctor/profile";

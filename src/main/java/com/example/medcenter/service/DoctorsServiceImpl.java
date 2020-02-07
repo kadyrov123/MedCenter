@@ -1,6 +1,7 @@
 package com.example.medcenter.service;
 
 import com.example.medcenter.dto.DoctorDTO;
+import com.example.medcenter.dto.DoctorsPatientDTO;
 import com.example.medcenter.dto.TimeDTO;
 import com.example.medcenter.dto.TimetableDTO;
 import com.example.medcenter.entity.*;
@@ -104,6 +105,7 @@ public class DoctorsServiceImpl implements DoctorsService {
         return timeList;
     }
 
+
     @Override
     public List<TimetableDTO> getTimetableByDoctorFeaturesId(int doctorId) {
         List<Date> dateList = new ArrayList<>();
@@ -135,5 +137,32 @@ public class DoctorsServiceImpl implements DoctorsService {
         }
 
         return timetables;
+    }
+
+    @Override
+    public List<DoctorsPatientDTO>  getPatientListByDoctorIdAndDate(int doctorId, Date date) {
+
+        List<QueueEntity> queueEntityList = queueRepository.findQueueEntitiesByDateAndDoctorId(date , doctorId);
+        List<UsersEntity> patientsList = new ArrayList<>();
+        List<DoctorsPatientDTO> patientDtoList = new ArrayList<>();
+        int i = 1;
+        for(QueueEntity queue : queueEntityList){
+            DoctorsPatientDTO patientDTO = new DoctorsPatientDTO();
+            UsersEntity patient = usersRepository.getOne(queue.getUserId());
+            patientDTO.setId(i);
+            patientDTO.setPatient(patient);
+            patientDTO.setQueue(queue);
+
+
+            patientDtoList.add(patientDTO);
+            i++;
+        }
+        return patientDtoList;
+    }
+
+    @Override
+    public List<DoctorsPatientDTO>  getTodayPatientListByDoctorId(int doctorId) {
+        Date today = new Date();
+        return getPatientListByDoctorIdAndDate(doctorId , today);
     }
 }
