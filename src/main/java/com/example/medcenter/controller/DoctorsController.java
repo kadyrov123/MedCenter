@@ -1,9 +1,10 @@
 package com.example.medcenter.controller;
 
 import com.example.medcenter.dto.DiseaseDTO;
-import com.example.medcenter.entity.DoctorsFeaturesEntity;
-import com.example.medcenter.entity.UsersEntity;
+import com.example.medcenter.dto.DoctorDTO;
+import com.example.medcenter.entity.*;
 import com.example.medcenter.repoitory.DoctorsFeaturesRepository;
+import com.example.medcenter.repoitory.IntervalRepository;
 import com.example.medcenter.repoitory.UsersRepository;
 import com.example.medcenter.service.DiseaseService;
 import com.example.medcenter.service.DoctorsService;
@@ -13,10 +14,10 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.Collection;
+import java.util.Set;
 
 @Controller
 public class DoctorsController {
@@ -32,6 +33,8 @@ public class DoctorsController {
     DiseaseService diseaseService;
     @Autowired
     DoctorsService doctorsService;
+    @Autowired
+    IntervalRepository intervalRepository;
 
 //    @RequestMapping("/doctors")
 //    public String getDoctorsList(ModelMap modelMap){
@@ -76,5 +79,31 @@ public class DoctorsController {
         return "doctor/profile";
     }
 
+    @PostMapping("/doctor/update")
+    public String updateUserInfo(DoctorsFeaturesEntity doctor){
+        UsersEntity authorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        UsersEntity doctorUser = doctor.getUsersByDoctorId();
+        doctorUser.setId(authorizedUser.getId());
+        doctorUser.setPassword(authorizedUser.getPassword());
+//        usersRepository.save(doctorUser);
+
+//        IntervalEntity doctorInterval = doctor.getIntervalByIntervalId();
+        IntervalEntity doctorInterval = intervalRepository.getOne(3);
+//        doctorInterval.setInterval(30);
+
+        Collection<RoleEntity> doctorRoles =  doctor.getUsersByDoctorId().getRoles();
+        doctorUser.setRoles(doctorRoles);
+
+        Set<DoctorsTypeEntity> doctorsTypes = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctor.getId()).getDoctorsTypeEntities();
+//        Collection<QueueEntity> doctorTimetable = doctor.get
+
+        doctor.setUsersByDoctorId(doctorUser);
+        doctor.setIntervalByIntervalId(doctorInterval);
+        doctor.setDoctorsTypeEntities(doctorsTypes);
+
+        doctorsFeaturesRepository.save(doctor);
+        return "redirect:/doctor/profile";
+    }
 
 }

@@ -165,4 +165,10 @@ public class DoctorsServiceImpl implements DoctorsService {
         Date today = new Date();
         return getPatientListByDoctorIdAndDate(doctorId , today);
     }
+
+    @Override
+    public  void saveDoctorDto(DoctorDTO doctorDTO){
+
+
+    }
 }
