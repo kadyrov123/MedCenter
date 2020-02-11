@@ -531,6 +531,12 @@
                     <label for="username">Время завершения работы :</label>
                     <input type="text" name="endTime" class="form-control" id="endTime" th:field="*{endTime}" th:value="${doctor.endTime}">
                 </div>
+                <div class="form-group" >
+                    <label for="username">Время завершения работы :</label>
+                    <select type="text" name="endTime" class="form-control" id="interval" th:field="*{intervalId}"  >
+                        <option th:each="interval : ${intervals}" th:value="${interval.id}" th:text="${interval.interval}"></option>
+                    </select>
+                </div>
 
 
             </div>

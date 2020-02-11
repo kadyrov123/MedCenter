@@ -75,12 +75,14 @@ public class DoctorsController {
         modelMap.addAttribute("patient_list", doctorsService.getTodayPatientListByDoctorId(doctor.getId()));
         modelMap.addAttribute("timetable", doctorsService.getTimetableByDoctorFeaturesId(doctor.getId()));
         modelMap.addAttribute("doctor" , doctor);
+        modelMap.addAttribute("intervals" , intervalRepository.findAll());
 
         return "doctor/profile";
     }
 
     @PostMapping("/doctor/update")
     public String updateUserInfo(DoctorsFeaturesEntity doctor){
+//        System.out.println(doctor.getIntervalId());
         UsersEntity authorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         UsersEntity doctorUser = doctor.getUsersByDoctorId();
@@ -89,7 +91,7 @@ public class DoctorsController {
 //        usersRepository.save(doctorUser);
 
 //        IntervalEntity doctorInterval = doctor.getIntervalByIntervalId();
-        IntervalEntity doctorInterval = intervalRepository.getOne(3);
+        IntervalEntity doctorInterval = intervalRepository.getOne(doctor.getIntervalId());
 //        doctorInterval.setInterval(30);
 
         Collection<RoleEntity> doctorRoles =  doctor.getUsersByDoctorId().getRoles();
