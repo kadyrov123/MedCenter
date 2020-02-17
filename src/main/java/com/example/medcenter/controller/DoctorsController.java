@@ -2,6 +2,7 @@ package com.example.medcenter.controller;
 
 import com.example.medcenter.dto.DiseaseDTO;
 import com.example.medcenter.dto.DoctorDTO;
+import com.example.medcenter.dto.TimeDTO;
 import com.example.medcenter.entity.*;
 import com.example.medcenter.repoitory.DoctorsFeaturesRepository;
 import com.example.medcenter.repoitory.IntervalRepository;
@@ -10,13 +11,17 @@ import com.example.medcenter.service.DiseaseService;
 import com.example.medcenter.service.DoctorsService;
 import com.example.medcenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.MediaType;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletRequest;
 import java.util.Collection;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 @Controller
@@ -55,7 +60,7 @@ public class DoctorsController {
 //    }
 
     @GetMapping("/user/{userId}/profile")
-    @PreAuthorize(value = "hasRole('ROLE_DOCTOR')")
+//    @PreAuthorize(value = "hasRole('ROLE_DOCTOR')")
     public String getUser(@PathVariable long userId , ModelMap model){
         System.out.println("user/userId/profile" + userId);
         model.addAttribute("user",usersRepository.getOne((long)userId));
@@ -98,7 +103,6 @@ public class DoctorsController {
         doctorUser.setRoles(doctorRoles);
 
         Set<DoctorsTypeEntity> doctorsTypes = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctor.getId()).getDoctorsTypeEntities();
-//        Collection<QueueEntity> doctorTimetable = doctor.get
 
         doctor.setUsersByDoctorId(doctorUser);
         doctor.setIntervalByIntervalId(doctorInterval);
@@ -106,6 +110,81 @@ public class DoctorsController {
 
         doctorsFeaturesRepository.save(doctor);
         return "redirect:/doctor/profile";
+    }
+
+
+//    @PostMapping("/doctor/save/queue")
+////    public String saveTimeToQueue(@RequestParam(value="timeList") Map<String,String>[] timeList){
+////    public String saveTimeToQueue(@RequestParam(value="timeList") String[][] timeList){
+//    public String saveTimeToQueue(@RequestParam(value= "timeList", required = true) String[][] timeList){
+//        System.out.println(timeList[0][0]);
+////        UsersEntity authorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+//        return "redirect:/doctor/profile";
+//    }
+
+//    @PostMapping("/doctor/save/queue")
+////    public String saveTimeToQueue(@RequestParam(value="timeList") Map<String,String>[] timeList){
+////    public String saveTimeToQueue(@RequestParam(value="timeList") String[][] timeList){
+//    public String saveTimeToQueue(@RequestParam(value = "timeList", required = true) String[][] timeList){
+//        System.out.println(timeList[0][0]);
+////        UsersEntity authorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+//        return "redirect:/doctor/profile";
+//    }
+
+
+//    @RequestMapping(value = "/doctor/queue", method = RequestMethod.POST)
+//    public @ResponseBody void Submit(@RequestBody String[][] name) {
+//        System.out.println(name[0][0]);
+//    }
+
+//    @RequestMapping(value = "/doctor/queue", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
+//    @RequestMapping(value = "/doctor/queue", method = RequestMethod.POST, consumes = "application/json")
+//    public @ResponseBody void Submit(@RequestParam("myArray") String[][] name) {
+//        System.out.println(name[0][0]);
+//    }
+
+//    @RequestMapping(value = "/doctor/queue", method = RequestMethod.GET, consumes = "application/json")
+//    public @ResponseBody void Submit2() {
+//        System.out.println("blabla");
+//    }
+
+//    @RequestMapping(value = "/doctor/save/queue", method = RequestMethod.POST , consumes = "application/json")
+//    @RequestMapping(value = "/doctor/save/queue", method = RequestMethod.POST, produces = "application/json", consumes = "application/json")
+    @RequestMapping(value = "/doctor/save/queue", method = RequestMethod.POST , produces = "application/json")
+//    public @ResponseBody void Submit(@RequestParam Map<String,String> arr) {
+//    public @ResponseBody void Submit(@RequestBody Map<String,String>[] arr) {
+//    public @ResponseBody void Submit(@RequestBody Map<String , Map<String,String>> arr) {
+//    public @ResponseBody void Submit(@RequestBody Map<Integer , TimeDTO> arr) {
+//    public @ResponseBody void Submit( @RequestBody TimeDTO arr , HttpServletRequest request) {
+    public @ResponseBody void Submit(@RequestBody TimeDTO arr ) {
+//        System.out.println(arr.get(0).values());
+//        for (Integer i : arr.keySet())
+//            System.out.println("key: " + i);
+
+        // using values() for iteration over keys
+//        System.out.println(arr.size());
+//        System.out.println(arr.length);
+//        Set<Integer> keys =  arr.keySet();
+//        System.out.println(keys.size());
+//        for(Integer obj : keys){
+//            System.out.println(obj);
+//        }
+//        System.out.println(arr.get(0).get("date"));
+        String a= "";
+//        for (Map<String , String> map : arr.values()) {
+//            for (String s : map.values()) {
+//                a += s;
+//            }
+//            map.forEach((k,v) -> System.out.println("Key = "
+//                    + k + ", Value = " + v));
+//            System.out.println(map.get("date"));
+//        }
+        System.out.println("sdfsdfsd = " +arr);
+        System.out.println("sdfsdfsd = " +arr.getTime());
+//        System.out.println("sdfsdfsd = " +arr[0].getTime());
+//        System.out.println("sdfsdfsd = " +arr[0]);
+//        System.out.println("sdfsdfsd = " +arr.get(0));
+
     }
 
 }

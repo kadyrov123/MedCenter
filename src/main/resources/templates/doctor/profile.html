@@ -71,6 +71,7 @@
 
 
     var queue = {"doctorId":-1 , "userUsername":"" , "date":"" , "order":-1 , "time":"" };
+    var selectedTimeList = [];
     // var timetable ;
     function toggleTimetableModal() {
         // alert("clicked");
@@ -188,35 +189,79 @@
 
 
         $("#saveToQueue").on("click" , function () {
-            saveToQueue();
+            // saveToQueue();
+            createConsumer();
         });
+
+        function createConsumer(){
+            var myArrayOfArrays = [
+                ["x", "y"],
+                ["x", "y"]
+            ];
+            // var arr ={
+            //     0:{"date": "2020-02-17", "order": "10", "time": "16:00 - 16:50"} ,
+            //     1:{"date": "2020-02-17", "order": "10", "time": "16:00 - 16:50"}
+            // };
+            // var arr =[
+            //     {"dateStr": "2020-02-17", "order": "10", "time": "16:00 - 16:50"} ,
+            //     {"dateStr": "2020-02-17", "order": "10", "time": "16:00 - 16:50"}
+            // ];
+
+            // var arr = ["2020-02-17;10;16:00 - 16:50","2020-02-17;10;16:00 - 16:50"];
+            // // var arr = {0:"2020-02-17;10;16:00 - 16:50",1:"2020-02-17;10;16:00 - 16:50"};
+            // var arr ={
+            //     0:{dateStr: "2020-02-17", order: "10", time: "16:00 - 16:50"} ,
+            //     1:{dateStr: "2020-02-17", order: "10", time: "16:00 - 16:50"}
+            // };
+            var arr =[
+                {dateStr: "2020-02-17", order: "10", time: "16:00 - 16:50"} ,
+                {dateStr: "2020-02-17", order: "10", time: "16:00 - 16:50"}
+            ];
+            // arr = JSON.stringify(arr);
+            console.log(arr);
+            // myArrayOfArrays[0] = ["x", "y"];
+            // myArrayOfArrays[1] = ["x", "y"];
+            // console.log(arr);
+            arr = {dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"};
+            $.ajax({
+                contentType : 'application/json; charset=utf-8',
+                type: "POST",
+                url: "/doctor/save/queue",
+                dataType : "json",
+                data: JSON.stringify( arr)
+                // data: {arr:myArrayOfArrays}
+                // data: {arr:arr}
+                // data: arr
+
+            });
+        }
 
 
         function saveToQueue() {
-            var e = document.getElementById("selectDoctor");
-            var doctorId = e.options[e.selectedIndex].value;
-            var doctorFullname = e.options[e.selectedIndex].text;
-            console.log(queue["order"]);
-            console.log(queue["time"]);
-            if(queue["order"] !== undefined ){
+            // var timeList = [
+            //     ["1","2","3"],
+            //     ["11","22","33"]
+            // ];
+
+            if(selectedTimeList.length > 0){
                 $.ajax({
-                    url: 'queue/save',
-                    type: 'GET',
+                    contentType: "application/json",
+                    type: "POST",
+                    url: '/doctor/save/queue',
                     // dataType: 'json',
-                    contentType: 'application/json',
                     // mimeType: 'application/json',
-                    data: ({
-                        doctorId: queue["doctorId"],
-                        userUsername: queue["userUsername"],
-                        time: queue["time"],
-                        date: queue["date"],
-                        order: queue["order"]
-                    }),
+                    // data: {
+                    //     // timeList : JSON.stringify(selectedTimeList)
+                    //     // timeList : selectedTimeList
+                    //     timeList: $(selectedTimeList).serializeFormList()
+                    //     // timeList : myTimelist
+                    // },
+                    data : JSON.stringify(timeList),
                     success: function (data) {
                         alert("success");
                         // console.log(data);
                         // location.reload();
-                        document.getElementById("logoLink").click();
+                        // document.getElementById("logoLink").click();
 
                         // timetable = data;
                         //
@@ -226,7 +271,7 @@
 
                     },
                     error: function (data) {
-                        alert("ошибка при отправлении формы");
+                        alert("ошибка при отправлении формы 2");
                         // console.log("status " + data.status);
                         // console.log("message " + data.message);
                         // console.log("state " + data.state);
@@ -234,7 +279,7 @@
                 });
             }
             else{
-                alert("Выберите время посещения");
+                alert("Выберите время");
             }
         }
 
@@ -263,10 +308,10 @@
         });
 
 
-        $(".timeLabel").click( function(){
-            $(".timeLabel").removeClass("selectedTimeLabel");
-            $(this).addClass("selectedTimeLabel");
-        });
+        // $(".timeLabel").click( function(){
+        //     // $(".timeLabel").removeClass("selectedTimeLabel");
+        //     $(this).addClass("selectedTimeLabel");
+        // });
 
         $(".unableTimeLabel").click( function(){
 // $(".timeLabel").removeClass("selectedTimeLabel");
@@ -278,15 +323,29 @@
     });
 
 
+
+
     function timeLabelClick(label){
-        // console.log($("#queueSaveFormUserInfo").val());
-        $(".timeLabel").removeClass("selectedTimeLabel");
-        $(label).addClass("selectedTimeLabel");
-        queue["time"] = $(label).text();
-        queue["order"] = $(label).data("order");
-        queue["date"] = $(label).data("date");
-        queue["doctorId"] = $(label).data("doctorid");
-        queue["userUsername"] = $("#queueSaveFormUserInfo").val();
+        var queue = {"date":"" , "order":-1 , "time":"" };
+
+        if($(label).hasClass("selectedTimeLabel")){
+            var unselectedTimeOrder = $(label).data("order");
+            var unselectedTimeDate =  $(label).data("date");
+            for(var i=0 ; i<selectedTimeList.length ; i++){
+                if (selectedTimeList[i]["date"] == unselectedTimeDate && selectedTimeList[i]["order"] == unselectedTimeOrder){
+                    selectedTimeList.splice(i , 1);
+                }
+            }
+            $(label).removeClass("selectedTimeLabel");
+        }else{
+            $(label).addClass("selectedTimeLabel");
+            queue["time"] = $(label).text();
+            queue["order"] = $(label).data("order");
+            queue["date"] = $(label).data("date");
+            selectedTimeList.push(queue);
+        }
+        // $(label).addClass("selectedTimeLabel");
+        console.log(selectedTimeList);
     }
 
     /*]]>*/
@@ -584,7 +643,10 @@
                         </tbody>
                     </table>
                 </div>
-                <!-- <button id="submitTime">Submit</button> -->
+<!--                 <button id="submitTime">Submit</button>-->
+            </div>
+            <div class="card-footer">
+                <button id="saveToQueue"  style="float: right;" type="submit" class="btn-success btn">Сохранить</button>
             </div>
         </div>
 
@@ -592,8 +654,9 @@
 
             <div class="card" th:each="patient : ${patient_list}">
                 <div class="card-header">
-                    <p th:text="${patient.queue.time +' => '}"></p>
+                    <a th:text="${patient.queue.time +' => '}"></a>
                         <a class="collapsed card-link" th:href="@{/user/__${patient.patient.id}__/profile}"  th:text="${patient.patient.name + ' '+ patient.patient.surname}"></a>
+
                 </div>
             </div>
 <!--            <div class="card" th:each="patient : ${patient_list}">-->

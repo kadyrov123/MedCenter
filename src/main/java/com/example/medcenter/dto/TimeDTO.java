@@ -1,5 +1,6 @@
 package com.example.medcenter.dto;
 
+import java.util.Date;
 import java.util.List;
 
 public class TimeDTO {
@@ -7,9 +8,17 @@ public class TimeDTO {
     String time;
     boolean isFree;
     int status;
+    Date date;
+    String dateStr;
 
 
     public TimeDTO(){}
+
+    public TimeDTO(int order, String time, String dateStr) {
+        this.order = order;
+        this.time = time;
+        this.dateStr = dateStr;
+    }
 
     public int getOrder() {
         return order;
