@@ -93,6 +93,11 @@
         // window.onload = fillTimetable();
         fillTimetable();
         function fillTimetable() {
+            console.log(timetable);
+
+            $("#timetableThead .cell100Header").remove();
+            $("#timetableTbody .row100").remove();
+
             console.log("fiiling timtable");
             // var table = document.getElementById("timetable");
             var theadTR = document.createElement("tr");
@@ -189,92 +194,47 @@
 
 
         $("#saveToQueue").on("click" , function () {
-            // saveToQueue();
-            createConsumer();
+            saveToQueue();
+            // createConsumer();
         });
 
-        function createConsumer(){
-            var myArrayOfArrays = [
-                ["x", "y"],
-                ["x", "y"]
-            ];
-            // var arr ={
-            //     0:{"date": "2020-02-17", "order": "10", "time": "16:00 - 16:50"} ,
-            //     1:{"date": "2020-02-17", "order": "10", "time": "16:00 - 16:50"}
-            // };
-            // var arr =[
-            //     {"dateStr": "2020-02-17", "order": "10", "time": "16:00 - 16:50"} ,
-            //     {"dateStr": "2020-02-17", "order": "10", "time": "16:00 - 16:50"}
-            // ];
-
-            // var arr = ["2020-02-17;10;16:00 - 16:50","2020-02-17;10;16:00 - 16:50"];
-            // // var arr = {0:"2020-02-17;10;16:00 - 16:50",1:"2020-02-17;10;16:00 - 16:50"};
-            // var arr ={
-            //     0:{dateStr: "2020-02-17", order: "10", time: "16:00 - 16:50"} ,
-            //     1:{dateStr: "2020-02-17", order: "10", time: "16:00 - 16:50"}
-            // };
-            var arr =[
-                {dateStr: "2020-02-17", order: "10", time: "16:00 - 16:50"} ,
-                {dateStr: "2020-02-17", order: "10", time: "16:00 - 16:50"}
-            ];
-            // arr = JSON.stringify(arr);
-            console.log(arr);
-            // myArrayOfArrays[0] = ["x", "y"];
-            // myArrayOfArrays[1] = ["x", "y"];
-            // console.log(arr);
-            arr = {dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"};
-            $.ajax({
-                contentType : 'application/json; charset=utf-8',
-                type: "POST",
-                url: "/doctor/save/queue",
-                dataType : "json",
-                data: JSON.stringify( arr)
-                // data: {arr:myArrayOfArrays}
-                // data: {arr:arr}
-                // data: arr
-
-            });
-        }
+        // function createConsumer(){
+        //     var arr = [{dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"},{dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"}];
+        //     $.ajax({
+        //         contentType : 'application/json; charset=utf-8',
+        //         type: "POST",
+        //         url: "/doctor/save/queue",
+        //         dataType : "json",
+        //         data: JSON.stringify( arr)
+        //     });
+        // }
 
 
         function saveToQueue() {
-            // var timeList = [
-            //     ["1","2","3"],
-            //     ["11","22","33"]
-            // ];
-
+            var arr = [{dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"},{dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"}];
+            console.log(selectedTimeList);
             if(selectedTimeList.length > 0){
+                arr = [{dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"},{dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"}];
                 $.ajax({
-                    contentType: "application/json",
+                    contentType : 'application/json; charset=utf-8',
                     type: "POST",
-                    url: '/doctor/save/queue',
-                    // dataType: 'json',
-                    // mimeType: 'application/json',
-                    // data: {
-                    //     // timeList : JSON.stringify(selectedTimeList)
-                    //     // timeList : selectedTimeList
-                    //     timeList: $(selectedTimeList).serializeFormList()
-                    //     // timeList : myTimelist
-                    // },
-                    data : JSON.stringify(timeList),
-                    success: function (data) {
+                    url: "/doctor/save/queue",
+                    dataType : "json",
+                    data: JSON.stringify(selectedTimeList),
+                    success:function (data) {
                         alert("success");
-                        // console.log(data);
-                        // location.reload();
-                        // document.getElementById("logoLink").click();
-
-                        // timetable = data;
-                        //
-                        // console.log(timetable);
-                        //
-                        // fillTimetable();
-
                     },
-                    error: function (data) {
-                        alert("ошибка при отправлении формы 2");
-                        // console.log("status " + data.status);
-                        // console.log("message " + data.message);
-                        // console.log("state " + data.state);
+                    error:function (response) {
+                        if(response.status == 200){
+                            console.log(response.status);
+                            // timetable = [[${timetable}]];
+                            // if(timetable != null){
+                            //     fillTimetable();
+                            // }
+                            document.location.reload();
+                        }else{
+                            console.log("Error in timeList sending form");
+                        }
                     }
                 });
             }
@@ -326,13 +286,13 @@
 
 
     function timeLabelClick(label){
-        var queue = {"date":"" , "order":-1 , "time":"" };
+        var queue = {"dateStr":"" , "order":-1 , "time":"" };
 
         if($(label).hasClass("selectedTimeLabel")){
             var unselectedTimeOrder = $(label).data("order");
             var unselectedTimeDate =  $(label).data("date");
             for(var i=0 ; i<selectedTimeList.length ; i++){
-                if (selectedTimeList[i]["date"] == unselectedTimeDate && selectedTimeList[i]["order"] == unselectedTimeOrder){
+                if (selectedTimeList[i]["dateStr"] == unselectedTimeDate && selectedTimeList[i]["order"] == unselectedTimeOrder){
                     selectedTimeList.splice(i , 1);
                 }
             }
@@ -341,11 +301,11 @@
             $(label).addClass("selectedTimeLabel");
             queue["time"] = $(label).text();
             queue["order"] = $(label).data("order");
-            queue["date"] = $(label).data("date");
+            queue["dateStr"] = $(label).data("date");
             selectedTimeList.push(queue);
         }
         // $(label).addClass("selectedTimeLabel");
-        console.log(selectedTimeList);
+        // console.log(selectedTimeList);
     }
 
     /*]]>*/
