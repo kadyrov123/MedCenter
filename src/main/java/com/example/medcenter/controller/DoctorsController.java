@@ -123,20 +123,35 @@ public class DoctorsController {
         UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(user.getId());
         for(TimeDTO time : arr){
-            QueueEntity queueEntity = new QueueEntity();
-//            queueEntity.setDoctorId(doctor.getId());
-            queueEntity.setDoctorFeaturesByDoctorId(doctor);
-            queueEntity.setUserId(doctor.getUsersByDoctorId().getId());
 
+            boolean exists = false;
+            long queueId = 0;
             java.sql.Date date  = java.sql.Date.valueOf(time.getDateStr());
-            queueEntity.setDate(date);
+            List<QueueEntity> queueEntities = queueRepository.findQueueEntitiesByDate(date);
+            for(QueueEntity queue : queueEntities){
+                if(queue.getOrder() == time.getOrder()){
+                    exists = true;
+                    queueId = queue.getId();
+                }
+            }
 
-            queueEntity.setOrder(time.getOrder());
-            queueEntity.setTime(time.getTime());
-            queueEntity.setStatus(1);
-            queueEntity.setIntervalByIntervalId(doctor.getIntervalByIntervalId());
+            if(!exists) {
+                QueueEntity queueEntity = new QueueEntity();
 
-            queueRepository.save(queueEntity);
+                queueEntity.setDoctorFeaturesByDoctorId(doctor);
+                queueEntity.setUserId(doctor.getUsersByDoctorId().getId());
+                queueEntity.setDate(date);
+                queueEntity.setOrder(time.getOrder());
+                queueEntity.setTime(time.getTime());
+                queueEntity.setStatus(2);
+                queueEntity.setIntervalByIntervalId(doctor.getIntervalByIntervalId());
+
+                queueRepository.save(queueEntity);
+            }else{
+                QueueEntity queueEntity = queueRepository.getOne(queueId);
+                queueEntity.setStatus(0);
+                queueRepository.save(queueEntity);
+            }
         }
 
 //        modelMap.addAttribute("timetable", doctorsService.getTimetableByDoctorFeaturesId(doctor.getId()));
