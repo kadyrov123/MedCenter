@@ -258,7 +258,7 @@
 							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore  et dolore magna aliqua.
 						</p>
 						<a sec:authorize="isAnonymous()" th:href="@{/login}" class="primary-btn text-uppercase">Записаться на прием</a>
-						<a sec:authorize="isAuthenticated()" href="#queueSaveFormDiv" class="primary-btn text-uppercase">Записаться на прием</a>
+						<a sec:authorize="hasRole('ROLE_USER')"  href="#queueSaveFormDiv" class="primary-btn text-uppercase">Записаться на прием</a>
 					</div>
 				</div>
 			</div>
@@ -268,7 +268,7 @@
 		<!-- Start appointment Area -->
 		<section class="appointment-area">
 			<div class="container">
-				<div sec:authorize="isAuthenticated()" class="row justify-content-between align-items-center pb-120 appointment-wrap">
+				<div sec:authorize="hasRole('ROLE_USER')" class="row justify-content-between align-items-center pb-120 appointment-wrap" style="margin-top: 50px;">
 					<div class="col-lg-5 col-md-6 appointment-left">
 						<h1>
 							Servicing Hours
@@ -342,7 +342,7 @@
 <!--									</label>-->
 <!--								</div>-->
 <!--							</div>-->
-							<button type="button" id="saveToQueue"   class="btn btn-primary">Записаться на прием</button>
+							<button  type="button" id="saveToQueue"   class="btn btn-primary">Записаться на прием</button>
 <!--						</form>-->
 
 <!--						<form class="form-wrap" action="#">-->
@@ -1030,55 +1030,55 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 
 			  $("#saveToQueue").on("click" , function () {
-                  saveToQueue();
-              });
+				  saveToQueue();
+			  });
 
 
-              function saveToQueue() {
+			  function saveToQueue() {
 				  var e = document.getElementById("selectDoctor");
 				  var doctorId = e.options[e.selectedIndex].value;
 				  var doctorFullname = e.options[e.selectedIndex].text;
-                    console.log(queue["order"]);
-                    console.log(queue["time"]);
-					if(queue["order"] !== undefined ){
-						  $.ajax({
-							  url: 'queue/save',
-							  type: 'GET',
-							  // dataType: 'json',
-							  contentType: 'application/json',
-							  // mimeType: 'application/json',
-							  data: ({
-								  doctorId: queue["doctorId"],
-								  userUsername: queue["userUsername"],
-								  time: queue["time"],
-								  date: queue["date"],
-								  order: queue["order"]
-							  }),
-							  success: function (data) {
-								  alert("success");
-								  // console.log(data);
-								  // location.reload();
-								  document.getElementById("logoLink").click();
+				  console.log(queue["order"]);
+				  console.log(queue["time"]);
+				  if(queue["order"] !== undefined ){
+					  $.ajax({
+						  url: 'queue/save',
+						  type: 'GET',
+						  // dataType: 'json',
+						  contentType: 'application/json',
+						  // mimeType: 'application/json',
+						  data: ({
+							  doctorId: queue["doctorId"],
+							  userUsername: queue["userUsername"],
+							  time: queue["time"],
+							  date: queue["date"],
+							  order: queue["order"]
+						  }),
+						  success: function (data) {
+							  alert("success");
+							  // console.log(data);
+							  // location.reload();
+							  document.getElementById("logoLink").click();
 
-								  // timetable = data;
-								  //
-								  // console.log(timetable);
-								  //
-								  // fillTimetable();
+							  // timetable = data;
+							  //
+							  // console.log(timetable);
+							  //
+							  // fillTimetable();
 
-							  },
-							  error: function (data) {
-                                  alert("ошибка при отправлении формы");
-								  // console.log("status " + data.status);
-								  // console.log("message " + data.message);
-								  // console.log("state " + data.state);
-							  }
-						  });
-			  		}
-					else{
-					    alert("Выберите время посещения");
-                    }
-              }
+						  },
+						  error: function (data) {
+							  alert("ошибка при отправлении формы");
+							  // console.log("status " + data.status);
+							  // console.log("message " + data.message);
+							  // console.log("state " + data.state);
+						  }
+					  });
+				  }
+				  else{
+					  alert("Выберите время посещения");
+				  }
+			  }
 
 
 
@@ -1089,14 +1089,14 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 			  // function timeLabelClick(){
 			  // 	alert("sdfsdfs");
-				//   $(".timeLabel").removeClass("selectedTimeLabel");
-				//   $(this).addClass("selectedTimeLabel");
+			  //   $(".timeLabel").removeClass("selectedTimeLabel");
+			  //   $(this).addClass("selectedTimeLabel");
 			  // }
 
 			  $("#timetableModalSaveButton").click( function(){
-			      // alert(queue["order"]);
+				  // alert(queue["order"]);
 				  if(queue["order"] != undefined){
-				  	$("#isTimeSelectedIcon").css("display", "inline-block");
+					  $("#isTimeSelectedIcon").css("display", "inline-block");
 				  }
 			  });
 			  $("#timetableModalCloseButton").click( function(){

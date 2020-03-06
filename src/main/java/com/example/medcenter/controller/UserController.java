@@ -2,6 +2,7 @@ package com.example.medcenter.controller;
 
 import com.example.medcenter.config.SecurityConfiguration;
 import com.example.medcenter.dto.DiseaseDTO;
+import com.example.medcenter.entity.RoleEntity;
 import com.example.medcenter.entity.UsersEntity;
 import com.example.medcenter.repoitory.DiseaseRepository;
 import com.example.medcenter.repoitory.UsersRepository;
@@ -55,10 +56,21 @@ public class UserController {
     public String changeUserPassword( @RequestParam String currentPassword,
                                      @RequestParam String newPassword,@RequestParam String confirmPassword){
         UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-
+        UsersEntity authorisedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        boolean isUser = true;
+        for (RoleEntity role : authorisedUser.getRoles()) {
+            if(role.getRole().equals("ROLE_DOCTOR")){
+                isUser = false;
+                break;
+            }
+        }
         if(newPassword.equals(confirmPassword) ){
             if(usersDetailsService.changePassword(currentPassword , newPassword , user)){
-                return "redirect:/user/profile";
+                if(isUser){
+                    return "redirect:/user/profile";
+                }else {
+                    return "redirect:/doctor/profile";
+                }
             }
         }
         return "redirect:/user/changepassword?error";

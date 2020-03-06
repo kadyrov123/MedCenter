@@ -5,10 +5,7 @@ import com.example.medcenter.dto.DoctorDTO;
 import com.example.medcenter.dto.TimeDTO;
 import com.example.medcenter.dto.TimetableDTO;
 import com.example.medcenter.entity.*;
-import com.example.medcenter.repoitory.DoctorsFeaturesRepository;
-import com.example.medcenter.repoitory.IntervalRepository;
-import com.example.medcenter.repoitory.QueueRepository;
-import com.example.medcenter.repoitory.UsersRepository;
+import com.example.medcenter.repoitory.*;
 import com.example.medcenter.service.DiseaseService;
 import com.example.medcenter.service.DoctorsService;
 import com.example.medcenter.service.UserService;
@@ -21,6 +18,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
+import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
@@ -43,25 +41,10 @@ public class DoctorsController {
     IntervalRepository intervalRepository;
     @Autowired
     QueueRepository queueRepository;
+    @Autowired
+    DiseaseRepository diseaseRepository;
 
 
-//    @RequestMapping("/doctors")
-//    public String getDoctorsList(ModelMap modelMap){
-//         modelMap.addAttribute("doctors",doctorsFeaturesRepository.findAll());
-//        return "";
-//    }
-
-//    @RequestMapping("/doctor/id")
-//    public String getDoctorById(@PathVariable("id") int id, ModelMap modelMap){
-//        modelMap.addAttribute("doctor",doctorsFeaturesRepository.findById(id));
-//        return "";
-//    }
-//
-//    @RequestMapping("/doctor/typeId")
-//    public String getDoctorByType(@PathVariable("type") int typeId, ModelMap modelMap){
-//        modelMap.addAttribute("doctor",doctorsFeaturesRepository.findById(typeId));
-//        return "";
-//    }
 
     @GetMapping("/user/{userId}/profile")
 //    @PreAuthorize(value = "hasRole('ROLE_DOCTOR')")
@@ -91,24 +74,18 @@ public class DoctorsController {
 
     @PostMapping("/doctor/update")
     public String updateUserInfo(DoctorsFeaturesEntity doctor){
-//        System.out.println(doctor.getIntervalId());
         UsersEntity authorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        UsersEntity doctorUser = doctor.getUsersByDoctorId();
-        doctorUser.setId(authorizedUser.getId());
-        doctorUser.setPassword(authorizedUser.getPassword());
-//        usersRepository.save(doctorUser);
+        doctor.getUsersByDoctorId().setId(authorizedUser.getId());
+        doctor.getUsersByDoctorId().setRoles(authorizedUser.getRoles());
+        doctor.getUsersByDoctorId().setPassword(authorizedUser.getPassword());
+        usersRepository.save(doctor.getUsersByDoctorId());
 
-//        IntervalEntity doctorInterval = doctor.getIntervalByIntervalId();
         IntervalEntity doctorInterval = intervalRepository.getOne(doctor.getIntervalId());
-//        doctorInterval.setInterval(30);
-
-        Collection<RoleEntity> doctorRoles =  doctor.getUsersByDoctorId().getRoles();
-        doctorUser.setRoles(doctorRoles);
 
         Set<DoctorsTypeEntity> doctorsTypes = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctor.getId()).getDoctorsTypeEntities();
 
-        doctor.setUsersByDoctorId(doctorUser);
+        doctor.setUsersByDoctorId(doctor.getUsersByDoctorId());
         doctor.setIntervalByIntervalId(doctorInterval);
         doctor.setDoctorsTypeEntities(doctorsTypes);
 
@@ -158,5 +135,34 @@ public class DoctorsController {
 
         return "redirect:/doctor/profile";
     }
+
+
+    @PostMapping(value = "/doctor/changeDisease")
+    public String changeDiseaseInfo(DiseaseEntity diseaseToChange){
+        UsersEntity autorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        System.out.println(diseaseToChange.getPatientId());
+//        System.out.println(diseaseToChange.getId());
+//        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(autorizedUser.getId());
+
+        UsersEntity patient = usersRepository.getOne(diseaseToChange.getPatientId());
+        diseaseToChange.setUsersByPatientId(patient);
+
+        java.util.Date today = new java.util.Date();
+        diseaseToChange.setDate(new java.sql.Date(today.getTime()));
+        diseaseRepository.save(diseaseToChange);
+
+        return "redirect:/user/"+diseaseToChange.getPatientId()+"/profile";
+//        if(doctor.getId() == diseaseToChange.getDoctorId()){
+//            java.util.Date today = new java.util.Date();
+//            diseaseToChange.setDate(new java.sql.Date(today.getTime()));
+//            diseaseRepository.save(diseaseToChange);
+//            return "redirect:";
+//        }else {
+//            return "redirect:/doctor/profile";
+//        }
+
+//        return "redirect:/doctor/profile";
+    }
+
 
 }

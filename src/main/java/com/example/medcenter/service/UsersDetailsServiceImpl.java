@@ -40,7 +40,7 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
         user.setUsername(registration.getUsername());
         user.setEmail(registration.getEmail());
         user.setPassword(passwordEncoder.encode(registration.getPassword()));
-//        user.setRoles(Arrays.asList(new RoleEntity("ROLE_USER")));
+        user.setRoles(Arrays.asList(new RoleEntity("ROLE_USER")));
         return userRepository.save(user);
     }
 
