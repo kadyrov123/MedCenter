@@ -22,6 +22,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
+            .csrf().disable() // HttpSecurity disabled, to send ajax post requests without user credentials
                 .authorizeRequests()
                 .antMatchers(
                         "/registration**",
@@ -36,7 +37,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/getTimetableByDoctorId",
                         "/*",
                         "/queue/*"
+//                        "/doctor/queue",
+//                        "/doctor/queue/*",
+//                        "doctor/queue",
+//                        "/**"
                         ).permitAll()
+//                .antMatchers("/*").hasAuthority("ROLE_USER")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
@@ -68,6 +74,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     protected void configure(AuthenticationManagerBuilder auth) throws Exception {
         auth.authenticationProvider(authenticationProvider());
     }
+
 
     @Bean
     public SpringSecurityDialect springSecurityDialect(){

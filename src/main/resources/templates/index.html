@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="fixed" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.thymeleaf.org/extras/spring-security">
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security4">
 <head>
 	<!-- Mobile Specific Meta -->
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -228,7 +228,9 @@
 <!--					<li sec:authorize="isAuthenticated()" class="menu-has-children"><a href=""  th:text="${#authentication.getPrincipal().getUsername()}" >My Profile</a>-->
 						<ul>
 <!--							<li><a th:href="@{/user/__${@userServiceJpaImpl.findUsersByUsername(#authentication.name).getId()}__/profile}">My Profile</a></li>-->
-							<li><a th:href="@{/user/__${#authentication.getPrincipal().getUsername()}__/profile}">My Profile</a></li>
+<!--							<li sec:authentication="hasAuthority('USER')"><a th:href="@{/user/profile}">My Profile</a></li>-->
+							<li sec:authorize="hasRole('ROLE_USER')" ><a th:href="@{/user/profile}">My Profile</a></li>
+							<li sec:authorize="hasRole('ROLE_DOCTOR')" ><a th:href="@{/doctor/profile}">My Profile</a></li>
 <!--							<li><a th:href="@{/user/__${#authentication.principal.id}__/profile}">My Profile</a></li>-->
 							<li><a th:href="@{/logout}">Logout</a></li>
 						</ul>
@@ -256,7 +258,7 @@
 							Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore  et dolore magna aliqua.
 						</p>
 						<a sec:authorize="isAnonymous()" th:href="@{/login}" class="primary-btn text-uppercase">Записаться на прием</a>
-						<a sec:authorize="isAuthenticated()" href="#queueSaveFormDiv" class="primary-btn text-uppercase">Записаться на прием</a>
+						<a sec:authorize="hasRole('ROLE_USER')"  href="#queueSaveFormDiv" class="primary-btn text-uppercase">Записаться на прием</a>
 					</div>
 				</div>
 			</div>
@@ -266,7 +268,7 @@
 		<!-- Start appointment Area -->
 		<section class="appointment-area">
 			<div class="container">
-				<div sec:authorize="isAuthenticated()" class="row justify-content-between align-items-center pb-120 appointment-wrap">
+				<div sec:authorize="hasRole('ROLE_USER')" class="row justify-content-between align-items-center pb-120 appointment-wrap" style="margin-top: 50px;">
 					<div class="col-lg-5 col-md-6 appointment-left">
 						<h1>
 							Servicing Hours
@@ -301,7 +303,7 @@
 								<div class="form-group col-md-10">
 									<label for="selectDoctor">Выберите врача</label>
 									<select id="selectDoctor" th:each="doctor: ${doctors}" class="form-control">
-										<option th:value="${doctor.id}"  th:text="${doctor.doctorsTypeEntities[0].type + ': ' + doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}" ></option>
+										<option th:value="${doctor.id}"  th:text="${doctor.getDoctorTypeString() + ' : ' + doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}" ></option>
 									</select>
 								</div>
 
@@ -340,7 +342,7 @@
 <!--									</label>-->
 <!--								</div>-->
 <!--							</div>-->
-							<button type="button" id="saveToQueue"   class="btn btn-primary">Записаться на прием</button>
+							<button  type="button" id="saveToQueue"   class="btn btn-primary">Записаться на прием</button>
 <!--						</form>-->
 
 <!--						<form class="form-wrap" action="#">-->
@@ -967,10 +969,16 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								  label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
 								  label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
 							  }
-							  else{
-								  label.setAttribute("class" , "busyTimeLabel timeLabel");
-								  label.setAttribute("style" , "background-color: lightcoral; color:white;");
+							  if(timetable[i-1].timeList[j].status == 1) {
+								  label.setAttribute("class", "busyTimeLabel timeLabel");
+								  label.setAttribute("style", "background-color: #f15151; color:white;");
 							  }
+							  if(timetable[i-1].timeList[j].status == 2) {
+								  // label.setAttribute("class", "busyTimeLabel timeLabel");
+								  label.setAttribute("class", "timeLabel");
+								  label.setAttribute("style", "background-color: #479ea3; color:white;");
+							  }
+
 
 							  // label.setAttribute("data-date" , timetable[i-1].dateString);
 							  // label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
@@ -1022,55 +1030,55 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 
 			  $("#saveToQueue").on("click" , function () {
-                  saveToQueue();
-              });
+				  saveToQueue();
+			  });
 
 
-              function saveToQueue() {
+			  function saveToQueue() {
 				  var e = document.getElementById("selectDoctor");
 				  var doctorId = e.options[e.selectedIndex].value;
 				  var doctorFullname = e.options[e.selectedIndex].text;
-                    console.log(queue["order"]);
-                    console.log(queue["time"]);
-					if(queue["order"] !== undefined ){
-						  $.ajax({
-							  url: 'queue/save',
-							  type: 'GET',
-							  // dataType: 'json',
-							  contentType: 'application/json',
-							  // mimeType: 'application/json',
-							  data: ({
-								  doctorId: queue["doctorId"],
-								  userUsername: queue["userUsername"],
-								  time: queue["time"],
-								  date: queue["date"],
-								  order: queue["order"]
-							  }),
-							  success: function (data) {
-								  alert("success");
-								  // console.log(data);
-								  // location.reload();
-								  document.getElementById("logoLink").click();
+				  console.log(queue["order"]);
+				  console.log(queue["time"]);
+				  if(queue["order"] !== undefined ){
+					  $.ajax({
+						  url: 'queue/save',
+						  type: 'GET',
+						  // dataType: 'json',
+						  contentType: 'application/json',
+						  // mimeType: 'application/json',
+						  data: ({
+							  doctorId: queue["doctorId"],
+							  userUsername: queue["userUsername"],
+							  time: queue["time"],
+							  date: queue["date"],
+							  order: queue["order"]
+						  }),
+						  success: function (data) {
+							  alert("success");
+							  // console.log(data);
+							  // location.reload();
+							  document.getElementById("logoLink").click();
 
-								  // timetable = data;
-								  //
-								  // console.log(timetable);
-								  //
-								  // fillTimetable();
+							  // timetable = data;
+							  //
+							  // console.log(timetable);
+							  //
+							  // fillTimetable();
 
-							  },
-							  error: function (data) {
-                                  alert("ошибка при отправлении формы");
-								  // console.log("status " + data.status);
-								  // console.log("message " + data.message);
-								  // console.log("state " + data.state);
-							  }
-						  });
-			  		}
-					else{
-					    alert("Выберите время посещения");
-                    }
-              }
+						  },
+						  error: function (data) {
+							  alert("ошибка при отправлении формы");
+							  // console.log("status " + data.status);
+							  // console.log("message " + data.message);
+							  // console.log("state " + data.state);
+						  }
+					  });
+				  }
+				  else{
+					  alert("Выберите время посещения");
+				  }
+			  }
 
 
 
@@ -1081,14 +1089,14 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 			  // function timeLabelClick(){
 			  // 	alert("sdfsdfs");
-				//   $(".timeLabel").removeClass("selectedTimeLabel");
-				//   $(this).addClass("selectedTimeLabel");
+			  //   $(".timeLabel").removeClass("selectedTimeLabel");
+			  //   $(this).addClass("selectedTimeLabel");
 			  // }
 
 			  $("#timetableModalSaveButton").click( function(){
-			      // alert(queue["order"]);
+				  // alert(queue["order"]);
 				  if(queue["order"] != undefined){
-				  	$("#isTimeSelectedIcon").css("display", "inline-block");
+					  $("#isTimeSelectedIcon").css("display", "inline-block");
 				  }
 			  });
 			  $("#timetableModalCloseButton").click( function(){
@@ -1096,7 +1104,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 				  queue = {"doctorId":-1 , "userUsername":"" , "date":"" , "order":-1 , "time":"" };
 			  });
 
-		  })
+		  });
 
 
 		  function timeLabelClick(label){

@@ -58,6 +58,26 @@ public class DoctorsFeaturesEntity {
             inverseJoinColumns = { @JoinColumn(name = "type_id") })
     @JsonIgnore
     private Set<DoctorsTypeEntity> doctorsTypeEntities = new HashSet<>();
+
+//    private String doctorTypeString;
+
+    public String getDoctorTypeString() {
+        String doctorTypeString = "";
+        int i = 0;
+        for(DoctorsTypeEntity type :this.getDoctorsTypeEntities()){
+            if(i==0){
+                doctorTypeString += type.getType();
+            }else {
+                doctorTypeString += ", "+type.getType();
+            }
+            i++;
+        }
+        return doctorTypeString;
+    }
+
+//    public void setDoctorTypeString(String doctorTypeString) {
+//        this.doctorTypeString = doctorTypeString;
+//    }
 //    private Collection<DoctorsFeaturesTypesEntity> doctorsFeaturesTypesById;
 
 

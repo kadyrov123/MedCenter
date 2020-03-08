@@ -1,6 +1,6 @@
 <!DOCTYPE html>
-<html class="fixed" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
-      xmlns:sec="http://www.w3.org/1999/xhtml">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 <head>
     <!-- Mobile Specific Meta -->
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -116,10 +116,10 @@
         <div class="row d-flex align-items-center justify-content-center">
             <div class="about-content col-lg-12">
                 <h1 class="text-white">
-                    Features
+                    My Profile
                 </h1>
-                <p class="text-white link-nav"><a href="">Home</a>  <span class="lnr lnr-arrow-right"></span>  <a href=""> Features</a></p>
-            </div>
+                <p class="text-white link-nav"><a href="">Home</a>  <span class="lnr lnr-arrow-right"></span>  <a href=""> My Profile </a></p>
+            </div>л
         </div>
     </div>
 </section>
@@ -127,57 +127,61 @@
 
 
 <section id="user-profile-info" style="width: 80%;">
-    <div id="firstInfoCard" class="card">
-        <div class="card-header">
-            <h3>INFO</h3>
-        </div>
-        <div class="card-body">
-            <h5 class="card-title" th:text="${user.name +' '+user.surname}">Name Surname</h5>
-            <p class="card-text" th:text="${'Email :'+user.email}" >Email</p>
-                <p class="card-text" th:text="${'Username : '+user.username}" >Email</p>
-<!--                <p>Tel : <p class="card-text" ></p></p>-->
-        </div>
-        <div class="card-footer">
-            <button id="userInfoChangeButton" class="btn btn-primary">Изменить</button>
-            <a href="#" class="btn btn-primary">Поменять пароль</a>
-        </div>
-    </div>
 
-    <div id="firstInfoCard2" class="card" style="display: none;">
-        <div class="card-header">
-            <h3>INFO</h3>
-        </div>
-        <form th:action="@{/user/update}" method="post" th:object="${user}">
-<!--        <form th:object="${user}">-->
+        <div id="firstInfoCard" class="card">
+            <div class="card-header">
+                <h3>INFO</h3>
+            </div>
             <div class="card-body">
-
-                <input hidden="hidden" type="text" name="id" th:field="*{id}" th:value="${user.id}">
-                <div class="form-group">
-                    <label for="firstname">Имя :</label>
-                    <input type="text" class="form-control" id="firstname" th:field="*{name}" th:value="${user.name}">
-                </div>
-                <div class="form-group">
-                    <label for="lastname">Фамилия :</label>
-                    <input type="text" class="form-control" id="lastname" th:field="*{surname}" th:value="${user.surname}">
-                </div>
-                <div class="form-group">
-                    <label for="email">Email :</label>
-                    <input type="email" class="form-control" id="email" th:field="*{email}" th:value="${user.email}">
-                </div>
-                <div class="form-group">
-                    <label for="username">Имя пользователя :</label>
-                    <input type="text" name="username" class="form-control" id="username" th:field="*{username}" th:value="${user.username}">
-                </div>
-
-
+                <h5 class="card-title" th:text="${user.name +' '+user.surname}">Name Surname</h5>
+                <p class="card-text" th:text="${'Email :'+user.email}" >Email</p>
+                    <p class="card-text" th:text="${'Username : '+user.username}" >Username</p>
+                    <p class="card-text" th:text="${'Pin : '+user.pin}" >Pin</p>
+    <!--                <p>Tel : <p class="card-text" ></p></p>-->
             </div>
-            <div class="card-footer">
-<!--                <a href="#" class="btn btn-primary">Сохранить</a>-->
-                <button id="userInfoFormCancelButton" type="button" class="btn btn-default">Отмена</button>
-                <button id="userInfoFormSaveButton" type="submit" class="btn btn-success">Сохранить</button>
+            <div class="card-footer" sec:authorize="hasRole('ROLE_USER')" >
+                <button id="userInfoChangeButton" class="btn btn-primary">Изменить</button>
+                <a th:href="@{/user/changepassword}" class="btn btn-primary">Поменять пароль</a>
             </div>
-        </form>
-    </div>
+        </div>
+
+        <div id="firstInfoCard2" class="card" style="display: none;"  sec:authorize="hasRole('ROLE_USER')">
+            <div class="card-header">
+                <h3>INFO</h3>
+            </div>
+            <form th:action="@{/user/update}" method="post" th:object="${user}">
+    <!--        <form th:object="${user}">-->
+                <div class="card-body">
+
+                    <input hidden="hidden" type="text" name="id" th:field="*{id}" th:value="${user.id}">
+                    <div class="form-group">
+                        <label for="firstname">Имя :</label>
+                        <input type="text" class="form-control" id="firstname" th:field="*{name}" th:value="${user.name}">
+                    </div>
+                    <div class="form-group">
+                        <label for="lastname">Фамилия :</label>
+                        <input type="text" class="form-control" id="lastname" th:field="*{surname}" th:value="${user.surname}">
+                    </div>
+                    <div class="form-group">
+                        <label for="email">Email :</label>
+                        <input type="email" class="form-control" id="email" th:field="*{email}" th:value="${user.email}">
+                    </div>
+                    <div class="form-group">
+                        <label for="username">Имя пользователя :</label>
+                        <input type="text" name="username" class="form-control" id="username" th:field="*{username}" th:value="${user.username}">
+                    </div>
+
+
+                </div>
+                <div class="card-footer">
+    <!--                <a href="#" class="btn btn-primary">Сохранить</a>-->
+                    <button id="userInfoFormCancelButton" type="button" class="btn btn-default">Отмена</button>
+                    <button id="userInfoFormSaveButton" type="submit" class="btn btn-success">Сохранить</button>
+                </div>
+            </form>
+        </div>
+
+
 
 <!--    =============-->
         <hr>
@@ -187,66 +191,115 @@
         <div class="card-header">
             <ul class="nav nav-tabs">
                 <li class="nav-item">
-                    <a class="nav-link active" >Список посещений</a>
+                    <a id="infoCardNavBarHeader1" class="nav-link active" >Список посещений</a>
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link " >История болезни</a>
+                    <a id="infoCardNavBarHeader2" class="nav-link " >История болезни</a>
                 </li>
             </ul>
         </div>
 
 
-<!--        <div class="card-body" th:each="visit : ${visits}">-->
-<!--            <div class="card">-->
-<!--                <div class="card-header">-->
-<!--                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree" th:text="${visit.date +' => '+visit.doctorType+':'+visit.doctorFullname}" ></a>-->
-<!--                </div>-->
-<!--&lt;!&ndash;                <div th:id="${'collapseThree'+visit.id}" class="collapse" data-parent="#accordion">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="card-body">&ndash;&gt;-->
-<!--&lt;!&ndash;                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--            </div>-->
-<!--&lt;!&ndash;            <div class="card">&ndash;&gt;-->
-<!--&lt;!&ndash;                <div class="card-header">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree2">&ndash;&gt;-->
-<!--&lt;!&ndash;                        Collapsible Group Item #3&ndash;&gt;-->
-<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                <div id="collapseThree2" class="collapse" data-parent="#accordion">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="card-body">&ndash;&gt;-->
-<!--&lt;!&ndash;                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            <div class="card">&ndash;&gt;-->
-<!--&lt;!&ndash;                <div class="card-header">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree3">&ndash;&gt;-->
-<!--&lt;!&ndash;                        Collapsible Group Item #3&ndash;&gt;-->
-<!--&lt;!&ndash;                    </a>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                <div id="collapseThree3" class="collapse" data-parent="#accordion">&ndash;&gt;-->
-<!--&lt;!&ndash;                    <div class="card-body">&ndash;&gt;-->
-<!--&lt;!&ndash;                        Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.&ndash;&gt;-->
-<!--&lt;!&ndash;                    </div>&ndash;&gt;-->
-<!--&lt;!&ndash;                </div>&ndash;&gt;-->
-<!--&lt;!&ndash;            </div>&ndash;&gt;-->
-<!--        </div>-->
-
-        <div class="card-body" th:each="disease : ${diseases}">
-            <div class="card">
+        <div id="secondInfoCardBody1" class="card-body" >
+            <div class="card" th:each="visit : ${visits}">
                 <div class="card-header">
-                    <a class="collapsed card-link" data-toggle="collapse" th:href="'#collapseThree' + ${disease.id}" th:text="${disease.date + '=>' +disease.doctorName+' '+disease.doctorSurname}" ></a>
+                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree" th:text="${visit.date +' => '+visit.doctorType+':'+visit.doctorFullname}" ></a>
                 </div>
-                <div th:id="'collapseThree' + ${disease.id}" class="collapse" data-parent="#accordion">
-                    <div class="card-body">
-                        <h5>Diagnos</h5>
-                        <p th:text="${disease.diagnosis}"></p>
-                        <h5>Recept</h5>
-                        <p th:text="${disease.recipe}"></p>
+            </div>
+        </div>
+
+        <div id="secondInfoCardBody2" style="display: none;" class="card-body" >
+
+<!--            <div th:each="disease : ${diseases}">-->
+<!--                    <div class="card" th:id="'accordion' + ${disease.id}" >-->
+<!--                <div class="card-header"  >-->
+<!--                    <a class="collapsed card-link" data-toggle="collapse" th:href="'#collapse1' + ${disease.id}" th:text="${disease.date + ' => ' +disease.doctorName+' '+disease.doctorSurname}" th:data-parent="'#accordion'+ ${disease.id}" ></a>-->
+<!--&lt;!&ndash;                    <a sec:authorize="hasRole('ROLE_DOCTOR')" class="collapsed card-link diseaseHistoryChangeButton" data-toggle="collapse" th:href="'#collapse2' + ${disease.id}" type="btn success-btn" >Изменить</a>&ndash;&gt;-->
+<!--                    <a class="collapsed card-link diseaseHistoryChangeButton" data-toggle="collapse" th:href="'#collapse2' + ${disease.id}" th:data-parent="'#accordion'+ ${disease.id}"  type="btn success-btn" >Изменить</a>-->
+<!--                </div>-->
+<!--                <div th:id="'collapse1' + ${disease.id}" class="collapse" >-->
+<!--                    <div  class="card-body diseaseHistoryCardBody1">-->
+<!--                        <h5>Diagnos</h5>-->
+<!--                        <p th:text="${disease.diagnosis}"></p>-->
+<!--                        <h5>Recept</h5>-->
+<!--                        <p th:text="${disease.recipe}"></p>-->
+<!--                    </div>-->
+
+<!--                </div>-->
+<!--                <div th:id="'collapse2' + ${disease.id}" class="collapse" >-->
+<!--                    <div  class="card-body diseaseHistoryCardBody2" sec:authorize="hasRole('ROLE_DOCTOR')">-->
+<!--                        <form method="post" th:href="@{/}">-->
+<!--                            <div class="card-body" th:object="${diseaseToChange}">-->
+<!--                                <div class="form-group">-->
+<!--                                    <label for="email">Диагноз :</label>-->
+<!--                                    <input type="email" class="form-control"  th:field="*{diagnosis}" th:value="${disease.diagnosis}" th:text="${disease.diagnosis}">-->
+<!--                                </div>-->
+<!--                                <div class="form-group">-->
+<!--                                    <label for="email">Диагноз :</label>-->
+<!--                                    <input type="email" class="form-control"  th:field="*{recipe}" th:value="${disease.recipe}" th:text="${disease.recipe}">-->
+<!--                                </div>-->
+
+<!--                            </div>-->
+<!--                            <div class="card-footer">-->
+<!--                                <button id="diseaseHistoryCardBody2SaveButton"  type="submit" class="btn btn-success">Сохранить</button>-->
+<!--                            </div>-->
+<!--                        </form>-->
+<!--                    </div>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            </div>-->
+
+
+            <div id="accordion" >
+                <div th:each="disease : ${diseases}" th:id="'accordion' + ${disease.id}" >
+                    <div class="card">
+
+                        <div class="card-header">
+                            <a class=" card-link" data-toggle="collapse" th:href="'#collapseOne' + ${disease.id}"  th:text="${disease.date + ' => ' +disease.doctorName+' '+disease.doctorSurname}"></a>
+                            <a sec:authorize="hasRole('ROLE_DOCTOR')" class="collapsed card-link" data-toggle="collapse" th:href="'#collapseTwo' + ${disease.id}" >Изменить</a>
+                        </div>
+
+
+                        <div th:id="'collapseOne' + ${disease.id}" class="collapse" th:data-parent="'#accordion' + ${disease.id}"  >
+                            <div  class="card-body diseaseHistoryCardBody1">
+                                <h5>Диагноз</h5>
+                                <p th:text="${disease.diagnosis}"></p>
+                                <h5>Рецепт</h5>
+                                <p th:text="${disease.recipe}"></p>
+                            </div>
+                        </div>
+                        <div th:id="'collapseTwo' + ${disease.id}" class="collapse" th:data-parent="'#accordion' + ${disease.id}" sec:authorize="hasRole('ROLE_DOCTOR')">
+<!--                            <div  class="card-body diseaseHistoryCardBody2" sec:authorize="hasRole('ROLE_DOCTOR')">-->
+                            <div  class="card-body diseaseHistoryCardBody2">
+<!--                                <form method="post" th:href="@{/}" th:object="${diseaseToChange}">-->
+                                <form method="post" th:action="@{/doctor/changeDisease}" th:object="${diseaseToChange}">
+                                    <div class="card-body" >
+                                        <input type="hidden" name="id"  th:value="${disease.id}" />
+                                        <input type="hidden" name="patientId"  th:value="${disease.patientId}" />
+                                        <input type="hidden" name="doctorId"  th:value="${disease.doctorId}" />
+                                        <div class="form-group">
+                                            <label >Диагноз :</label>
+                                            <textarea type="text"  class="form-control" name="diagnosis" th:value="${disease.diagnosis}" >[[${disease.diagnosis}]]</textarea>
+                                        </div>
+                                        <div class="form-group">
+                                            <label >Рецепт :</label>
+                                            <textarea type="text" class="form-control"  name="recipe"  th:value="${disease.recipe}" >[[${disease.recipe}]]</textarea>
+                                        </div>
+
+                                    </div>
+                                    <div class="card-footer">
+                                        <button id="diseaseHistoryCardBody2SaveButton"  type="submit" class="btn btn-success">Сохранить</button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+
                     </div>
                 </div>
             </div>
+
+
+
         </div>
 
     </div>
@@ -547,6 +600,32 @@
             $("#firstInfoCard").css("display","none");
             $("#firstInfoCard2").css("display","block");
         });
+
+        // infoCardNavBarHeader1
+
+        $("#infoCardNavBarHeader1").on("click" , function(){
+            $("#infoCardNavBarHeader2").removeClass("active");
+            $("#infoCardNavBarHeader1").addClass("active");
+            $("#secondInfoCardBody2").css("display","none");
+            $("#secondInfoCardBody1").css("display","block");
+        });
+        $("#infoCardNavBarHeader2").on("click" , function(){
+            $("#infoCardNavBarHeader1").removeClass("active");
+            $("#infoCardNavBarHeader2").addClass("active");
+            $("#secondInfoCardBody1").css("display","none");
+            $("#secondInfoCardBody2").css("display","block");
+        });
+
+        // $(".diseaseHistoryCardBody2SaveButton").on("click" , function(){
+        //     $(".diseaseHistoryCardBody2").css("display","none");
+        //     $(".diseaseHistoryCardBody1").css("display","block");
+        // });
+        //
+        // $(".diseaseHistoryChangeButton").on("click" , function(){
+        //     $(".diseaseHistoryCardBody1").css("display","none");
+        //     $(".diseaseHistoryCardBody2").css("display","block");
+        // });
+
 
 
     });

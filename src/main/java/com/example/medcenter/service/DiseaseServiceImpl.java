@@ -50,7 +50,7 @@ public class DiseaseServiceImpl implements DiseaseService{
             dto.setDate(disease.getDate());
             dto.setDiagnosis(disease.getDiagnosis());
             dto.setRecipe(disease.getRecipe());
-            dto.setId(i);
+            dto.setId((int) disease.getId());
 
             diseaseDTOList.add(dto);
             i++;

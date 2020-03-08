@@ -12,4 +12,6 @@ public interface QueueRepository extends JpaRepository<QueueEntity, Long> {
     List<QueueEntity> findQueueEntitiesByDateAndDoctorId(Date date , int doctorId);
 
     List<QueueEntity> findQueueEntitiesByUserId(long userId);
+
+    List<QueueEntity> findQueueEntitiesByDate(Date date);
 }
