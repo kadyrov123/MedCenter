@@ -27,6 +27,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                 .antMatchers(
                         "/registration**",
                         "/js/**",
+                        "/assets/**",
                         "/css/**",
                         "/img/**",
                         "/images/**",
