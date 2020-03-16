@@ -110,10 +110,7 @@ public class MainController {
         return "admin/test";
     }
 
-    @GetMapping("/ownprofile")
-    public String ownprofile(Model model) {
-        return "admin/ownprofile";
-    }
+
 
 
 }
