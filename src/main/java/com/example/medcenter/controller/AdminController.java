@@ -4,6 +4,7 @@ import com.example.medcenter.entity.DoctorsFeaturesEntity;
 import com.example.medcenter.entity.DoctorsTypeEntity;
 import com.example.medcenter.entity.IntervalEntity;
 import com.example.medcenter.entity.UsersEntity;
+import com.example.medcenter.repoitory.DoctorsFeaturesRepository;
 import com.example.medcenter.repoitory.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -13,6 +14,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 
+import java.util.List;
 import java.util.Set;
 
 @Controller
@@ -20,6 +22,8 @@ public class AdminController {
 
     @Autowired
     UsersRepository usersRepository;
+    @Autowired
+    DoctorsFeaturesRepository doctorsFeaturesRepository;
 
     @GetMapping("/admin/profile")
     @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
@@ -42,9 +46,18 @@ public class AdminController {
 
         usersRepository.save(user);
 
-
-
         return "redirect:/admin/profile";
+    }
+
+    @GetMapping("/admin/doctors")
+    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
+    public String getDoctors(Model model) {
+//        UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        List<DoctorsFeaturesEntity>  doctors = doctorsFeaturesRepository.findAll();
+        UsersEntity newDoctor = new UsersEntity();
+        model.addAttribute("doctors" , doctors);
+        model.addAttribute("newDoctor" , newDoctor);
+        return "admin/test";
     }
 
 }

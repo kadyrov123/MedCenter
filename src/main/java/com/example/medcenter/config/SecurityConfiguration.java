@@ -1,6 +1,7 @@
 package com.example.medcenter.config;
 
 import com.example.medcenter.service.UsersDetailsService;
+import nz.net.ultraq.thymeleaf.LayoutDialect;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -84,6 +85,12 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
     @Bean
     public SpringSecurityDialect springSecurityDialect(){
         return new SpringSecurityDialect();
+    }
+
+
+    @Bean // For adding layouts in thymeleaf
+    public LayoutDialect layoutDialect() {
+        return new LayoutDialect();
     }
 
 }
