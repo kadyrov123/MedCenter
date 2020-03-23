@@ -3,20 +3,21 @@
 
 <head>
     <th:block th:fragment="head">
-    <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-    <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
-    <meta name="author" content="Creative Tim">
-    <title>Argon Dashboard - Free Dashboard for Bootstrap 4</title>
-    <!-- Favicon -->
-    <link rel="icon" href="../assets/img/brand/favicon.png" type="image/png">
-    <!-- Fonts -->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
-    <!-- Icons -->
-    <link rel="stylesheet" href="../assets/vendor/nucleo/css/nucleo.css" type="text/css">
-    <link rel="stylesheet" href="../assets/vendor/@fortawesome/fontawesome-free/css/all.min.css" type="text/css">
-    <!-- Argon CSS -->
-    <link rel="stylesheet" href="../assets/css/argon.css?v=1.2.0" type="text/css">
+        <meta charset="utf-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <meta name="description" content="Start your development with a Dashboard for Bootstrap 4.">
+        <meta name="author" content="Creative Tim">
+        <title>Argon Dashboard - Free Dashboard for Bootstrap 4</title>
+        <!-- Favicon -->
+        <link rel="icon" href="../assets/img/brand/favicon.png" th:href="@{/assets/img/brand/favicon.png}" type="image/png">
+        <!-- Fonts -->
+        <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700">
+        <!-- Icons -->
+        <link rel="stylesheet"  th:href="@{/assets/vendor/nucleo/css/nucleo.css}" type="text/css">
+        <link rel="stylesheet" th:href="@{/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css}" type="text/css">
+        <!-- Page plugins -->
+        <!-- Argon CSS -->
+        <link rel="stylesheet" href="../assets/css/argon.css?v=1.2.0" th:href="@{/assets/css/argon.css?v=1.2.0}" type="text/css">
     </th:block>
 </head>
 
@@ -36,7 +37,7 @@
                 <!-- Nav items -->
                 <ul class="navbar-nav">
                     <li class="nav-item">
-                        <a class="nav-link" href="dashboard.html">
+                        <a class="nav-link" th:href="@{/admin}">
                             <i class="ni ni-tv-2 text-primary"></i>
                             <span class="nav-link-text">Dashboard</span>
                         </a>
@@ -54,9 +55,15 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="ownprofile.html">
+                        <a class="nav-link" th:href="@{/admin/profile}">
                             <i class="ni ni-single-02 text-yellow"></i>
-                            <span class="nav-link-text">Profile</span>
+                            <span class="nav-link-text">My Profile</span>
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/doctors}">
+                            <i class="ni ni-single-02 text-yellow"></i>
+                            <span class="nav-link-text">Doctors</span>
                         </a>
                     </li>
                     <li class="nav-item">
@@ -366,13 +373,22 @@
 
 <th:block th:fragment="footer_scripts">
     <!-- Core -->
-    <script src="../assets/vendor/jquery/dist/jquery.min.js"></script>
-    <script src="../assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="../assets/vendor/js-cookie/js.cookie.js"></script>
-    <script src="../assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js"></script>
-    <script src="../assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js"></script>
+    <script th:src="@{/assets/vendor/jquery/dist/jquery.min.js}"></script>
+    <script th:src="@{/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/vendor/js-cookie/js.cookie.js}"></script>
+    <script th:src="@{/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js}"></script>
+    <script th:src="@{/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js}"></script>
     <!-- Argon JS -->
-    <script src="../assets/js/argon.js?v=1.2.0"></script>
+    <script th:src="@{/assets/js/argon.js?v=1.2.0}"></script>
+
+    <script th:src="@{/assets/vendor/jquery/dist/jquery.min.js}"></script>
+    <script th:src="@{/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/vendor/js-cookie/js.cookie.js}"></script>
+    <script th:src="@{/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js}"></script>
+    <script th:src="@{/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js}"></script>
+    <!-- Optional JS -->
+    <script th:src="@{/assets/vendor/chart.js/dist/Chart.min.js}"></script>
+    <script th:src="@{/assets/vendor/chart.js/dist/Chart.extension.js}"></script>
 </th:block>
 </body>
 
