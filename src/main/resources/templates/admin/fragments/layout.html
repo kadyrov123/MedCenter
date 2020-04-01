@@ -1,5 +1,6 @@
 <!DOCTYPE html>
-<html  xmlns:th="http://www.thymeleaf.org">
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
 
 <head>
     <th:block th:fragment="head">
@@ -17,7 +18,7 @@
         <link rel="stylesheet" th:href="@{/assets/vendor/@fortawesome/fontawesome-free/css/all.min.css}" type="text/css">
         <!-- Page plugins -->
         <!-- Argon CSS -->
-        <link rel="stylesheet" href="../assets/css/argon.css?v=1.2.0" th:href="@{/assets/css/argon.css?v=1.2.0}" type="text/css">
+        <link rel="stylesheet"  th:href="@{/assets/css/argon.css?v=1.2.0}" type="text/css">
     </th:block>
 </head>
 
@@ -28,7 +29,7 @@
         <!-- Brand -->
         <div class="sidenav-header  align-items-center">
             <a class="navbar-brand" href="javascript:void(0)">
-                <img src="../assets/img/brand/blue.png" class="navbar-brand-img" alt="...">
+                <img th:src="@{/assets/img/brand/blue.png}" class="navbar-brand-img" alt="...">
             </a>
         </div>
         <div class="navbar-inner">

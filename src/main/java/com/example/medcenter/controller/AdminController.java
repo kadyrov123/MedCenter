@@ -57,7 +57,7 @@ public class AdminController {
         UsersEntity newDoctor = new UsersEntity();
         model.addAttribute("doctors" , doctors);
         model.addAttribute("newDoctor" , newDoctor);
-        return "admin/test";
+        return "admin/doctors";
     }
 
 }
