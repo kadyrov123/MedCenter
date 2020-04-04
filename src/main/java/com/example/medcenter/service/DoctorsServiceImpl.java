@@ -11,13 +11,11 @@ import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import java.sql.Time;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalTime;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 @Service
 public class DoctorsServiceImpl implements DoctorsService {
@@ -56,6 +54,22 @@ public class DoctorsServiceImpl implements DoctorsService {
     }
 
     @Override
+    public void saveDefaultDoctor(UsersEntity user) {
+        UsersEntity savedUser = usersRepository.findUsersEntityByUsername(user.getUsername());
+        IntervalEntity interval = intervalRepository.getOne(3);
+
+        DoctorsFeaturesEntity doctor = new DoctorsFeaturesEntity();
+        doctor.setUsersByDoctorId(savedUser);
+        doctor.setIntervalByIntervalId(interval);
+        doctor.setDoctorsTypeEntities(new HashSet());
+        doctor.setInfo("");
+        doctor.setStartTime(new Time(9,0,0));
+        doctor.setEndTime(new Time(17,0,0));
+
+        doctorsFeaturesRepository.save(doctor);
+    }
+
+    @Override
     public void updateDoctor(DoctorDTO doctorDTO) {
 
     }
@@ -63,7 +77,6 @@ public class DoctorsServiceImpl implements DoctorsService {
     @Override
     public List<TimeDTO> getTimetableByDoctorFeaturesIdAndDate(int doctorId , Date date) {
         DoctorsFeaturesEntity doctorsFeatures = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctorId);
-        System.out.println("======================================== doctorFeatures" + doctorsFeatures.getEndTime());
         LocalTime startTime = doctorsFeatures.getStartTime().toLocalTime();
         LocalTime endTime = doctorsFeatures.getEndTime().toLocalTime();
         LocalTime localTime = startTime;
@@ -166,9 +179,9 @@ public class DoctorsServiceImpl implements DoctorsService {
         return getPatientListByDoctorIdAndDate(doctorId , today);
     }
 
-    @Override
-    public  void saveDoctorDto(DoctorDTO doctorDTO){
-
-
-    }
+//    @Override
+//    public  void saveDoctor(DoctorDTO doctorDTO){
+//
+//
+//    }
 }

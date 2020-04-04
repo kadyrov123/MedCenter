@@ -23,6 +23,6 @@ public interface DoctorsService {
     List<DoctorsPatientDTO>  getPatientListByDoctorIdAndDate(int doctorId , Date date);
     List<DoctorsPatientDTO>  getTodayPatientListByDoctorId(int doctorId);
 
-    void saveDoctorDto(DoctorDTO doctorDTO);
+    void saveDefaultDoctor(UsersEntity user);
 
 }

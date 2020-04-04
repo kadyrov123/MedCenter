@@ -40,7 +40,18 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
         user.setUsername(registration.getUsername());
         user.setEmail(registration.getEmail());
         user.setPassword(passwordEncoder.encode(registration.getPassword()));
-        user.setRoles(Arrays.asList(new RoleEntity("ROLE_USER")));
+        user.setRoles(Arrays.asList(roleRepository.getRoleEntityByRole("ROLE_USER")));
+        return userRepository.save(user);
+    }
+
+    public UsersEntity saveDoctor(UserRegistrationDTO registration){
+        UsersEntity user = new UsersEntity();
+        user.setName(registration.getFirstName());
+        user.setSurname(registration.getLastName());
+        user.setUsername(registration.getUsername());
+        user.setEmail(registration.getEmail());
+        user.setPassword(passwordEncoder.encode(registration.getPassword()));
+        user.setRoles(Arrays.asList(roleRepository.getRoleEntityByRole("ROLE_DOCTOR")));
         return userRepository.save(user);
     }
 

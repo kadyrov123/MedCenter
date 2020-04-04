@@ -35,7 +35,6 @@ public class UserRegistrationDTO {
     private String confirmPassword;
 
 //    @Email
-    @NotEmpty
     private String email;
 
 //    @Email
