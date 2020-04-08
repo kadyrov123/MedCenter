@@ -15,9 +15,11 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 
 import javax.validation.Valid;
@@ -37,11 +39,11 @@ public class AdminController {
     DoctorsService doctorsService;
 
     @GetMapping("/admin/profile")
-    @PreAuthorize(value = "hasRole('ROLE_ADMIN')")
     public String ownprofile(Model model) {
         UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         model.addAttribute("user" , user);
-        return "admin/ownprofile";
+        model.addAttribute("canBeEdited" , true);
+        return "admin/profile";
     }
 
 
@@ -85,6 +87,17 @@ public class AdminController {
         doctorsService.saveDefaultDoctor(usersRepository.findUsersEntityByUsername(newDoctorUser.getUsername()));
 
         return "redirect:/admin/doctors";
+    }
+
+
+    @GetMapping("/doctor/{id}/profile")
+    public String doctorProfile(@PathVariable int id , ModelMap model) {
+        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(id);
+        UsersEntity user = doctor.getUsersByDoctorId();
+        model.addAttribute("doctor" , doctor);
+        model.addAttribute("user" , user);
+        model.addAttribute("canBeEdited" , false);
+        return "admin/profile";
     }
 
 }
