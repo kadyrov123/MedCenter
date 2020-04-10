@@ -11,9 +11,11 @@ import com.example.medcenter.service.DoctorsService;
 import com.example.medcenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -24,6 +26,7 @@ import java.text.SimpleDateFormat;
 import java.util.*;
 
 @Controller
+@PreAuthorize(value = "hasRole('ROLE_DOCTOR')")
 public class DoctorsController {
 
 
@@ -45,9 +48,12 @@ public class DoctorsController {
     DiseaseRepository diseaseRepository;
 
 
+    @GetMapping("/doctor")
+    public String test(Model model) {
+        return "admin/dashboard";
+    }
 
     @GetMapping("/user/{userId}/profile")
-//    @PreAuthorize(value = "hasRole('ROLE_DOCTOR')")
     public String getUser(@PathVariable long userId , ModelMap model){
         System.out.println("user/userId/profile" + userId);
         model.addAttribute("user",usersRepository.getOne((long)userId));
@@ -57,19 +63,37 @@ public class DoctorsController {
         return "user/profile";
     }
 
+//    @GetMapping("/doctor/profile")
+//    public String userProfilePage( ModelMap modelMap){
+//        UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+//        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(user.getId());
+////        modelMap.addAttribute("visits" , userService.getVisitsByUserId(user.getId()));
+////        modelMap.addAttribute("diseases" , diseaseService.getDiseaseByPatientId(user.getId()));
+////        modelMap.addAttribute("diseaseToChange", new DiseaseDTO());
+//        modelMap.addAttribute("patient_list", doctorsService.getTodayPatientListByDoctorId(doctor.getId()));
+//        modelMap.addAttribute("timetable", doctorsService.getTimetableByDoctorFeaturesId(doctor.getId()));
+//        modelMap.addAttribute("doctor" , doctor);
+//        modelMap.addAttribute("intervals" , intervalRepository.findAll());
+//
+//        return "doctor/profile";
+//    }
+
     @GetMapping("/doctor/profile")
-    public String userProfilePage( ModelMap modelMap){
+    public String doctorProfile(Model model) {
         UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(user.getId());
-//        modelMap.addAttribute("visits" , userService.getVisitsByUserId(user.getId()));
-//        modelMap.addAttribute("diseases" , diseaseService.getDiseaseByPatientId(user.getId()));
-//        modelMap.addAttribute("diseaseToChange", new DiseaseDTO());
-        modelMap.addAttribute("patient_list", doctorsService.getTodayPatientListByDoctorId(doctor.getId()));
-        modelMap.addAttribute("timetable", doctorsService.getTimetableByDoctorFeaturesId(doctor.getId()));
-        modelMap.addAttribute("doctor" , doctor);
-        modelMap.addAttribute("intervals" , intervalRepository.findAll());
+        model.addAttribute("user" , user);
+        model.addAttribute("doctor" , doctor);
+        model.addAttribute("canBeEdited" , true);
+        return "admin/profile";
+    }
 
-        return "doctor/profile";
+    @GetMapping("/doctor/timetable")
+    public String doctorTimetable(Model model) {
+        UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(user.getId());
+        model.addAttribute("timetable", doctorsService.getTimetableByDoctorFeaturesId(doctor.getId()));
+        return "admin/tables";
     }
 
     @PostMapping("/doctor/update")

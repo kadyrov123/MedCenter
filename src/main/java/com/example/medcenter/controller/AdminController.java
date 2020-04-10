@@ -11,6 +11,7 @@ import com.example.medcenter.repoitory.UsersRepository;
 import com.example.medcenter.service.DoctorsService;
 import com.example.medcenter.service.UsersDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetailsService;
@@ -26,7 +27,9 @@ import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
+
 @Controller
+@PreAuthorize(value = "hasRole('ROLE_ADMIN')")
 public class AdminController {
 
     @Autowired
@@ -39,6 +42,12 @@ public class AdminController {
     UsersDetailsService usersDetailsService;
     @Autowired
     DoctorsService doctorsService;
+
+
+    @GetMapping("/admin")
+    public String admin(Model model) {
+        return "admin/dashboard";
+    }
 
     @GetMapping("/admin/profile")
     public String ownprofile(Model model) {
@@ -75,7 +84,7 @@ public class AdminController {
         return "admin/doctors";
     }
 
-    @PostMapping("/save/doctor")
+    @PostMapping("/admin/save/doctor")
     public String saveDoctor(@ModelAttribute("newDoctor") @Valid UserRegistrationDTO newDoctorUser, BindingResult result){
         UsersEntity existing = usersDetailsService.findByUsername(newDoctorUser.getUsername());
         if (existing != null){
@@ -92,7 +101,7 @@ public class AdminController {
     }
 
 
-    @GetMapping("/doctor/{id}/profile")
+    @GetMapping("/admin/doctor/{id}/profile")
     public String doctorProfile(@PathVariable int id , ModelMap model) {
         DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(id);
         UsersEntity user = doctor.getUsersByDoctorId();
@@ -102,7 +111,7 @@ public class AdminController {
         return "admin/profile";
     }
 
-    @GetMapping("/doctor/{id}/delete")
+    @GetMapping("/admin/doctor/{id}/delete")
     public String deleteDoctor(@PathVariable int id , ModelMap model) {
         DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(id);
         UsersEntity doctorUser = doctor.getUsersByDoctorId();

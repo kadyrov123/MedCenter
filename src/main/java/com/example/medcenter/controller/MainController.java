@@ -101,15 +101,6 @@ public class MainController {
         return "login";
     }
 
-    @GetMapping("/admin")
-    public String admin(Model model) {
-        return "admin/dashboard";
-    }
-    @GetMapping("/test")
-    public String test(Model model) {
-        return "admin/test";
-    }
-
 
 
 

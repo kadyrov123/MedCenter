@@ -74,7 +74,7 @@
                           <input type="text" id="input-pin" class="form-control" placeholder="First name" th:field="${user.pin}"   th:value="${user.pin}">
                         </div>
                       </div>
-                      <div class="col-lg-6">
+                      <div class="col-lg-6" th:if="${canBeEdited}">
                         <div class="form-group" style="margin-top: 30px;">
                           <input type="button" id="input-password" class="form-control" value="Изменить пароль">
                         </div>

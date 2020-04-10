@@ -384,7 +384,7 @@
 
                                     <td class="text-right">
                                         <div class="dropdown">
-                                            <form th:action="@{/doctor/__${doctor.id}__/delete}" method="get" >
+                                            <form th:action="@{/admin/doctor/__${doctor.id}__/delete}" method="get" >
                                                 <button class="btn btn-sm btn-icon-only text-light" type="submit" >
                                                     <i class="ni ni-fat-remove" style="font-size: 30px;"></i>
                                                 </button>
@@ -446,7 +446,7 @@
                         </div>
                         <!-- Light table -->
                         <div class="card-body">
-                            <form th:action="@{/save/doctor}" method="post" th:object="${newDoctor}">
+                            <form th:action="@{/admin/save/doctor}" method="post" th:object="${newDoctor}">
                                 <div class="form-group">
                                     <label for="name" class="form-control-label">Имя</label>
                                     <input class="form-control" type="text" value="John Snow" id="name" th:field="*{firstName}">
@@ -489,7 +489,7 @@
     $(document).ready(function(){
         $('.my-clickable-row').on("click" , function () {
             var doctorId = $(this).attr("data-doctorid");
-            window.location = "/doctor/" +doctorId + "/profile";
+            window.location = "/admin/doctor/" +doctorId + "/profile";
         });
 
     });

@@ -7,7 +7,9 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
+import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.web.util.matcher.AntPathRequestMatcher;
@@ -15,6 +17,8 @@ import org.thymeleaf.extras.springsecurity5.dialect.SpringSecurityDialect;
 
 
 @Configuration
+@EnableWebSecurity
+@EnableGlobalMethodSecurity(prePostEnabled = true)
 public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
 
     @Autowired
@@ -42,12 +46,9 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/getTimetableByDoctorId",
                         "/*",
                         "/queue/*"
-//                        "/doctor/queue",
-//                        "/doctor/queue/*",
-//                        "doctor/queue",
-//                        "/**"
                         ).permitAll()
-//                .antMatchers("/*").hasAuthority("ROLE_USER")
+//                .antMatchers("/admin").hasAuthority("ROLE_ADMIN")
+//                .antMatchers("/doctor/**").hasAuthority("ROLE_DOCTOR")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()
