@@ -6,6 +6,7 @@ import com.example.medcenter.entity.DoctorsTypeEntity;
 import com.example.medcenter.entity.IntervalEntity;
 import com.example.medcenter.entity.UsersEntity;
 import com.example.medcenter.repoitory.DoctorsFeaturesRepository;
+import com.example.medcenter.repoitory.RoleRepository;
 import com.example.medcenter.repoitory.UsersRepository;
 import com.example.medcenter.service.DoctorsService;
 import com.example.medcenter.service.UsersDetailsService;
@@ -17,12 +18,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.Set;
 
@@ -33,6 +33,8 @@ public class AdminController {
     UsersRepository usersRepository;
     @Autowired
     DoctorsFeaturesRepository doctorsFeaturesRepository;
+    @Autowired
+    RoleRepository roleRepository;
     @Autowired
     UsersDetailsService usersDetailsService;
     @Autowired
@@ -98,6 +100,16 @@ public class AdminController {
         model.addAttribute("user" , user);
         model.addAttribute("canBeEdited" , false);
         return "admin/profile";
+    }
+
+    @GetMapping("/doctor/{id}/delete")
+    public String deleteDoctor(@PathVariable int id , ModelMap model) {
+        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(id);
+        UsersEntity doctorUser = doctor.getUsersByDoctorId();
+        doctorUser.setRoles(new ArrayList<>());
+        doctorsFeaturesRepository.delete(doctor);
+        usersRepository.delete(doctorUser);
+        return "redirect:/admin/doctors";
     }
 
 }

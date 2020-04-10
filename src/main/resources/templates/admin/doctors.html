@@ -366,29 +366,33 @@
                             </tr>
                             </thead>
                             <tbody class="list">
-<!--                            <a th:each="doctor : ${doctors}" th:href="@{/doctor/${doctor.id}/profile}">-->
-                                <tr th:each="doctor : ${doctors}" class='my-clickable-row' th:data-doctorid="${doctor.id}">
+                                <tr th:each="doctor : ${doctors}"  th:data-doctorid="${doctor.id}">
 
-                                        <th scope="row">
+                                        <th class='my-clickable-row' th:data-doctorid="${doctor.id}" scope="row">
                                            <p>[[${doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}]]</p>
                                         </th>
-                                        <td class="budget">
+                                        <td class='my-clickable-row' th:data-doctorid="${doctor.id}" >
                                             [[${doctor.startTime}]]
                                         </td>
-                                        <td class="budget">
+                                        <td class='my-clickable-row' th:data-doctorid="${doctor.id}" >
                                             [[${doctor.endTime}]]
                                         </td>
-                                        <td class="budget">
+                                        <td class='my-clickable-row' th:data-doctorid="${doctor.id}" >
                                             [[${doctor.intervalByIntervalId.interval}]]
                                         </td>
 
 
-
                                     <td class="text-right">
                                         <div class="dropdown">
-                                            <a class="btn btn-sm btn-icon-only text-light" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                                <i class="ni ni-fat-remove" style="font-size: 30px;"></i>
-                                            </a>
+                                            <form th:action="@{/doctor/__${doctor.id}__/delete}" method="get" >
+                                                <button class="btn btn-sm btn-icon-only text-light" type="submit" >
+                                                    <i class="ni ni-fat-remove" style="font-size: 30px;"></i>
+                                                </button>
+                                            </form>
+
+<!--                                            <a class="btn btn-sm btn-icon-only text-light" th:href="@{/doctor/__${doctor.id}__/delete}" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">-->
+<!--                                                <i class="ni ni-fat-remove" style="font-size: 30px;"></i>-->
+<!--                                            </a>-->
     <!--                                        <div class="dropdown-menu dropdown-menu-right dropdown-menu-arrow">-->
     <!--                                            <a class="dropdown-item" href="#">Action</a>-->
     <!--                                            <a class="dropdown-item" href="#">Another action</a>-->
@@ -397,7 +401,6 @@
                                         </div>
                                     </td>
                                 </tr>
-<!--                            </a>-->
 
                             </tbody>
                         </table>
