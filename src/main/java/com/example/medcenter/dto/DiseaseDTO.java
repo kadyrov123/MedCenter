@@ -16,6 +16,7 @@ public class DiseaseDTO {
     Date date;
     String diagnosis;
     String recipe;
+    String file ;
 
     public DiseaseDTO() {
     }
@@ -122,5 +123,13 @@ public class DiseaseDTO {
 
     public void setId(int id) {
         this.id = id;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
     }
 }

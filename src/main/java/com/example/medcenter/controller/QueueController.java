@@ -64,10 +64,7 @@ public class QueueController {
 
     @RequestMapping(value = "/getTimetableByDoctorId", method = RequestMethod.GET)
     public @ResponseBody List<TimetableDTO> getTimetableByDoctorId(@RequestParam int  doctorId){
-
-//        System.out.println("========================================== doctorId ="+doctorId);
         List<TimetableDTO> timetables = doctorsService.getTimetableByDoctorFeaturesId(doctorId);
-
         return timetables;
     }
 

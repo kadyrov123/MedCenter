@@ -161,6 +161,17 @@
             <version>2.3.0</version>
         </dependency>
 
+<!--        for file uploading -->
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-devtools</artifactId>
+            <optional>true</optional>
+        </dependency>
+        <dependency>
+            <groupId>javax.servlet</groupId>
+            <artifactId>jstl</artifactId>
+        </dependency>
+
     </dependencies>
 
     <build>

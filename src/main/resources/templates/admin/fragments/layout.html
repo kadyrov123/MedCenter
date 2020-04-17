@@ -73,6 +73,20 @@
                             <span class="nav-link-text">График</span>
                         </a>
                     </li>
+                    <li sec:authorize="hasRole('ROLE_DOCTOR')" class="nav-item">
+                        <a class="nav-link" th:href="@{/doctor/patients}">
+                            <i class="ni ni-bullet-list-67 text-default"></i>
+                            <span class="nav-link-text">Пациенты</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" th:href="@{/logout}">
+                            <i class="ni ni-bullet-list-67 text-default"></i>
+                            <span class="nav-link-text">LOGOUT</span>
+                        </a>
+                    </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="login.html">
                             <i class="ni ni-key-25 text-info"></i>

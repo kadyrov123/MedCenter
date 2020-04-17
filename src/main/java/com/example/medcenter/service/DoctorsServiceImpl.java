@@ -160,15 +160,17 @@ public class DoctorsServiceImpl implements DoctorsService {
         List<DoctorsPatientDTO> patientDtoList = new ArrayList<>();
         int i = 1;
         for(QueueEntity queue : queueEntityList){
-            DoctorsPatientDTO patientDTO = new DoctorsPatientDTO();
-            UsersEntity patient = usersRepository.getOne(queue.getUserId());
-            patientDTO.setId(i);
-            patientDTO.setPatient(patient);
-            patientDTO.setQueue(queue);
+            if(queue.getStatus()!=0 && queue.getStatus()!=2) {
+                DoctorsPatientDTO patientDTO = new DoctorsPatientDTO();
+                UsersEntity patient = usersRepository.getOne(queue.getUserId());
+                patientDTO.setId(i);
+                patientDTO.setPatient(patient);
+                patientDTO.setQueue(queue);
 
 
-            patientDtoList.add(patientDTO);
-            i++;
+                patientDtoList.add(patientDTO);
+                i++;
+            }
         }
         return patientDtoList;
     }

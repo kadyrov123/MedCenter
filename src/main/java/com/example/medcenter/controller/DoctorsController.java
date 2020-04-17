@@ -1,15 +1,13 @@
 package com.example.medcenter.controller;
 
-import com.example.medcenter.dto.DiseaseDTO;
-import com.example.medcenter.dto.DoctorDTO;
-import com.example.medcenter.dto.TimeDTO;
-import com.example.medcenter.dto.TimetableDTO;
+import com.example.medcenter.dto.*;
 import com.example.medcenter.entity.*;
 import com.example.medcenter.repoitory.*;
 import com.example.medcenter.service.DiseaseService;
 import com.example.medcenter.service.DoctorsService;
 import com.example.medcenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.repository.query.Param;
 import org.springframework.http.MediaType;
 import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
@@ -17,13 +15,27 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
+import org.springframework.util.FileCopyUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.*;
+import java.net.URLConnection;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.*;
+
+import static org.springframework.util.StringUtils.*;
 
 @Controller
 @PreAuthorize(value = "hasRole('ROLE_DOCTOR')")
@@ -46,6 +58,9 @@ public class DoctorsController {
     QueueRepository queueRepository;
     @Autowired
     DiseaseRepository diseaseRepository;
+
+    private static String FILE_UPLOAD_DIR = "src/main/resources/static/uploads/files/";
+    private static String PHOTO_UPLOAD_DIR = "src/main/resources/static/uploads/photos/";
 
 
     @GetMapping("/doctor")
@@ -94,6 +109,15 @@ public class DoctorsController {
         DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(user.getId());
         model.addAttribute("timetable", doctorsService.getTimetableByDoctorFeaturesId(doctor.getId()));
         return "admin/tables";
+    }
+
+    @GetMapping("/doctor/patients")
+    public String doctorPatients(Model model) {
+        UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(user.getId());
+        model.addAttribute("patient_list", doctorsService.getTodayPatientListByDoctorId(doctor.getId()));
+        model.addAttribute("doctor", doctor);
+        return "admin/patients";
     }
 
     @PostMapping("/doctor/update")
@@ -162,31 +186,109 @@ public class DoctorsController {
 
 
     @PostMapping(value = "/doctor/changeDisease")
-    public String changeDiseaseInfo(DiseaseEntity diseaseToChange){
-        UsersEntity autorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        System.out.println(diseaseToChange.getPatientId());
-//        System.out.println(diseaseToChange.getId());
-//        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(autorizedUser.getId());
+    public String changeDiseaseInfo(@RequestParam("fileToUpload") MultipartFile file, DiseaseEntity disease, RedirectAttributes attributes){
 
-        UsersEntity patient = usersRepository.getOne(diseaseToChange.getPatientId());
-        diseaseToChange.setUsersByPatientId(patient);
+        // normalize the file path
+        String fileName = cleanPath(file.getOriginalFilename());
+
+        // save the file on the local file system
+        try {
+            Path path = Paths.get(FILE_UPLOAD_DIR + fileName);
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        UsersEntity patient = usersRepository.getOne(disease.getPatientId());
+        disease.setUsersByPatientId(patient);
 
         java.util.Date today = new java.util.Date();
-        diseaseToChange.setDate(new java.sql.Date(today.getTime()));
-        diseaseRepository.save(diseaseToChange);
+        disease.setDate(new java.sql.Date(today.getTime()));
+        disease.setFile(fileName);
+        diseaseRepository.save(disease);
 
-        return "redirect:/user/"+diseaseToChange.getPatientId()+"/profile";
-//        if(doctor.getId() == diseaseToChange.getDoctorId()){
-//            java.util.Date today = new java.util.Date();
-//            diseaseToChange.setDate(new java.sql.Date(today.getTime()));
-//            diseaseRepository.save(diseaseToChange);
-//            return "redirect:";
-//        }else {
-//            return "redirect:/doctor/profile";
-//        }
-
-//        return "redirect:/doctor/profile";
+        return "redirect:/doctor/patient/"+disease.getPatientId()+"/profile";
     }
 
+
+    @RequestMapping(value = "/doctor/getPatientList", method = RequestMethod.GET)
+    public @ResponseBody List<List<String>> getTimetableByDoctorId(@RequestParam int  doctorId , @RequestParam("date") String stringDate) throws ParseException {
+        java.util.Date date = new SimpleDateFormat("dd/MM/yyyy").parse(stringDate);
+        List<DoctorsPatientDTO> patient_list = doctorsService.getPatientListByDoctorIdAndDate(doctorId,date);
+        List patients = new ArrayList();
+        for(int i =0 ; i< patient_list.size() ; i++){
+            List<String> patient = new ArrayList<>();
+            patient.add(patient_list.get(i).getId()+"");
+            patient.add(patient_list.get(i).getPatient().getSurname() +" "+patient_list.get(i).getPatient().getName());
+            patient.add(patient_list.get(i).getQueue().getDate()+"");
+            patient.add(patient_list.get(i).getQueue().getTime());
+            patient.add(patient_list.get(i).getPatient().getId()+"");
+
+            patients.add(patient);
+        }
+        return patients;
+    }
+
+
+    @GetMapping("/doctor/patient/{id}/profile")
+    public String doctorProfile(@PathVariable int id , ModelMap model) {
+        UsersEntity authorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(authorizedUser.getId());
+
+        UsersEntity user = usersRepository.findUsersEntityById(id);
+        DiseaseEntity newDisease = new DiseaseEntity();
+        newDisease.setUsersByPatientId(user);
+//        model.addAttribute("doctor" , doctor);
+        model.addAttribute("user" , user);
+        model.addAttribute("canBeEdited" , false);
+        model.addAttribute("visits" , userService.getVisitsByUserId(user.getId()));
+        model.addAttribute("diseases" , diseaseService.getDiseaseByPatientId(user.getId()));
+        model.addAttribute("disease" , newDisease);
+        return "admin/profile";
+    }
+
+
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam("fileToUpload") MultipartFile file,DiseaseEntity disease, RedirectAttributes attributes) {
+        UsersEntity authorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(authorizedUser.getId());
+
+        // normalize the file path
+        String fileName = cleanPath(file.getOriginalFilename());
+
+        // save the file on the local file system
+        try {
+            Path path = Paths.get(FILE_UPLOAD_DIR + fileName);
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        disease.setDate(new java.sql.Date(new java.util.Date().getTime()));
+        disease.setUsersByPatientId(usersRepository.getOne(disease.getPatientId()));
+        disease.setFile(fileName);
+        disease.setDoctorId(doctor.getId());
+
+        diseaseRepository.save(disease);
+
+        // return success response
+        attributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
+
+        return "redirect:/doctor/patient/"+disease.getPatientId()+"/profile";
+    }
+
+
+    @RequestMapping("/doctor/file/delete")
+    public String deleteFileFromDisease(@Param(value="id") Long id, HttpServletRequest request, HttpServletResponse response) throws IOException {
+        DiseaseEntity disease = diseaseRepository.getOne(id);
+
+        File file = new File(FILE_UPLOAD_DIR + disease.getFile());
+        file.delete();
+
+        disease.setFile(null);
+        diseaseRepository.save(disease);
+
+        return "redirect:/doctor/patient/"+disease.getPatientId()+"/profile";
+    }
 
 }

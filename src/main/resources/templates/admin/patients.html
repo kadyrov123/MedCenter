@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+    <th:block th:insert="admin/fragments/layout :: head"></th:block>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <script src="https://unpkg.com/gijgo@1.9.13/js/gijgo.min.js" type="text/javascript"></script>
+    <link href="https://unpkg.com/gijgo@1.9.13/css/gijgo.min.css" rel="stylesheet" type="text/css" />
+</head>
+
+<body>
+<!-- Sidenav -->
+<th:block th:insert="admin/fragments/layout :: sidebar_fragment"></th:block>
+<!-- Main content -->
+<div class="main-content" id="panel">
+    <!-- Topnav -->
+    <th:block th:insert="admin/fragments/layout :: header_fragment"></th:block>
+    <!-- Header -->
+    <div class="header bg-primary pb-6" style="background-color: #21385f !important;">
+        <div class="container-fluid">
+            <div class="header-body">
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-6 col-7">
+                        <h6 class="h2 text-white d-inline-block mb-0">Пациенты</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Page content -->
+    <div class="container-fluid mt--6" >
+        <div class="row">
+
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-info">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+                                <form class="navbar-search navbar-search-light form-inline mr-sm-3" id="navbar-search-main">
+                                    <div class="form-group mb-0">
+                                        <div class="input-group input-group-alternative input-group-merge">
+                                            <div class="input-group-prepend">
+                                                <span class="input-group-text"><i class="fas fa-search"></i></span>
+                                            </div>
+                                            <input class="form-control" placeholder="Search" type="text" style="transition: none !important;border-radius: 100%;padding-left: 10px;">
+                                        </div>
+                                    </div>
+                                    <button type="button" class="close" data-action="search-close" data-target="#navbar-search-main" aria-label="Close">
+                                        <span aria-hidden="true"></span>
+                                    </button>
+                                </form>
+                            </div>
+                            <div class="col-4">
+                                <input id="patientDatePicker" width="276" />
+                                <script>
+                                    $('#patientDatePicker').datepicker({
+                                        uiLibrary: 'bootstrap4',
+                                        format: 'dd/mm/yyyy'
+                                    });
+                                </script>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="patientsTable" class="table align-items-center table-flush table-hover">
+                                <thead class="thead-light">
+                                    <tr>
+                                        <th scope="col" class="sort" data-sort="name">#</th>
+                                        <th scope="col" class="sort" data-sort="name">ФИО</th>
+                                        <th scope="col" class="sort" data-sort="status">Дата</th>
+                                        <th scope="col" class="sort" data-sort="status">Время</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="patientsTableBody" class="list">
+                                    <tr th:each="patient : ${patient_list}" class="my-clickable-row"  th:data-patientid="${patient.patient.id}">
+                                        <td  th:text="${patient.id}"></td>
+                                        <td  th:text="${patient.patient.surname + ' ' + patient.patient.name}"></td>
+                                        <td  th:text="${patient.queue.date}" ></td>
+                                        <td  th:text="${patient.queue.time}"></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+
+
+</div>
+<!-- Argon Scripts -->
+
+<script>
+    // $(document).ready(function () {
+
+    var doctorId = [[${doctor.id}]];
+    var patientList = null;
+
+        $('#patientDatePicker').change(function () {
+            var date = $(this).val();
+            $.ajax({
+                url : 'getPatientList',
+                type: 'GET',
+                dataType: 'json',
+                contentType: 'application/json',
+                mimeType: 'application/json',
+                data : ({
+                    doctorId : doctorId,
+                    date : date
+                }),
+                success: function (data) {
+
+                    patientList = data;
+                    fillPatientTable();
+                }
+            });
+        });
+
+    function fillPatientTable(){
+        // $("patientsTable tbody")
+        $("#patientsTableBody tr").remove();
+        var tbody = document.getElementById("patientsTableBody");
+        for (var i=0 ; i<patientList.length ;i++ ){
+            var tr = document.createElement("tr");
+            tr.setAttribute("class" , "my-clickable-row");
+            tr.setAttribute("onclick" , "openPatientProfile(this);");
+            tr.setAttribute("data-patientid",patientList[i][4]);
+            for(var j=0 ; j<patientList[i].length-1 ; j++){
+                var td = document.createElement("td");
+                // td.setAttribute("class" , "my-clickable-row");
+                td.appendChild(document.createTextNode(patientList[i][j]));
+                tr.appendChild(td);
+            }
+            tbody.appendChild(tr);
+        }
+    }
+
+
+    function openPatientProfile(row) {
+        var patientid = row.dataset.patientid;
+        window.location = "/doctor/patient/" +patientid + "/profile";
+    }
+    // })
+</script>
+
+
+
+
+<!-- Core -->
+
+<th:block th:insert="admin/fragments/layout :: footer_scripts"></th:block>
+
+</body>
+
+</html>
