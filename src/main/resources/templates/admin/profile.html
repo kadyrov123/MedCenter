@@ -5,6 +5,10 @@
 <head>
   <th:block th:insert="admin/fragments/layout :: head"></th:block>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+<!--  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css">-->
+<!--&lt;!&ndash;  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>&ndash;&gt;-->
+<!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.16.0/umd/popper.min.js"></script>-->
+<!--  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js"></script>-->
 
   <style>
     .diseaseCard{
@@ -15,6 +19,12 @@
     }
     .diseaseNav{
       margin-top: 10px;
+    }
+
+    .show {
+      -webkit-transition-delay: 3s;
+      transition-delay: 3s;
+      visibility: visible;
     }
   </style>
 </head>
@@ -224,12 +234,14 @@
                 <div class="card diseaseCard">
 
                   <div class="card-header">
-                    <a class=" card-link" data-toggle="collapse" th:href="'#collapseOne' + ${disease.id}"  th:text="${disease.date + ' => ' +disease.doctorName+' '+disease.doctorSurname}"></a>
-                    <a sec:authorize="hasRole('ROLE_DOCTOR')" class="collapsed card-link" data-toggle="collapse" th:href="'#collapseTwo' + ${disease.id}" >Изменить</a>
+<!--                    <a class="custom-collapse1 card-link" data-toggle="collapse" th:href="'#collapseOne' + ${disease.id}"  th:text="${disease.date + ' => ' +disease.doctorName+' '+disease.doctorSurname}" aria-expanded="false" th:aria-controls="'#collapseOne' + ${disease.id}"></a>-->
+                    <a class="custom-collapse1 card-link" data-toggle="collapse"   th:text="${disease.date + ' => ' +disease.doctorName+' '+disease.doctorSurname}" aria-expanded="false" th:aria-controls="'#collapseOne' + ${disease.id}"></a>
+<!--                    <a sec:authorize="hasRole('ROLE_DOCTOR')" class="custom-collapse2 collapsed card-link" data-toggle="collapse" th:href="'#collapseTwo' + ${disease.id}" >Изменить</a>-->
+                    <a sec:authorize="hasRole('ROLE_DOCTOR')" class="custom-collapse2 collapsed card-link" data-toggle="collapse" >Изменить</a>
                   </div>
 
 
-                  <div th:id="'collapseOne' + ${disease.id}" class="collapse" th:data-parent="'#accordion' + ${disease.id}"  >
+                  <div th:id="'collapseOne' + ${disease.id}" class="custom-collapse-result1 collapse" th:data-parent="'#accordion' + ${disease.id}"  >
                     <div  class="card-body diseaseHistoryCardBody1">
                       <h5>Диагноз</h5>
                       <p th:text="${disease.diagnosis}"></p>
@@ -239,51 +251,50 @@
                       <a th:href="@{|/file/download?id=${disease.id}|}"  th:text="${disease.file}"></a>
                     </div>
                   </div>
-                  <div th:id="'collapseTwo' + ${disease.id}" class="collapse" th:data-parent="'#accordion' + ${disease.id}" sec:authorize="hasRole('ROLE_DOCTOR')">
-                    <!--                            <div  class="card-body diseaseHistoryCardBody2" sec:authorize="hasRole('ROLE_DOCTOR')">-->
-                    <div  class="card-body diseaseHistoryCardBody2">
-                      <!--                                <form method="post" th:href="@{/}" th:object="${diseaseToChange}">-->
-                      <form method="post" th:action="@{/doctor/changeDisease}" enctype="multipart/form-data">
-                        <div class="card-body" >
-                          <input type="hidden" name="id"  th:value="${disease.id}" />
-                          <input type="hidden" name="patientId"  th:value="${disease.patientId}" />
-                          <input type="hidden" name="doctorId"  th:value="${disease.doctorId}" />
-                          <div class="form-group">
-                            <label >Диагноз :</label>
-                            <textarea type="text"  class="form-control" name="diagnosis" th:value="${disease.diagnosis}" >[[${disease.diagnosis}]]</textarea>
-                          </div>
-                          <div class="form-group">
-                            <label >Рецепт :</label>
-                            <textarea type="text" class="form-control"  name="recipe"  th:value="${disease.recipe}" >[[${disease.recipe}]]</textarea>
-                          </div>
-                          <div class="form-group">
-                            <label>Файл :</label>
-                            <div class="row" th:if="${disease.file} != null">
-                              <div class="col-11">
-                                <a th:href="@{|/file/download?id=${disease.id}|}"  th:text="${disease.file}"></a>
-                              </div>
-                              <div class="col-1">
-                                <a th:href="@{|/doctor/file/delete?id=${disease.id}|}" alt="Удалить" >x</a>
-                              </div>
+                  <div th:id="'collapseTwo' + ${disease.id}" class="custom-collapse-result2 collapse" th:data-parent="'#accordion' + ${disease.id}" sec:authorize="hasRole('ROLE_DOCTOR')">
+                      <!--                            <div  class="card-body diseaseHistoryCardBody2" sec:authorize="hasRole('ROLE_DOCTOR')">-->
+                      <div  class="card-body diseaseHistoryCardBody2">
+                        <!--                                <form method="post" th:href="@{/}" th:object="${diseaseToChange}">-->
+                        <form method="post" th:action="@{/doctor/changeDisease}" enctype="multipart/form-data">
+                          <div class="card-body" >
+                            <input type="hidden" name="id"  th:value="${disease.id}" />
+                            <input type="hidden" name="patientId"  th:value="${disease.patientId}" />
+                            <input type="hidden" name="doctorId"  th:value="${disease.doctorId}" />
+                            <div class="form-group">
+                              <label >Диагноз :</label>
+                              <textarea type="text"  class="form-control" name="diagnosis" th:value="${disease.diagnosis}" >[[${disease.diagnosis}]]</textarea>
                             </div>
-                            <div class="form-group" th:if="${disease.file} == null">
-                              <input type="file" class="form-control-file" id="exampleFormControlFile1" name="fileToUpload" >
+                            <div class="form-group">
+                              <label >Рецепт :</label>
+                              <textarea type="text" class="form-control"  name="recipe"  th:value="${disease.recipe}" >[[${disease.recipe}]]</textarea>
+                            </div>
+                            <div class="form-group">
+                              <label>Файл :</label>
+                              <div class="row" th:if="${disease.file} != null">
+                                <div class="col-11">
+                                  <a th:href="@{|/file/download?id=${disease.id}|}"  th:text="${disease.file}"></a>
+                                </div>
+                                <div class="col-1">
+                                  <a th:href="@{|/doctor/file/delete?id=${disease.id}|}" alt="Удалить" >x</a>
+                                </div>
+                              </div>
+                              <div class="form-group" th:if="${disease.file} == null">
+                                <input type="file" class="form-control-file" id="exampleFormControlFile2" name="fileToUpload" >
+                              </div>
+
                             </div>
 
                           </div>
-
-                        </div>
-                        <div class="card-footer">
-                          <button id="diseaseHistoryCardBody2SaveButton"  type="submit" class="btn btn-success">Сохранить</button>
-                        </div>
-                      </form>
+                          <div class="card-footer">
+                            <button id="diseaseHistoryCardBody2SaveButton"  type="submit" class="btn btn-success">Сохранить</button>
+                          </div>
+                        </form>
+                      </div>
                     </div>
-                  </div>
 
                 </div>
               </div>
             </div>
-
 
 
           </div>
@@ -329,18 +340,18 @@
   // $(document).ready(function(){
 
 
-    $("#userInfoFormSaveButton").on("click" , function(){
-      $("#firstInfoCard2").css("display","none");
-      $("#firstInfoCard").css("display","block");
-    });
-    $("#userInfoFormCancelButton").on("click" , function(){
-      $("#firstInfoCard2").css("display","none");
-      $("#firstInfoCard").css("display","block");
-    });
-    $("#userInfoChangeButton").on("click" , function(){
-      $("#firstInfoCard").css("display","none");
-      $("#firstInfoCard2").css("display","block");
-    });
+    // $("#userInfoFormSaveButton").on("click" , function(){
+    //   $("#firstInfoCard2").css("display","none");
+    //   $("#firstInfoCard").css("display","block");
+    // });
+    // $("#userInfoFormCancelButton").on("click" , function(){
+    //   $("#firstInfoCard2").css("display","none");
+    //   $("#firstInfoCard").css("display","block");
+    // });
+    // $("#userInfoChangeButton").on("click" , function(){
+    //   $("#firstInfoCard").css("display","none");
+    //   $("#firstInfoCard2").css("display","block");
+    // });
 
     // infoCardNavBarHeader1
 
@@ -368,6 +379,34 @@
       $("#secondInfoCardBody2").css("display","none");
       $("#secondInfoCardBody3").css("display","block");
     });
+
+
+    $(".custom-collapse1").on("click" , function(){
+      var cardHeader = $(this).parent();
+      var diseaseCard = cardHeader.parent();
+      var collapseResult1 = diseaseCard.children(".custom-collapse-result1");
+      var collapseResult2 = diseaseCard.children(".custom-collapse-result2");
+      if(collapseResult1.hasClass('show')) {
+        collapseResult1.removeClass("show");
+      }else{
+        collapseResult1.addClass("show");
+        collapseResult2.removeClass("show");
+      }
+    });
+
+  $(".custom-collapse2").on("click" , function(){
+    var cardHeader = $(this).parent();
+    var diseaseCard = cardHeader.parent();
+    var collapseResult1 = diseaseCard.children(".custom-collapse-result1");
+    var collapseResult2 = diseaseCard.children(".custom-collapse-result2");
+    if(collapseResult2.hasClass('show')) {
+      collapseResult2.removeClass("show");
+    }else{
+      collapseResult2.addClass("show");
+      collapseResult1.removeClass("show");
+    }
+  });
+
 
     // $(".diseaseHistoryCardBody2SaveButton").on("click" , function(){
     //     $(".diseaseHistoryCardBody2").css("display","none");
