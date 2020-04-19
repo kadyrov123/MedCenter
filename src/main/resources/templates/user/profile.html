@@ -203,7 +203,16 @@
         <div id="secondInfoCardBody1" class="card-body" >
             <div class="card" th:each="visit : ${visits}">
                 <div class="card-header">
-                    <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree" th:text="${visit.date +' => '+visit.doctorType+':'+visit.doctorFullname}" ></a>
+                    <div class="row">
+                        <div class="col-9">
+                            <a class="collapsed card-link" data-toggle="collapse" href="#collapseThree" th:text="${visit.date+' '+ visit.startTime +' => '+visit.doctorType+':'+visit.doctorFullname}" ></a>
+                        </div>
+                        <div class="col-3" th:if="${visit.canBeCanceled}">
+<!--                        <div class="col-3" th:if="${visit.queueId}">-->
+                            <a class="card-link" role="button" th:href="@{/user/queue/__${visit.queueId}__/cancel}" >Отменить</a>
+                        </div>
+                    </div>
+
                 </div>
             </div>
         </div>

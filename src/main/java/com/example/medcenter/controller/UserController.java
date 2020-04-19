@@ -3,9 +3,11 @@ package com.example.medcenter.controller;
 import com.example.medcenter.config.SecurityConfiguration;
 import com.example.medcenter.dto.DiseaseDTO;
 import com.example.medcenter.entity.DiseaseEntity;
+import com.example.medcenter.entity.QueueEntity;
 import com.example.medcenter.entity.RoleEntity;
 import com.example.medcenter.entity.UsersEntity;
 import com.example.medcenter.repoitory.DiseaseRepository;
+import com.example.medcenter.repoitory.QueueRepository;
 import com.example.medcenter.repoitory.UsersRepository;
 import com.example.medcenter.service.DiseaseService;
 import com.example.medcenter.service.UserService;
@@ -39,6 +41,8 @@ public class UserController {
     UsersDetailsService usersDetailsService;
     @Autowired
     DiseaseRepository diseaseRepository;
+    @Autowired
+    QueueRepository queueRepository;
 
 
     private static String FILE_UPLOAD_DIR = "src/main/resources/static/uploads/files/";
@@ -113,17 +117,6 @@ public class UserController {
 
             response.setContentType(mimeType);
 
-            /**
-             * In a regular HTTP response, the Content-Disposition response header is a
-             * header indicating if the content is expected to be displayed inline in the
-             * browser, that is, as a Web page or as part of a Web page, or as an
-             * attachment, that is downloaded and saved locally.
-             *
-             */
-
-            /**
-             * Here we have mentioned it to show inline
-             */
             response.setHeader("Content-Disposition", String.format("inline; filename=\"" + file.getName() + "\""));
 
             //Here we have mentioned it to show as attachment
@@ -140,4 +133,8 @@ public class UserController {
 
 
 
-}
+
+
+
+
+    }

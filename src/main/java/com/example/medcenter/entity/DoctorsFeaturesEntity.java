@@ -182,4 +182,17 @@ public class DoctorsFeaturesEntity {
 //    public void setDoctorsFeaturesTypesById(Collection<DoctorsFeaturesTypesEntity> doctorsFeaturesTypesById) {
 //        this.doctorsFeaturesTypesById = doctorsFeaturesTypesById;
 //    }
+
+
+    @Override
+    public String toString() {
+        return "DoctorsFeaturesEntity{" +
+                "id=" + id +
+                ", doctorId=" + doctorId +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", intervalId=" + intervalId +
+                ", info='" + info + '\'' +
+                '}';
+    }
 }

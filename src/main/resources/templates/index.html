@@ -160,6 +160,63 @@
 			margin-left: -20px !important;
 		}
 
+		/*  ================   Timetable responsiveness and scrolling */
+		.table-master {
+			overflow-x: auto;
+		}
+
+		table.scroll {
+			/* width: 100%; */
+			/* Optional */
+			/* border-collapse: collapse; */
+			border-spacing: 0;
+		}
+
+		table.scroll tbody,
+		table.scroll thead {
+			display: block;
+		}
+
+		thead tr th {
+			height: 30px;
+			line-height: 30px;
+			/* text-align: left; */
+		}
+
+		table.scroll tbody {
+			height: 300px;
+			overflow-y: auto;
+			overflow-x: hidden;
+		}
+
+		tbody td:last-child,
+		thead th:last-child {
+			border-right: none;
+		}
+
+		::-webkit-scrollbar {
+			width: 8px;
+			height: 8px;
+		}
+
+		/* Track */
+		::-webkit-scrollbar-track {
+			box-shadow: inset 0 0 5px grey;
+			border-radius: 10px;
+		}
+
+		/* Handle */
+		::-webkit-scrollbar-thumb {
+			background: #00ad5f;
+			border-radius: 10px;
+		}
+
+		/* Handle on hover */
+		::-webkit-scrollbar-thumb:hover {
+			background: #00ad5f;
+		}
+		/*  ============================*/
+
 	</style>
 
 </head>
@@ -302,8 +359,8 @@
 
 								<div class="form-group col-md-10">
 									<label for="selectDoctor">Выберите врача</label>
-									<select id="selectDoctor" th:each="doctor: ${doctors}" class="form-control">
-										<option th:value="${doctor.id}"  th:text="${doctor.getDoctorTypeString() + ' : ' + doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}" ></option>
+									<select id="selectDoctor" class="form-control">
+										<option th:each="doctor: ${doctors}" th:value="${doctor.id}"  th:text="${doctor.getDoctorTypeString() + ' : ' + doctor.usersByDoctorId.name +' '+doctor.usersByDoctorId.surname}" ></option>
 									</select>
 								</div>
 
@@ -380,66 +437,20 @@
 
 <!--					Table    ===================-->
 
-						  <div class="table100 ver3 m-b-110">
-							  <div class="table100-head">
-								  <table >
-									  <thead id="timetableThead">
-<!--									              <tr class="row100 head" >-->
-<!--									                  <th class="cell100 cell100Header" >#</th>-->
-<!--									                  <th class="cell100 cell100Header">07/01/20</th>-->
-<!--									                  <th class="cell100 cell100Header">08/01/20</th>-->
-<!--									                  <th class="cell100 cell100Header">09/01/20</th>-->
-<!--									                  <th class="cell100 cell100Header">10/01/20</th>-->
-<!--									                  <th class="cell100 cell100Header">11/01/20</th>-->
-<!--									                  <th class="cell100 cell100Header">12/01/20</th>-->
-<!--									              </tr>-->
-									  </thead>
-								  </table>
-							  </div>
+					  <div class="table100 ver3 m-b-110 table-responsive" style="padding-top: 10px;">
 
-							  <div class="table100-body js-pscroll">
-								  <table>
-									  <tbody id="timetableTbody" >
-<!--									          <tr class="row100 body">-->
-<!--									              <td class="cell100 cell100ID">1</td>-->
-<!--									  &lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${list.time}">9:00 - 10:00</label></td>&ndash;&gt;-->
-<!--									  &lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${timetableState.index}">9:00 - 10:00</label></td>&ndash;&gt;-->
-<!--									  &lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${timeState.index}">9:00 - 10:00</label></td>&ndash;&gt;-->
-<!--									              <td class="cell100 "><label class="timeLabel" >9:00 - 10:00</label></td>-->
-<!--									              <td class="cell100 "><label class="timeLabel" >9:00 - 10:00</label></td>-->
-<!--									              <td class="cell100 "><label class="timeLabel" >9:00 - 10:00</label></td>-->
-<!--									  &lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${time[iter].time}">9:00 - 10:00</label></td>&ndash;&gt;-->
-<!--									  &lt;!&ndash;            <td class="cell100 "><label class="timeLabel" th:text="${time[iter].time}">9:00 - 10:00</label></td>&ndash;&gt;-->
-<!--									          </tr>-->
+						  <div class=" table-master" style="display: block;overflow-x: auto;white-space: nowrap;padding-top: 10px;">
+							  <table class="scroll">
+								  <thead id="timetableThead">
 
-<!--									          <tr class="row100 body">-->
-<!--									              <td class="cell100 cell100ID">2</td>-->
-<!--									              <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
-<!--									              <td class="cell100 "><label class="timeLabel unableTimeLabel">9:00 - 10:00</label></td>-->
-<!--									              <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
-<!--									              <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
-<!--									              <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
-<!--									              <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
-<!--									          </tr>-->
+								  </thead>
+								  <tbody id="timetableTbody" >
 
-<!--									  <tr class="row100 body">-->
-<!--									  <td class="cell100 cell100ID">3</td>-->
-<!--									  <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
-<!--									  <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
-<!--									  <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
-<!--									  <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
-<!--									  <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
-<!--									  <td class="cell100 "><label class="timeLabel">9:00 - 10:00</label></td>-->
-<!--									  </tr>-->
-
-
-
-
-									  </tbody>
-								  </table>
-							  </div>
-							  <!-- <button id="submitTime">Submit</button> -->
+								  </tbody>
+							  </table>
 						  </div>
+						  <!--                 <button id="submitTime">Submit</button>-->
+					  </div>
 
 <!--					  ==========================-->
 
@@ -928,7 +939,12 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 			  // window.onload = fillTimetable();
 
 			  function fillTimetable() {
-				  // console.log("fiiling timtable");
+				  console.log(timetable);
+
+				  $("#timetableThead .cell100Header").remove();
+				  $("#timetableTbody .row100").remove();
+
+				  console.log("fiiling timtable");
 				  // var table = document.getElementById("timetable");
 				  var theadTR = document.createElement("tr");
 				  theadTR.setAttribute("class","row100 head");
@@ -970,13 +986,15 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								  label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
 							  }
 							  if(timetable[i-1].timeList[j].status == 1) {
-								  label.setAttribute("class", "busyTimeLabel timeLabel");
+								  label.setAttribute("class", "timeLabelOrderedByUser timeLabel");
 								  label.setAttribute("style", "background-color: #f15151; color:white;");
 							  }
 							  if(timetable[i-1].timeList[j].status == 2) {
-								  // label.setAttribute("class", "busyTimeLabel timeLabel");
-								  label.setAttribute("class", "timeLabel");
-								  label.setAttribute("style", "background-color: #479ea3; color:white;");
+								  label.setAttribute("class", "timeLabelOrderedByDoctor timeLabel");
+								  label.setAttribute("data-date" , timetable[i-1].dateString);
+								  label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
+								  label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
+								  // label.setAttribute("style", "background-color: #479ea3; color:white;");
 							  }
 
 
@@ -1135,6 +1153,25 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 
 
 		  })
+	  </script>
+
+	  <script>
+		  var $table = $('table.scroll'),
+				  $bodyCells = $table.find('tbody tr:first').children(),
+				  colWidth;
+
+		  // Adjust the width of thead cells when window resizes
+		  $(window).resize(function() {
+			  // Get the tbody columns width array
+			  colWidth = $bodyCells.map(function() {
+				  return $(this).width();
+			  }).get();
+
+			  // Set the width of thead columns
+			  $table.find('thead tr').children().each(function(i, v) {
+				  $(v).width(colWidth[i]);
+			  });
+		  }).resize(); // Trigger resize handler
 	  </script>
 
 

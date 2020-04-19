@@ -100,6 +100,7 @@ public class DoctorsController {
         model.addAttribute("user" , user);
         model.addAttribute("doctor" , doctor);
         model.addAttribute("canBeEdited" , true);
+        model.addAttribute("visitsList" , false);
         return "admin/profile";
     }
 
@@ -241,6 +242,7 @@ public class DoctorsController {
 //        model.addAttribute("doctor" , doctor);
         model.addAttribute("user" , user);
         model.addAttribute("canBeEdited" , false);
+        model.addAttribute("visitsList" , true);
         model.addAttribute("visits" , userService.getVisitsByUserId(user.getId()));
         model.addAttribute("diseases" , diseaseService.getDiseaseByPatientId(user.getId()));
         model.addAttribute("disease" , newDisease);

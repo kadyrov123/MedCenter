@@ -54,6 +54,7 @@ public class AdminController {
         UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         model.addAttribute("user" , user);
         model.addAttribute("canBeEdited" , true);
+        model.addAttribute("visitsList" , false);
         return "admin/profile";
     }
 
@@ -108,6 +109,7 @@ public class AdminController {
         model.addAttribute("doctor" , doctor);
         model.addAttribute("user" , user);
         model.addAttribute("canBeEdited" , false);
+        model.addAttribute("visitsList" , false);
         return "admin/profile";
     }
 
