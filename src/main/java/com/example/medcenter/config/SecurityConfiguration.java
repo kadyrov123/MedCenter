@@ -44,6 +44,7 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/scss/**",
                         "/webjars/**",
                         "/getTimetableByDoctorId",
+                        "/guest/**",
                         "/*",
                         "/queue/*"
                         ).permitAll()

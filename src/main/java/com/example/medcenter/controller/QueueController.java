@@ -11,6 +11,8 @@ import com.example.medcenter.repoitory.UsersRepository;
 import com.example.medcenter.service.DoctorsService;
 import com.example.medcenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
@@ -44,14 +46,19 @@ public class QueueController {
 //        return "timetable";
 //    }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/queue/save", method = RequestMethod.GET , consumes = "application/json")
-    public String saveQueue(@RequestParam int doctorId, @RequestParam String userUsername ,@RequestParam String date ,@RequestParam String time , @RequestParam int order ){
-//        UsersEntity usersEntity = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        UsersEntity usersEntity = userService.findUserByUsername(userUsername);
+    public String saveQueue(@RequestParam int doctorId ,@RequestParam String date ,@RequestParam String time , @RequestParam int order ){
+        UsersEntity usersEntity = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+//        UsersEntity usersEntity = userService.findUserByUsername(userUsername);
         DoctorsFeaturesEntity doctorsFeaturesEntity = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctorId);
         System.out.println(doctorId);
+        System.out.println(date);
+        System.out.println(time);
+        System.out.println(order);
         System.out.println(doctorsFeaturesEntity);
         if(!userService.haveQueueOrder(Date.valueOf(date),usersEntity.getId(), doctorId)) {
+            System.out.println(true);
             QueueEntity queue = new QueueEntity();
             queue.setDate(Date.valueOf(date));
 //            queue.setDoctorId(doctorsFeaturesEntity.getId());
@@ -66,7 +73,7 @@ public class QueueController {
             queueRepository.save(queue);
         }
 
-        return "index";
+        return "redirect:/";
     }
 
     @GetMapping("/user/queue/{id}/cancel")

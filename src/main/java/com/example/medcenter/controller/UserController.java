@@ -57,14 +57,21 @@ public class UserController {
         modelMap.addAttribute("diseases" , diseaseService.getDiseaseByPatientId(user.getId()));
         modelMap.addAttribute("diseaseToChange", new DiseaseDTO());
         modelMap.addAttribute("user" , user);
+        modelMap.addAttribute("canBeEdited" , true);
 
         return "user/profile";
     }
 
     @PostMapping("/user/update")
-    public String updateUserInfo(UsersEntity user){
-//        System.out.println(user.getId());
-        user.setPassword(usersRepository.findUsersEntityById(user.getId()).getPassword());
+    public String updateUserInfo(UsersEntity changedUser){
+        UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+
+        user.setUsername(changedUser.getUsername());
+        user.setEmail(changedUser.getEmail());
+        user.setName(changedUser.getName());
+        user.setSurname(changedUser.getSurname());
+        user.setPin(changedUser.getPin());
+
         usersRepository.save(user);
         return "redirect:/user/profile";
     }
@@ -130,9 +137,6 @@ public class UserController {
 
         }
     }
-
-
-
 
 
 
