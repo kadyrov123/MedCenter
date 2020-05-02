@@ -29,6 +29,8 @@ public class DoctorsServiceImpl implements DoctorsService {
     IntervalRepository intervalRepository;
     @Autowired
     QueueRepository queueRepository;
+    @Autowired
+    DoctorsTypeRepository doctorsTypeRepository;
 
     @PersistenceContext
     EntityManager entityManager;
@@ -54,7 +56,7 @@ public class DoctorsServiceImpl implements DoctorsService {
     }
 
     @Override
-    public void saveDefaultDoctor(UsersEntity user) {
+    public void saveDefaultDoctor(UsersEntity user , int doctorTypeId) {
         UsersEntity savedUser = usersRepository.findUsersEntityByUsername(user.getUsername());
         IntervalEntity interval = intervalRepository.getOne(3);
 
@@ -65,6 +67,10 @@ public class DoctorsServiceImpl implements DoctorsService {
         doctor.setInfo("");
         doctor.setStartTime(new Time(9,0,0));
         doctor.setEndTime(new Time(17,0,0));
+
+        Set<DoctorsTypeEntity> doctorType = new HashSet<>();
+        doctorType.add(doctorsTypeRepository.getOne(doctorTypeId));
+        doctor.setDoctorsTypeEntities(doctorType);
 
         doctorsFeaturesRepository.save(doctor);
     }

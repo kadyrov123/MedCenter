@@ -6,6 +6,7 @@ import com.example.medcenter.entity.DoctorsTypeEntity;
 import com.example.medcenter.entity.IntervalEntity;
 import com.example.medcenter.entity.UsersEntity;
 import com.example.medcenter.repoitory.DoctorsFeaturesRepository;
+import com.example.medcenter.repoitory.DoctorsTypeRepository;
 import com.example.medcenter.repoitory.RoleRepository;
 import com.example.medcenter.repoitory.UsersRepository;
 import com.example.medcenter.service.DoctorsService;
@@ -42,6 +43,8 @@ public class AdminController {
     UsersDetailsService usersDetailsService;
     @Autowired
     DoctorsService doctorsService;
+    @Autowired
+    DoctorsTypeRepository doctorsTypeRepository;
 
 
     @GetMapping("/admin")
@@ -81,12 +84,13 @@ public class AdminController {
         List<DoctorsFeaturesEntity>  doctors = doctorsFeaturesRepository.findAll();
         UserRegistrationDTO newDoctor = new UserRegistrationDTO();
         model.addAttribute("doctors" , doctors);
+        model.addAttribute("doctorTypes" , doctorsTypeRepository.findAll());
         model.addAttribute("newDoctor" , newDoctor);
         return "admin/doctors";
     }
 
     @PostMapping("/admin/save/doctor")
-    public String saveDoctor(@ModelAttribute("newDoctor") @Valid UserRegistrationDTO newDoctorUser, BindingResult result){
+    public String saveDoctor(@ModelAttribute("newDoctor") @Valid UserRegistrationDTO newDoctorUser, @RequestParam int doctorTypeId, BindingResult result){
         UsersEntity existing = usersDetailsService.findByUsername(newDoctorUser.getUsername());
         if (existing != null){
             result.rejectValue("email", null, "There is already an account registered with that email");
@@ -96,7 +100,7 @@ public class AdminController {
         }
 
         usersDetailsService.saveDoctor(newDoctorUser);
-        doctorsService.saveDefaultDoctor(usersRepository.findUsersEntityByUsername(newDoctorUser.getUsername()));
+        doctorsService.saveDefaultDoctor(usersRepository.findUsersEntityByUsername(newDoctorUser.getUsername()), doctorTypeId);
 
         return "redirect:/admin/doctors";
     }

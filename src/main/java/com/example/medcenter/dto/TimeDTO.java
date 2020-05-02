@@ -1,7 +1,6 @@
 package com.example.medcenter.dto;
 
 import java.util.Date;
-import java.util.List;
 
 public class TimeDTO {
     int order;

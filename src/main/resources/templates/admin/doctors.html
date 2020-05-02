@@ -449,11 +449,17 @@
                             <form th:action="@{/admin/save/doctor}" method="post" th:object="${newDoctor}">
                                 <div class="form-group">
                                     <label for="name" class="form-control-label">Имя</label>
-                                    <input class="form-control" type="text" value="John Snow" id="name" th:field="*{firstName}">
+                                    <input class="form-control" type="text" placeholder="John" id="name" th:field="*{firstName}">
                                 </div>
                                 <div class="form-group">
                                     <label for="surname" class="form-control-label">Фамилия</label>
-                                    <input class="form-control" type="text" value="John Snow" id="surname" th:field="*{lastName}">
+                                    <input class="form-control" type="text" placeholder="Snow" id="surname" th:field="*{lastName}">
+                                </div>
+                                <div class="form-group">
+                                    <label for="surname" class="form-control-label">Тип врача</label>
+                                    <select type="text" class="form-control" id="doctorType" name="doctorTypeId"  >
+                                        <option th:each="type : ${doctorTypes}" th:text="${type.type}" th:value="${type.id}" ></option>
+                                    </select>
                                 </div>
                                 <div class="form-group">
                                     <label for="username" class="form-control-label">Имя ползователя</label>
