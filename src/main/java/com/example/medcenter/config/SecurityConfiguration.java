@@ -48,8 +48,6 @@ public class SecurityConfiguration extends WebSecurityConfigurerAdapter {
                         "/*",
                         "/queue/*"
                         ).permitAll()
-//                .antMatchers("/admin").hasAuthority("ROLE_ADMIN")
-//                .antMatchers("/doctor/**").hasAuthority("ROLE_DOCTOR")
                 .anyRequest().authenticated()
                 .and()
                 .formLogin()

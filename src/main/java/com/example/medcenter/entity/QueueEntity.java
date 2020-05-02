@@ -53,6 +53,11 @@ public class QueueEntity {
     @JoinColumn(name = "interval_id", referencedColumnName = "id")
     private IntervalEntity intervalByIntervalId;
 
+    @OneToOne(fetch = FetchType.LAZY,
+            cascade =  CascadeType.ALL,
+            mappedBy = "queue")
+    private NewComersEntity newComer;
+
 
     public long getId() {
         return id;

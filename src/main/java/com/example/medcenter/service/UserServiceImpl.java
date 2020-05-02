@@ -65,10 +65,21 @@ public class UserServiceImpl implements UserService {
                 LocalTime startTime = doctorStartTime.toLocalTime();
                 startTime = startTime.plusMinutes(order * doctor.getIntervalByIntervalId().getInterval());
 
-    //            visit.setStartTime(startTime);
-                visit.setStartTime(queue.getTime().substring(0, 5));
+                visit.setStartTime(startTime.toString());
 
-                visit.setCanBeCanceled(LocalTime.now().isBefore(startTime));
+                Date today = new Date();
+                if(today.before(queue.getDate())){
+                    visit.setCanBeCanceled(true);
+                }
+                else{
+                    if (today.equals(visit.getDate())){
+                        visit.setCanBeCanceled(LocalTime.now().isBefore(startTime));
+                    }
+                    else{
+                        visit.setCanBeCanceled(false);
+                    }
+                }
+
 
                 visit.setQueueId(queue.getId());
 

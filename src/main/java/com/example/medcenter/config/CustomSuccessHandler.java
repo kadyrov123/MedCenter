@@ -54,7 +54,9 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
             url = "/admin";
         } else if (isUser(roles)) {
             url = "/";
-        } else {
+        } else if (isRegistrator(roles)) {
+            url = "/registrator";
+        }else {
             url = "/accessDenied";
         }
 
@@ -63,6 +65,12 @@ public class CustomSuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 
     private boolean isUser(List<String> roles) {
         if (roles.contains("ROLE_USER")) {
+            return true;
+        }
+        return false;
+    }
+    private boolean isRegistrator(List<String> roles) {
+        if (roles.contains("ROLE_REGISTRATOR")) {
             return true;
         }
         return false;

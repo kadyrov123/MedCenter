@@ -101,18 +101,16 @@ public class DoctorsServiceImpl implements DoctorsService {
         }
 
         List<QueueEntity> queueEntities = queueRepository.findQueueEntitiesByDateAndDoctorId(date,doctorId);
-        for(QueueEntity queueEntity : queueEntities){
-//            if (queueEntity.getIntervalId() == doctorsFeatures.getIntervalId()){
-                for(TimeDTO timeDTO : timeList){
-                    if(queueEntity.getOrder() == timeDTO.getOrder()){
-                        timeDTO.setStatus(queueEntity.getStatus());
-                        if(queueEntity.getStatus() <= 1) {
-                            timeDTO.setFree(false);
-                            System.out.println(" Busy Queue");
-                        }
+        for(TimeDTO time : timeList){
+            for(QueueEntity queue : queueEntities){
+//                if (queueEntity.getIntervalId() == doctorsFeatures.getIntervalId()){}
+                if (time.getOrder() == queue.getOrder()){
+                    if(queue.getStatus() > 0){
+                        time.setFree(false);
+                        time.setStatus(queue.getStatus());
                     }
                 }
-//            }
+            }
         }
 
         return timeList;
