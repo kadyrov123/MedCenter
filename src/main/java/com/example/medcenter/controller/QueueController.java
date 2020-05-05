@@ -19,6 +19,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
@@ -50,18 +51,11 @@ public class QueueController {
     @RequestMapping(value = "/queue/save", method = RequestMethod.GET , consumes = "application/json")
     public String saveQueue(@RequestParam int doctorId ,@RequestParam String date ,@RequestParam String time , @RequestParam int order ){
         UsersEntity usersEntity = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-//        UsersEntity usersEntity = userService.findUserByUsername(userUsername);
         DoctorsFeaturesEntity doctorsFeaturesEntity = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctorId);
-        System.out.println(doctorId);
-        System.out.println(date);
-        System.out.println(time);
-        System.out.println(order);
-        System.out.println(doctorsFeaturesEntity);
         if(!userService.haveQueueOrder(Date.valueOf(date),usersEntity.getId(), doctorId)) {
             System.out.println(true);
             QueueEntity queue = new QueueEntity();
             queue.setDate(Date.valueOf(date));
-//            queue.setDoctorId(doctorsFeaturesEntity.getId());
             queue.setDoctorFeaturesByDoctorId(doctorsFeaturesEntity);
             queue.setUserId(usersEntity.getId());
             queue.setTime(time);
@@ -81,8 +75,6 @@ public class QueueController {
         UsersEntity authorisedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         QueueEntity queue = queueRepository.getOne(queueId);
         if(queue.getUserId() == authorisedUser.getId()){
-//            queue.setStatus(0);
-//            queueRepository.save(queue);
             queueRepository.delete(queue);
         }
         return "redirect:/user/profile";
@@ -93,6 +85,8 @@ public class QueueController {
         List<TimetableDTO> timetables = doctorsService.getTimetableByDoctorFeaturesId(doctorId);
         return timetables;
     }
+
+
 
 
 

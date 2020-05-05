@@ -18,10 +18,7 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.*;
 
 import javax.jws.soap.SOAPBinding;
 import java.sql.Time;
@@ -105,6 +102,19 @@ public class RegistratorController {
         patient.setSurname(lastname);
         patient.setQueue(q);
         newComersRepository.save(patient);
+
+        return "redirect:/registrator";
+    }
+
+    @GetMapping("/registrator/queue/{id}/cancel")
+    public String deleteDoctor(@PathVariable Long id , ModelMap model) {
+        QueueEntity queue = queueRepository.getOne(id);
+        NewComersEntity patient = newComersRepository.findNewComersEntityByQueue(queue);
+
+        queueRepository.delete(queue);
+        if(patient != null) {
+            newComersRepository.delete(patient);
+        }
 
         return "redirect:/registrator";
     }

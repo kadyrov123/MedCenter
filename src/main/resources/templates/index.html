@@ -1005,7 +1005,7 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								  label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
 								  label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
 							  }
-							  if(timetable[i-1].timeList[j].status == 1) {
+							  if(timetable[i-1].timeList[j].status == 1 || timetable[i-1].timeList[j].status == 3) {
 								  label.setAttribute("class", "timeLabelOrderedByUser timeLabel");
 								  label.setAttribute("style", "background-color: #f15151; color:white;");
 							  }
@@ -1015,6 +1015,11 @@ Copyright &copy;<script>document.write(new Date().getFullYear());</script> All r
 								  label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
 								  label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
 								  // label.setAttribute("style", "background-color: #479ea3; color:white;");
+							  }
+
+							  if(timetable[i-1].timeList[j].status == 4) {
+								  label.setAttribute("class", "timeLabelLunchTime timeLabel");
+								  label.setAttribute("style", "background-color: #a0a204; color:white;");
 							  }
 
 

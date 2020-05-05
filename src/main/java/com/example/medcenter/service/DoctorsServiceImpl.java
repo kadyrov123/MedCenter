@@ -83,6 +83,10 @@ public class DoctorsServiceImpl implements DoctorsService {
     @Override
     public List<TimeDTO> getTimetableByDoctorFeaturesIdAndDate(int doctorId , Date date) {
         DoctorsFeaturesEntity doctorsFeatures = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctorId);
+        LocalTime lunchTimeStart = LocalTime.parse("12:00:00");
+        LocalTime lunchTimeEnd = LocalTime.parse("13:00:00");
+        LocalTime saturdayEndTime = LocalTime.parse("14:30:00");
+
         LocalTime startTime = doctorsFeatures.getStartTime().toLocalTime();
         LocalTime endTime = doctorsFeatures.getEndTime().toLocalTime();
         LocalTime localTime = startTime;
@@ -91,19 +95,44 @@ public class DoctorsServiceImpl implements DoctorsService {
         List<LocalTime> possibleTimes = new ArrayList<>();
         int interval = doctorsFeatures.getIntervalByIntervalId().getInterval();
         while(0 <= (endTime.compareTo(localTime))){
-            possibleTimes.add(localTime);
-            localTime = localTime.plusMinutes(interval);
+            if(0 >= (lunchTimeStart.compareTo(localTime)) && 0 <= (lunchTimeEnd.compareTo(localTime.plusMinutes(interval)))){
+                System.out.println(localTime+" - " +localTime.plusMinutes(interval));
+                possibleTimes.add(lunchTimeStart);
+                localTime = lunchTimeEnd;
+            }
+            else{
+                possibleTimes.add(localTime);
+                localTime = localTime.plusMinutes(interval);
+            }
         }
+
+        Calendar c = Calendar.getInstance();
+        c.setTime(date);
+        int dayOfWeek = c.get(Calendar.DAY_OF_WEEK);
 
         int order = 1;
         for(int i=0; i<possibleTimes.size()-1 ; i++){
-            TimeDTO timeDTO = new TimeDTO();
-            timeDTO.setOrder(order);
-            timeDTO.setTime(possibleTimes.get(i)+" - "+possibleTimes.get(i+1));
-            timeDTO.setFree(true);
-            timeDTO.setStatus(0);
-            order++;
-            timeList.add(timeDTO);
+//            if(0 <= (lunchTimeStart.compareTo(possibleTimes.get(i).plusMinutes(interval)))  || 0 >= (lunchTimeEnd.compareTo(possibleTimes.get(i).plusMinutes(interval))) ) {
+            if(0 !=  lunchTimeStart.compareTo(possibleTimes.get(i+1))) {
+                TimeDTO timeDTO = new TimeDTO();
+                timeDTO.setOrder(order);
+                timeDTO.setTime(possibleTimes.get(i) + " - " + possibleTimes.get(i + 1));
+                if (0 > (lunchTimeStart.compareTo(possibleTimes.get(i + 1))) && 0 < (lunchTimeEnd.compareTo(possibleTimes.get(i)))) {
+                    timeDTO.setFree(false);
+                    timeDTO.setStatus(4);
+                }
+                else {
+                    if(dayOfWeek == 7 &&  0 > (saturdayEndTime.compareTo(possibleTimes.get(i + 1)))){
+                        timeDTO.setFree(false);
+                        timeDTO.setStatus(4);
+                    }else {
+                        timeDTO.setFree(true);
+                        timeDTO.setStatus(0);
+                    }
+                }
+                order++;
+                timeList.add(timeDTO);
+            }
         }
 
         List<QueueEntity> queueEntities = queueRepository.findQueueEntitiesByDateAndDoctorId(date,doctorId);

@@ -520,12 +520,31 @@
             // tr.setAttribute("onclick" , "openPatientProfile(this);");
             // tr.setAttribute("data-patientid",patientList[i][4]);
             // for(var j=1 ; j<patientList[i].length-1 ; j++){
-            for(var j=1 ; j<patientList[i].length ; j++){
+
+            for(var j=1 ; j<patientList[i].length ; j++) {
                 var td = document.createElement("td");
                 // td.setAttribute("class" , "my-clickable-row");
-                td.appendChild(document.createTextNode(patientList[i][j]));
-                td.setAttribute("data-queueid" , patientList[i][0]);
-                tr.appendChild(td);
+                if (j == 3) {
+                    if(patientList[i][3]=='true') {
+                        var cancelTD = '<td class="text-right" >\n' +
+                            '                                        <div class="dropdown">\n' +
+                            '                                            <form action="/registrator/queue/' + patientList[i][0] + '/cancel" method="get" >\n' +
+                            '                                                <button class="btn btn-sm btn-icon-only text-light" type="submit" >\n' +
+                            '                                                    <i class="ni ni-fat-remove" style="font-size: 30px;"></i>\n' +
+                            '                                                </button>\n' +
+                            '                                            </form>\n' +
+                            '                                        </div>\n' +
+                            '                                    </td>';
+                        tr.insertAdjacentHTML('beforeend', cancelTD);
+                    }
+                }
+                else{
+                    td.appendChild(document.createTextNode(patientList[i][j]));
+                    td.setAttribute("data-queueid", patientList[i][0]);
+                    tr.appendChild(td);
+                }
+
+
             }
             tbody.appendChild(tr);
         }

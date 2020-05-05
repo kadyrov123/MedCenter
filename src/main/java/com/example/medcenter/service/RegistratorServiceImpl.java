@@ -36,6 +36,7 @@ public class RegistratorServiceImpl implements RegistratorService {
         Date today = new Date();
         List<QueueEntity> queueForToday = queueRepository.findQueueEntitiesByDateAndDoctorId(today,doctorId);
         List<QueuePatientsDTO> queuePatientsList = new ArrayList<>();
+
         for(QueueEntity queue : queueForToday){
             QueuePatientsDTO queuePatient = new QueuePatientsDTO();
             UsersEntity user = usersRepository.getOne(queue.getUserId());
@@ -54,6 +55,7 @@ public class RegistratorServiceImpl implements RegistratorService {
                 queuePatient.setCanBeCanceled(LocalTime.now().isBefore(startTime));
             }
             if(queue.getStatus() == 1){
+                System.out.println(" =============================user ====" + user.getId());
                 queuePatient.setName(user.getName());
                 queuePatient.setSurname(user.getSurname());
                 queuePatient.setCanBeCanceled(false);

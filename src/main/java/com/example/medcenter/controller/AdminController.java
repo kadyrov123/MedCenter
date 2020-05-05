@@ -1,15 +1,10 @@
 package com.example.medcenter.controller;
 
 import com.example.medcenter.dto.UserRegistrationDTO;
-import com.example.medcenter.entity.DoctorsFeaturesEntity;
-import com.example.medcenter.entity.DoctorsTypeEntity;
-import com.example.medcenter.entity.IntervalEntity;
-import com.example.medcenter.entity.UsersEntity;
-import com.example.medcenter.repoitory.DoctorsFeaturesRepository;
-import com.example.medcenter.repoitory.DoctorsTypeRepository;
-import com.example.medcenter.repoitory.RoleRepository;
-import com.example.medcenter.repoitory.UsersRepository;
+import com.example.medcenter.entity.*;
+import com.example.medcenter.repoitory.*;
 import com.example.medcenter.service.DoctorsService;
+import com.example.medcenter.service.StatService;
 import com.example.medcenter.service.UsersDetailsService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.annotation.Secured;
@@ -45,10 +40,21 @@ public class AdminController {
     DoctorsService doctorsService;
     @Autowired
     DoctorsTypeRepository doctorsTypeRepository;
+    @Autowired
+    QueueRepository queueRepository;
+    @Autowired
+    StatService statService;
 
 
     @GetMapping("/admin")
     public String admin(Model model) {
+        model.addAttribute("numberOfDoctors",doctorsFeaturesRepository.findAll().size());
+        model.addAttribute("numberOfUsers", usersRepository.findAll().size());
+        model.addAttribute("numberOfVisits", queueRepository.findAll().size());
+        model.addAttribute("numberOfAppointments", queueRepository.findQueueEntitiesByStatus(1).size());
+        model.addAttribute("visitsByDoctors", statService.getNumberOfVisitsByDoctors());
+        model.addAttribute("visitsByMonths", statService.getNumberOfVisitsByMonths());
+
         return "admin/dashboard";
     }
 
@@ -65,13 +71,11 @@ public class AdminController {
     @PostMapping("/admin/save/profile")
     public String updateUserInfo(UsersEntity admin){
         UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-
         user.setUsername(admin.getUsername());
         user.setEmail(admin.getEmail());
         user.setName(admin.getName());
         user.setSurname(admin.getSurname());
         System.out.println(admin.getName());
-
         usersRepository.save(user);
 
         return "redirect:/admin/profile";
