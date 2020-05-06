@@ -76,15 +76,24 @@ public class UserController {
         return "redirect:/user/profile";
     }
 
-    @PreAuthorize("hasAnyRole()")
     @PostMapping("/user/changepassword")
     public String changeUserPassword( @RequestParam String currentPassword,
                                      @RequestParam String newPassword,@RequestParam String confirmPassword){
         UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         UsersEntity authorisedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         boolean isUser = true;
+        String userRole = "user";
         for (RoleEntity role : authorisedUser.getRoles()) {
             if(role.getRole().equals("ROLE_DOCTOR")){
+                userRole = "doctor";
+                isUser = false;
+                break;
+            }if(role.getRole().equals("ROLE_ADMIN")){
+                userRole = "admin";
+                isUser = false;
+                break;
+            }if(role.getRole().equals("ROLE_REGISTRATOR")){
+                userRole = "registrator";
                 isUser = false;
                 break;
             }
@@ -94,7 +103,7 @@ public class UserController {
                 if(isUser){
                     return "redirect:/user/profile";
                 }else {
-                    return "redirect:/doctor/profile";
+                    return "redirect:/"+userRole+"/profile";
                 }
             }
         }

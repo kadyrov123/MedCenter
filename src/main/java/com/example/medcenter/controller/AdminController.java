@@ -64,6 +64,7 @@ public class AdminController {
         model.addAttribute("user" , user);
         model.addAttribute("canBeEdited" , true);
         model.addAttribute("visitsList" , false);
+        model.addAttribute("role" , "admin");
         return "admin/profile";
     }
 
@@ -118,6 +119,8 @@ public class AdminController {
         model.addAttribute("user" , user);
         model.addAttribute("canBeEdited" , false);
         model.addAttribute("visitsList" , false);
+        model.addAttribute("role" , "null");
+
         return "admin/profile";
     }
 

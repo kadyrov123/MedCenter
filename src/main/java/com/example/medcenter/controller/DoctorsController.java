@@ -65,7 +65,7 @@ public class DoctorsController {
 
     @GetMapping("/doctor")
     public String test(Model model) {
-        return "admin/dashboard";
+        return "redirect:/doctor/profile";
     }
 
     @GetMapping("/user/{userId}/profile")
@@ -101,6 +101,7 @@ public class DoctorsController {
         model.addAttribute("doctor" , doctor);
         model.addAttribute("canBeEdited" , true);
         model.addAttribute("visitsList" , false);
+        model.addAttribute("role" , "doctor");
         return "admin/profile";
     }
 
@@ -121,27 +122,78 @@ public class DoctorsController {
         return "admin/patients";
     }
 
-    @PostMapping("/doctor/update")
-    public String updateUserInfo(DoctorsFeaturesEntity doctor){
+    @PostMapping("/doctor/save/profile")
+    public String updateUserInfo(DoctorsFeaturesEntity doctor ,UsersEntity user, @RequestParam("doctorsPhoto") MultipartFile photo){
+//    public String updateUserInfo(DoctorsFeaturesEntity doctor, UsersEntity user  ){
         UsersEntity authorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
-        doctor.getUsersByDoctorId().setId(authorizedUser.getId());
-        doctor.getUsersByDoctorId().setRoles(authorizedUser.getRoles());
-        doctor.getUsersByDoctorId().setPassword(authorizedUser.getPassword());
-        usersRepository.save(doctor.getUsersByDoctorId());
+        user.setRoles(authorizedUser.getRoles());
+        user.setId(authorizedUser.getId());
+        user.setPassword(authorizedUser.getPassword());
 
-        IntervalEntity doctorInterval = intervalRepository.getOne(doctor.getIntervalId());
+        usersRepository.save(user);
 
-        Set<DoctorsTypeEntity> doctorsTypes = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctor.getId()).getDoctorsTypeEntities();
+        doctor.setUsersByDoctorId(user);
+
+        IntervalEntity doctorInterval = intervalRepository.getOne(doctor.getIntervalByIntervalId().getId());
+
+        Set<DoctorsTypeEntity> doctorsTypes = doctorsFeaturesRepository.getOne(doctor.getId()).getDoctorsTypeEntities();
 
         doctor.setUsersByDoctorId(doctor.getUsersByDoctorId());
         doctor.setIntervalByIntervalId(doctorInterval);
         doctor.setDoctorsTypeEntities(doctorsTypes);
 
+        // normalize the file path
+        String fileName = cleanPath(photo.getOriginalFilename());
+
+        // save the file on the local file system
+        try {
+            File oldPhoto = new File(PHOTO_UPLOAD_DIR + doctor.getPhoto());
+//            oldPhoto.delete();
+            System.out.println("sdfsdfsdf==========================");
+            if(oldPhoto.delete())                      //returns Boolean value
+            {
+                System.out.println(oldPhoto.getName() + " deleted");   //getting and printing the file name
+            }
+            Path path = Paths.get(PHOTO_UPLOAD_DIR + fileName);
+            Files.copy(photo.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        doctor.setPhoto(fileName);
+
         doctorsFeaturesRepository.save(doctor);
         return "redirect:/doctor/profile";
     }
 
+    @PostMapping("/upload")
+    public String uploadFile(@RequestParam("fileToUpload") MultipartFile file,DiseaseEntity disease, RedirectAttributes attributes) {
+        UsersEntity authorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(authorizedUser.getId());
+
+        // normalize the file path
+        String fileName = cleanPath(file.getOriginalFilename());
+
+        // save the file on the local file system
+        try {
+            Path path = Paths.get(FILE_UPLOAD_DIR + fileName);
+            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        disease.setDate(new java.sql.Date(new java.util.Date().getTime()));
+        disease.setUsersByPatientId(usersRepository.getOne(disease.getPatientId()));
+        disease.setFile(fileName);
+        disease.setDoctorId(doctor.getId());
+
+        diseaseRepository.save(disease);
+
+        // return success response
+        attributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
+
+        return "redirect:/doctor/patient/"+disease.getPatientId()+"/profile";
+    }
 
     @RequestMapping(value = "/doctor/save/queue", method = RequestMethod.POST , produces = "application/json" , consumes = "application/json")
 //    public @ResponseBody String doctorSaveTime(@RequestBody TimeDTO[] arr , ModelMap modelMap ) {
@@ -246,38 +298,12 @@ public class DoctorsController {
         model.addAttribute("visits" , userService.getVisitsByUserId(user.getId()));
         model.addAttribute("diseases" , diseaseService.getDiseaseByPatientId(user.getId()));
         model.addAttribute("disease" , newDisease);
+        model.addAttribute("role" , "null");
         return "admin/profile";
     }
 
 
-    @PostMapping("/upload")
-    public String uploadFile(@RequestParam("fileToUpload") MultipartFile file,DiseaseEntity disease, RedirectAttributes attributes) {
-        UsersEntity authorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
-        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(authorizedUser.getId());
 
-        // normalize the file path
-        String fileName = cleanPath(file.getOriginalFilename());
-
-        // save the file on the local file system
-        try {
-            Path path = Paths.get(FILE_UPLOAD_DIR + fileName);
-            Files.copy(file.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
-        disease.setDate(new java.sql.Date(new java.util.Date().getTime()));
-        disease.setUsersByPatientId(usersRepository.getOne(disease.getPatientId()));
-        disease.setFile(fileName);
-        disease.setDoctorId(doctor.getId());
-
-        diseaseRepository.save(disease);
-
-        // return success response
-        attributes.addFlashAttribute("message", "You successfully uploaded " + fileName + '!');
-
-        return "redirect:/doctor/patient/"+disease.getPatientId()+"/profile";
-    }
 
 
     @RequestMapping("/doctor/file/delete")
@@ -292,5 +318,6 @@ public class DoctorsController {
 
         return "redirect:/doctor/patient/"+disease.getPatientId()+"/profile";
     }
+
 
 }

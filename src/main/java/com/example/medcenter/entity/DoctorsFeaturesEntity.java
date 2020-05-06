@@ -35,6 +35,10 @@ public class DoctorsFeaturesEntity {
     @Column(name = "info")
     private String info;
 
+    @Basic
+    @Column(name = "photo")
+    private String photo;
+
     @ManyToOne
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     private UsersEntity usersByDoctorId;
@@ -183,6 +187,22 @@ public class DoctorsFeaturesEntity {
 //        this.doctorsFeaturesTypesById = doctorsFeaturesTypesById;
 //    }
 
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public Collection<QueueEntity> getQueueEntities() {
+        return queueEntities;
+    }
+
+    public void setQueueEntities(Collection<QueueEntity> queueEntities) {
+        this.queueEntities = queueEntities;
+    }
 
     @Override
     public String toString() {
