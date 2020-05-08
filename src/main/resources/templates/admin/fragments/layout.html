@@ -43,16 +43,16 @@
                             <span class="nav-link-text">Главная</span>
                         </a>
                     </li>
-                    <li sec:authorize="hasRole('ROLE_DOCTOR')" class="nav-item">
-                        <a class="nav-link" th:href="@{/doctor}">
-                            <i class="ni ni-tv-2 text-primary"></i>
-                            <span class="nav-link-text">Главная</span>
-                        </a>
-                    </li>
                     <li sec:authorize="hasRole('ROLE_ADMIN')"  class="nav-item">
                         <a class="nav-link" th:href="@{/admin/doctors}">
                             <i class="ni ni-single-02 text-yellow"></i>
                             <span class="nav-link-text">Врачи</span>
+                        </a>
+                    </li>
+                    <li sec:authorize="hasRole('ROLE_ADMIN')"  class="nav-item">
+                        <a class="nav-link" th:href="@{/admin/registrator/profile}">
+                            <i class="ni ni-circle-08 text-yellow"></i>
+                            <span class="nav-link-text">Регистратор</span>
                         </a>
                     </li>
                     <li sec:authorize="hasRole('ROLE_DOCTOR')" class="nav-item">
@@ -63,6 +63,12 @@
                     </li>
                     <li sec:authorize="hasRole('ROLE_DOCTOR')" class="nav-item">
                         <a class="nav-link" th:href="@{/doctor/patients}">
+                            <i class="ni ni-bullet-list-67 text-default"></i>
+                            <span class="nav-link-text">Пациенты</span>
+                        </a>
+                    </li>
+                    <li sec:authorize="hasRole('ROLE_REGISTRATOR')" class="nav-item">
+                        <a class="nav-link" th:href="@{/registrator}">
                             <i class="ni ni-bullet-list-67 text-default"></i>
                             <span class="nav-link-text">Пациенты</span>
                         </a>
@@ -87,7 +93,7 @@
                         <!-- Sidenav toggler -->
                         <div class="pr-3 sidenav-toggler sidenav-toggler-dark" data-action="sidenav-pin" data-target="#sidenav-main">
                             <div class="sidenav-toggler-inner">
-                                <i class="ni ni-align-left-2" style="font-size: 25px;margin-top: 15px;"></i>lo
+                                <i class="ni ni-align-left-2" style="font-size: 25px;margin-top: 15px;"></i>
                             </div>
                         </div>
                     </li>
@@ -96,9 +102,9 @@
                     <li class="nav-item dropdown">
                         <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <div class="media align-items-center">
-                      <span class="avatar avatar-sm rounded-circle">
-                        <img alt="Image placeholder" src="../assets/img/theme/team-4.jpg">
-                      </span>
+                                  <span class="avatar avatar-sm rounded-circle">
+                                    <img alt="Image placeholder" th:src="@{/assets/img/theme/team-4.jpg}">
+                                  </span>
                                 <div class="media-body  ml-2  d-none d-lg-block">
                                     <span class="mb-0 text-sm  font-weight-bold">John Snow</span>
                                 </div>
@@ -164,6 +170,17 @@
     <script th:src="@{/assets/vendor/chart.js/dist/Chart.min.js}"></script>
     <script th:src="@{/assets/vendor/chart.js/dist/Chart.extension.js}"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+
+    <script th:src="@{/assets/vendor/jquery/dist/jquery.min.js}"></script>
+    <script th:src="@{/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+    <script th:src="@{/assets/vendor/js-cookie/js.cookie.js}"></script>
+    <script th:src="@{/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js}"></script>
+    <script th:src="@{/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js}"></script>
+    <!-- Optional JS -->
+    <script th:src="@{/assets/vendor/chart.js/dist/Chart.min.js}"></script>
+    <script th:src="@{/assets/vendor/chart.js/dist/Chart.extension.js}"></script>
+    <!-- Argon JS -->
+    <script th:src="@{/assets/js/argon.js?v=1.2.0}"></script>
 
 
 </th:block>

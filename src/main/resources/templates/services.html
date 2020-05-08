@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html class="fixed" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+<head>
+    <th:block th:insert="layout :: head"></th:block>
+
+    <style>
+        .servicesRow .col-lg-4{
+            padding: 20px;
+        }
+    </style>
+</head>
+<body>
+
+
+<th:block th:insert="layout :: header_fragment"></th:block>
+<!-- #header -->
+
+<!-- start banner Area -->
+<th:block th:insert="layout :: banner_fragment"></th:block>
+<!-- End banner Area -->
+
+<!-- Start facilities Area -->
+<section class="facilities-area section-gap" style="padding: 90px 0">
+    <div class="container">
+        <div class="row d-flex justify-content-center">
+            <div class="menu-content pb-70 col-lg-7">
+                <div class="title text-center">
+                    <h1 class="mb-10">Наши услуги</h1>
+<!--                    <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit, sed do eiusmod tempor incididunt ut labore  et dolore magna aliqua. </p>-->
+                </div>
+            </div>
+        </div>
+        <div class="row servicesRow">
+            <div class="col-lg-4 col-md-6">
+                <div class="single-facilities">
+                    <div class="row">
+                        <div class="col-2">
+                            <span class="fa fa-heartbeat" style="    line-height: 2;font-size: 35px;color: #9edc12;">
+                            </span>
+                        </div>
+                        <div class="col-10"><a href="#"><h4>ЭКГ</h4></a></div>
+                    </div>
+                    <p>
+                        Электрокардиографическая методика дает возможность вовремя выявить и диагностировать целый ряд недугов сердечно-сосудистой системы
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="single-facilities">
+                    <div class="row">
+                        <div class="col-2"> <img th:src="@{/images/icons/uzi.png}" style="margin-top: 8px;width: 45px;"> </div>
+                        <div class="col-10"><a href="#"><h4>УЗИ</h4></a></div>
+                    </div>
+                    <p>
+                        Диагностика разных заболеваний и состояний у детей всех возрастов при помощи ультразвукового аппарата.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="single-facilities">
+                    <div class="row">
+                        <div class="col-2"> <img th:src="@{/images/icons/cheek.png}" style="margin-top: 8px;width: 45px;"> </div>
+                        <div class="col-10"><a href="#"><h4>Плазмолифтинг</h4></a></div>
+                    </div>
+                    <p>
+                        Это уникальная методика безоперационного омоложения лица, основанная на использовании собственной плазмы пациента
+                    </p>
+                </div>
+            </div>
+
+            <div class="col-lg-4 col-md-6">
+                <div class="single-facilities">
+                    <div class="row">
+                        <div class="col-2"> <img th:src="@{/images/icons/massage.png}" style="margin-top: 8px;width: 45px;"> </div>
+                        <div class="col-10"><a href="#"><h4>Массаж</h4></a></div>
+                    </div>
+                    <p>
+                        Лечебный массаж, способствующий правильному развитию моторики, укреплению мышц, нервной и иммунной систем.
+                    </p>
+                </div>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <div class="single-facilities">
+                    <div class="row">
+                        <div class="col-2"> <img th:src="@{/images/icons/stats.png}" style="margin-top: 8px;width: 45px;"> </div>
+                        <div class="col-10"><a href="#"><h4>Физиотерапия</h4></a></div>
+                    </div>
+                    <p>
+                        Это метод лечебного воздействия на организм различных физических факторов. К ним относятся ультрафиолетовое и инфракрасное излучения, магнитные поля, ток, тепло, холод и другие.
+                    </p>
+                </div>
+            </div>
+
+
+<!--            <div class="col-lg-4 col-md-6">-->
+<!--                <div class="single-facilities">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-2"> <img th:src="@{/images/icons/medical.png}" style="margin-top: 8px;width: 45px;"> </div>-->
+<!--                        <div class="col-10"><a href="#"><h4>Дигностика</h4></a></div>-->
+<!--                    </div>-->
+<!--                    <p>-->
+<!--                        inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct women face higher conduct.-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-lg-4 col-md-6">-->
+<!--                <div class="single-facilities">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-2"> <img th:src="@{/images/icons/therapy.png}" style="margin-top: 8px;width: 45px;"> </div>-->
+<!--                        <div class="col-10"><a href="#"><h4>Терапия</h4></a></div>-->
+<!--                    </div>-->
+<!--                    <p>-->
+<!--                        inappropriate behavior is often laughed off as “boys will be boys,” women face higher conduct women face higher conduct.-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+<!--            <div class="col-lg-4 col-md-6">-->
+<!--                <div class="single-facilities">-->
+<!--                    <div class="row">-->
+<!--                        <div class="col-2"> <img th:src="@{/images/icons/health.png}" style="margin-top: 8px;width: 45px;"> </div>-->
+<!--                        <div class="col-10"><a href="#"><h4>Консультация</h4></a></div>-->
+<!--                    </div>-->
+<!--                    <p>-->
+<!--                        Это основа постановки точного диагноза и нахождения результативного лечения.-->
+<!--                    </p>-->
+<!--                </div>-->
+<!--            </div>-->
+
+            <div class="col-lg-4 col-md-6">
+                <div class="single-facilities">
+                    <div class="row">
+                        <div class="col-2"> <img th:src="@{/images/icons/doc.png}" style="margin-top: 8px;width: 45px;"> </div>
+                        <div class="col-10"><a href="#"><h4>Справки</h4></a></div>
+                    </div>
+                    <p>
+                        У нас Вы можете оформить медицинские справки для всех случаев жизни.
+                    </p>
+                </div>
+            </div>
+
+
+
+
+        </div>
+    </div>
+</section>
+<!-- End facilities Area -->
+
+<!-- start footer Area -->
+<th:block th:insert="layout :: footer_fragment"></th:block>
+<!-- End footer Area -->
+
+<th:block th:insert="layout :: footer_scripts"></th:block>
+</body>
+</html>

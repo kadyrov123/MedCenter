@@ -119,7 +119,7 @@
                 label.setAttribute("onclick" , "timeLabelClick(this)");
               }
               if(timetable[i-1].timeList[j].status == 1 || timetable[i-1].timeList[j].status == 3) {
-                label.setAttribute("class", "timeLabelOrderedByUser timeLabel");
+                label.setAttribute("class", "timeLabelOrderedBwyUser timeLabel");
                 label.setAttribute("style", "background-color: #f15151; color:white;");
               }
               if(timetable[i-1].timeList[j].status == 2) {
@@ -481,8 +481,6 @@
 <body>
   <!-- Sidenav -->
   <th:block th:insert="admin/fragments/layout :: sidebar_fragment"></th:block>
-
-
 
   <!-- Main content -->
   <div class="main-content" id="panel">

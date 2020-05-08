@@ -17,6 +17,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
@@ -117,6 +118,30 @@ public class RegistratorController {
         }
 
         return "redirect:/registrator";
+    }
+
+    @GetMapping("/registrator/profile")
+    public String doctorProfile(Model model) {
+        UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        model.addAttribute("user" , user);
+        model.addAttribute("canBeEdited" , true);
+        model.addAttribute("visitsList" , false);
+        model.addAttribute("role" , "registrator");
+        return "admin/profile";
+    }
+
+    @PostMapping("/registrator/save/profile")
+    public String updateUserInfo(UsersEntity registrator){
+        UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        user.setUsername(registrator.getUsername());
+        user.setEmail(registrator.getEmail());
+        user.setName(registrator.getName());
+        user.setSurname(registrator.getSurname());
+        user.setPin(registrator.getPin());
+
+        usersRepository.save(user);
+
+        return "redirect:/registrator/profile";
     }
 
 }

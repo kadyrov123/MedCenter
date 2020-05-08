@@ -65,7 +65,7 @@ public class DoctorsController {
 
     @GetMapping("/doctor")
     public String test(Model model) {
-        return "redirect:/doctor/profile";
+        return "redirect:/doctor/patients";
     }
 
     @GetMapping("/user/{userId}/profile")
@@ -282,6 +282,27 @@ public class DoctorsController {
         return patients;
     }
 
+    @RequestMapping(value = "/doctor/searchPatient", method = RequestMethod.GET)
+    public @ResponseBody List<List<String>> patientSearch(@RequestParam("value") String value) {
+
+        List<UsersEntity> users = usersRepository.search(value.toLowerCase());
+
+        List patients = new ArrayList();
+        for(int i =0 ; i< users.size() ; i++){
+            if(isUser((List)users.get(i).getRoles())) {
+                List<String> patient = new ArrayList<>();
+                patient.add(i+"");
+                patient.add(users.get(i).getSurname() + " " + users.get(i).getName());
+                patient.add("");
+                patient.add("");
+                patient.add(users.get(i).getId()+"");
+
+                patients.add(patient);
+            }
+        }
+        return patients;
+    }
+
 
     @GetMapping("/doctor/patient/{id}/profile")
     public String doctorProfile(@PathVariable int id , ModelMap model) {
@@ -317,6 +338,15 @@ public class DoctorsController {
         diseaseRepository.save(disease);
 
         return "redirect:/doctor/patient/"+disease.getPatientId()+"/profile";
+    }
+
+    private boolean isUser(List<RoleEntity> roles) {
+        for(RoleEntity role: roles){
+            if (role.getRole().equals("ROLE_USER")){
+                return true;
+            }
+        }
+        return false;
     }
 
 

@@ -12,6 +12,8 @@ public interface RoleRepository extends CrudRepository<RoleEntity , Integer> {
     RoleEntity getRoleEntityByRole(String roleName);
     RoleEntity getRoleEntityById(int id);
 
+
+
 //    List<RoleEntity> findRoleEntitiesBy
 }
 

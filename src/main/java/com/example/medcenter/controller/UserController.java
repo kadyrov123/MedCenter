@@ -123,7 +123,6 @@ public class UserController {
         DiseaseEntity disease = diseaseRepository.getOne(id);
         File file = new File(FILE_UPLOAD_DIR + disease.getFile());
         if (file.exists()) {
-
             //get the mimetype
             String mimeType = URLConnection.guessContentTypeFromName(file.getName());
             if (mimeType == null) {

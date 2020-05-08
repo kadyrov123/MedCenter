@@ -66,9 +66,19 @@ public class MainController {
         return "about";
     }
 
+    @RequestMapping("/layout")
+    public String  aboutPage2(){
+        return "layout";
+    }
+
     @RequestMapping("/departments")
     public String  departmentPage(){
         return "departments";
+    }
+
+    @RequestMapping("/services")
+    public String  servicePage(){
+        return "services";
     }
 
 

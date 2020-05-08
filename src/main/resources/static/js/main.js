@@ -144,7 +144,6 @@ $(document).ready(function() {
         $('#mobile-nav').find('.menu-has-children').prepend('<i class="lnr lnr-chevron-down"></i>');
 
         $(document).on('click', '.menu-has-children i', function(e) {
-            alert("sdfdf");
             $(this).next().toggleClass('menu-item-active');
             $(this).nextAll('ul').eq(0).slideToggle();
             $(this).toggleClass("lnr-chevron-up lnr-chevron-down");

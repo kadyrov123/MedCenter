@@ -76,7 +76,8 @@ public class AdminController {
         user.setEmail(admin.getEmail());
         user.setName(admin.getName());
         user.setSurname(admin.getSurname());
-        System.out.println(admin.getName());
+        user.setPin(admin.getPin());
+
         usersRepository.save(user);
 
         return "redirect:/admin/profile";
@@ -122,6 +123,38 @@ public class AdminController {
         model.addAttribute("role" , "null");
 
         return "admin/profile";
+    }
+
+    @GetMapping("/admin/registrator/profile")
+    public String registratorProfile( ModelMap model) {
+        RoleEntity registratorRole = roleRepository.getRoleEntityByRole("ROLE_REGISTRATOR");
+        List<UsersEntity> registrators = usersRepository.findUsersEntitiesByRolesContaining(registratorRole);
+        UsersEntity user = registrators.get(0);
+        System.out.println(user.getName());
+
+
+//        UsersEntity user = usersRepository.getOne(id);
+//        model.addAttribute("doctor" , doctor);
+        model.addAttribute("user" , user);
+        model.addAttribute("canBeEdited" , true);
+        model.addAttribute("visitsList" , false);
+        model.addAttribute("role" , "admin/registrator");
+
+        return "admin/profile";
+    }
+
+    @PostMapping("/admin/registrator/save/profile")
+    public String updateRegistrator(UsersEntity registrator , @RequestParam("password") String password){
+        System.out.println(password);
+        System.out.println(registrator.getId());
+        usersDetailsService.setPassword(registrator , password);
+        Collection<RoleEntity> roles = new ArrayList<>();
+        roles.add(roleRepository.getRoleEntityByRole("ROLE_REGISTRATOR"));
+        registrator.setRoles(roles);
+        usersRepository.save(registrator);
+        usersDetailsService.setPassword(usersRepository.getOne(registrator.getId()) , password);
+
+        return "redirect:/admin";
     }
 
     @GetMapping("/admin/doctor/{id}/delete")

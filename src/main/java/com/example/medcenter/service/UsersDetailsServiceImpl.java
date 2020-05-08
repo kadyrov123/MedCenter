@@ -66,43 +66,12 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
     }
 
 
-//    @Override
-//    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-//        UsersEntity user = userRepository.findUsersEntityByUsername(username);
-//        if (user == null){
-//            throw new UsernameNotFoundException("Invalid username or password.");
-//        }
-//
-////        Collection<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
-////        if (user.getRoleById() != null) {
-////            // ROLE_USER, ROLE_ADMIN,..
-////            GrantedAuthority authority = new SimpleGrantedAuthority(user.getRoleById().getRole());
-////            grantList.add(authority);
-////
-////        }
-//
-//        Collection<RoleEntity> roles = new ArrayList<>();
-//        roles.add(new RoleEntity());
-////        roles.add(user.getRoles());
-//
-////        UserDetails userDetails =  new UserDetails(user.getUsername(), //
-////                user.getPassword(), grantList);
-////        UserDetails userDetails =  new UserDetails();
-//
-////        return  userDetails;
-////        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-////                user.getPassword(),
-////                mapRolesToAuthorities((Collection<RoleEntity>) roles));
-//        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-//                user.getPassword(),
-//                mapRolesToAuthorities(user.getRoles()));
-//    }
-//
-//    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<RoleEntity> roles){
-//        return roles.stream()
-//                .map(role -> new SimpleGrantedAuthority(role.getRole()))
-//                .collect(Collectors.toList());
-//    }
+    public boolean setPassword(UsersEntity usersEntity , String password ){
+        usersEntity.setPassword(passwordEncoder.encode(password));
+        userRepository.save(usersEntity);
+        return true;
+    }
+
 
 
     @Override
