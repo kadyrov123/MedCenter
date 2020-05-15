@@ -730,6 +730,8 @@
                                 <p th:text="${disease.diagnosis}"></p>
                                 <h5>Рецепт</h5>
                                 <p th:text="${disease.recipe}"></p>
+                                <h5 th:if="${disease.file}">Файл</h5>
+                                <a th:href="@{|/file/download?id=${disease.id}|}"  th:text="${disease.file}"></a>
                             </div>
                         </div>
                         <div th:id="'collapseTwo' + ${disease.id}" class="collapse" th:data-parent="'#accordion' + ${disease.id}" sec:authorize="hasRole('ROLE_DOCTOR')">
