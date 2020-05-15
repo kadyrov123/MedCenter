@@ -1,0 +1,280 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.w3.org/1999/xhtml">
+
+<head>
+    <th:block th:insert="admin/fragments/layout :: head"></th:block>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+</head>
+
+<body>
+<!-- Sidenav -->
+<th:block th:insert="admin/fragments/layout :: sidebar_fragment"></th:block>
+<!-- Main content -->
+<div class="main-content" id="panel">
+    <!-- Topnav -->
+    <th:block th:insert="admin/fragments/layout :: header_fragment"></th:block>
+    <!-- Header -->
+
+
+    <!-- ================================================================== Main Plane =========================================================================================-->
+    <div class="header bg-primary pb-6" style="background-color: #21385f !important;">
+        <div class="container-fluid">
+            <div class="header-body">
+                <div class="row align-items-center py-4">
+                    <div class="col-lg-6 col-7">
+                        <h6 class="h2 text-white d-inline-block mb-0">Пациенты</h6>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="container-fluid mt--6" >
+        <div class="row">
+
+            <div class="col">
+                <div class="card">
+                    <div class="card-header border-info">
+                        <div class="row align-items-center">
+                            <div class="col-8">
+
+                            </div>
+                            <div class="col-4">
+                                <select type="text" name="endTime" class="form-control" id="selectDoctor"   >
+                                    <option th:each="doctor : ${doctors}" th:text="${doctor.usersByDoctorId.surname + ' ' + doctor.usersByDoctorId.name}" th:data-doctorid="${doctor.id}"></option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="patientsTable" class="table align-items-center table-flush table-hover">
+                                <thead class="thead-light">
+                                <tr>
+                                    <th scope="col" class="sort" data-sort="name">ФИО</th>
+                                    <th scope="col" class="sort" data-sort="status">Время</th>
+                                </tr>
+                                </thead>
+                                <tbody id="patientsTableBody" class="list">
+                                <tr th:each="patient : ${patientList}" class="my-clickable-row" >
+                                    <td  th:text="${patient.surname + ' ' + patient.name}"></td>
+        <!--                            <td  th:text="${patient.queueEntity.doctorFeaturesByDoctorId.usersByDoctorId.surname + ' ' + patient.queueEntity.doctorFeaturesByDoctorId.usersByDoctorId.name}"></td>-->
+                                    <td  th:text="${patient.queueEntity.time}" ></td>
+                                    <td class="text-right" th:if="${patient.canBeCanceled}">
+                                        <div class="dropdown">
+                                            <form th:action="@{/registrator/queue/__${patient.queueEntity.id}__/cancel}" method="get" >
+                                                <button class="btn btn-sm btn-icon-only text-light" type="submit" >
+                                                    <i class="ni ni-fat-remove" style="font-size: 30px;"></i>
+                                                </button>
+                                            </form>
+                                        </div>
+                                    </td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+</div>
+
+
+<div class="container-fluid mt--6" style="margin-top: 1.5rem !important;">
+        <div class="row">
+            <div class="col">
+                <div class="card">
+                    <div class="card">
+                        <!-- Card header -->
+                        <div class="card-header border-success">
+                            <h2 class="mb-0">Добавить пациента в очередь</h2>
+                        </div>
+                        <!-- Light table -->
+                        <div class="card-body">
+                            <form th:action="@{/registrator/save/patient}" method="post">
+                                <div class="form-group">
+                                    <label for="name" class="form-control-label">Имя</label>
+                                    <input class="form-control" type="text" placeholder="John" id="name" name="firstname">
+                                </div>
+                                <div class="form-group">
+                                    <label for="surname" class="form-control-label">Фамилия</label>
+                                    <input class="form-control" type="text" placeholder="Snow" id="surname" name="lastname">
+                                </div>
+                                <div class="form-group">
+                                    <label for="selectDoctor2" class="form-control-label">Доктор</label>
+                                    <select type="text" name="doctorId" class="form-control" id="selectDoctor2"   >
+                                        <option th:each="doctor : ${doctors}" th:text="${doctor.usersByDoctorId.surname + ' ' + doctor.usersByDoctorId.name}" th:value="${doctor.id}" th:data-doctorid="${doctor.id}"></option>
+                                    </select>
+                                </div>
+                                <div class="form-group">
+                                    <label for="selectTime" class="form-control-label">Время</label>
+                                    <select type="text" name="order" class="form-control" id="selectTime"  >
+
+                                    </select>
+                                </div>
+
+                                <input class="btn btn-success" type="submit" value="Добавить">
+
+                            </form>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+
+
+<script>
+    // $(document).ready(function () {
+
+    var patientList = null;
+    var timeList = null;
+
+    $('#selectDoctor').change(function () {
+        getPatientList();
+    });
+
+    getPatientList();
+    function getPatientList(){
+        var doctorid = $( "#selectDoctor option:selected" ).attr("data-doctorid");
+        $.ajax({
+            url : '/registrator/getPatientList',
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            data : ({
+                doctorId : doctorid
+            }),
+            success: function (data) {
+                console.log(data);
+                patientList = data;
+                fillPatientTable();
+            }
+        });
+    }
+
+    $('#selectDoctor2').change(function () {
+        getTimeListByDoctorId();
+    });
+
+    getTimeListByDoctorId();
+    function getTimeListByDoctorId(){
+        var doctorid = $( "#selectDoctor2 option:selected" ).attr("data-doctorid");
+        $.ajax({
+            url : '/registrator/getTimeListByDoctorId',
+            type: 'GET',
+            dataType: 'json',
+            contentType: 'application/json',
+            mimeType: 'application/json',
+            data : ({
+                doctorId : doctorid
+            }),
+            success: function (data) {
+                timeList = data;
+                console.log(data);
+                // console.log(timeList[0].time);
+                fillTimeList();
+            }
+        });
+    }
+
+
+    function fillPatientTable(){
+        // $("patientsTable tbody")
+        $("#patientsTableBody tr").remove();
+        var tbody = document.getElementById("patientsTableBody");
+        for (var i=0 ; i<patientList.length ;i++ ){
+            var tr = document.createElement("tr");
+            // tr.setAttribute("class" , "my-clickable-row");
+            // tr.setAttribute("onclick" , "openPatientProfile(this);");
+            // tr.setAttribute("data-patientid",patientList[i][4]);
+            // for(var j=1 ; j<patientList[i].length-1 ; j++){
+
+            for(var j=1 ; j<patientList[i].length ; j++) {
+                var td = document.createElement("td");
+                // td.setAttribute("class" , "my-clickable-row");
+                if (j == 3) {
+                    if(patientList[i][3]=='true') {
+                        var cancelTD = '<td class="text-right" >\n' +
+                            '                                        <div class="dropdown">\n' +
+                            '                                            <form action="/registrator/queue/' + patientList[i][0] + '/cancel" method="get" >\n' +
+                            '                                                <button class="btn btn-sm btn-icon-only text-light" type="submit" >\n' +
+                            '                                                    <i class="ni ni-fat-remove" style="font-size: 30px;"></i>\n' +
+                            '                                                </button>\n' +
+                            '                                            </form>\n' +
+                            '                                        </div>\n' +
+                            '                                    </td>';
+                        tr.insertAdjacentHTML('beforeend', cancelTD);
+                    }
+                }
+                else{
+                    td.appendChild(document.createTextNode(patientList[i][j]));
+                    td.setAttribute("data-queueid", patientList[i][0]);
+                    tr.appendChild(td);
+                }
+
+
+            }
+            tbody.appendChild(tr);
+        }
+    }
+
+    function fillTimeList(){
+        // $("patientsTable tbody")
+        $("#selectTime option").remove();
+        var selectTime = document.getElementById("selectTime");
+        for (var i=0 ; i<timeList.length ;i++ ){
+            if(timeList[i].free) {
+                var option = document.createElement("option");
+                option.appendChild(document.createTextNode(timeList[i].time));
+                option.setAttribute("data-order", timeList[i].order);
+                option.setAttribute("data-free", timeList[i].free);
+                option.setAttribute("value", timeList[i].order);
+                selectTime.appendChild(option);
+            }
+        }
+    }
+
+
+    // function openPatientProfile(row) {
+    //     var patientid = row.dataset.patientid;
+    //     window.location = "/doctor/patient/" +patientid + "/profile";
+    // }
+    // })
+</script>
+<!--<script>-->
+<!--    $(document).ready(function(){-->
+<!--        $('.my-clickable-row').on("click" , function () {-->
+<!--            var doctorId = $(this).attr("data-doctorid");-->
+<!--            window.location = "/admin/doctor/" +doctorId + "/profile";-->
+<!--        });-->
+
+<!--    });-->
+<!--</script>-->
+
+
+<!-- Argon Scripts -->
+<!-- Core -->
+<script th:src="@{/assets/vendor/jquery/dist/jquery.min.js}"></script>
+<script th:src="@{/assets/vendor/bootstrap/dist/js/bootstrap.bundle.min.js}"></script>
+<script th:src="@{/assets/vendor/js-cookie/js.cookie.js}"></script>
+<script th:src="@{/assets/vendor/jquery.scrollbar/jquery.scrollbar.min.js}"></script>
+<script th:src="@{/assets/vendor/jquery-scroll-lock/dist/jquery-scrollLock.min.js}"></script>
+<!-- Optional JS -->
+<script th:src="@{/assets/vendor/chart.js/dist/Chart.min.js}"></script>
+<script th:src="@{/assets/vendor/chart.js/dist/Chart.extension.js}"></script>
+<!-- Argon JS -->
+<script th:src="@{/assets/js/argon.js?v=1.2.0}"></script>
+
+</body>
+
+</html>

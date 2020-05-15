@@ -35,6 +35,10 @@ public class DoctorsFeaturesEntity {
     @Column(name = "info")
     private String info;
 
+    @Basic
+    @Column(name = "photo")
+    private String photo;
+
     @ManyToOne
     @JoinColumn(name = "doctor_id", referencedColumnName = "id")
     private UsersEntity usersByDoctorId;
@@ -58,6 +62,26 @@ public class DoctorsFeaturesEntity {
             inverseJoinColumns = { @JoinColumn(name = "type_id") })
     @JsonIgnore
     private Set<DoctorsTypeEntity> doctorsTypeEntities = new HashSet<>();
+
+//    private String doctorTypeString;
+
+    public String getDoctorTypeString() {
+        String doctorTypeString = "";
+        int i = 0;
+        for(DoctorsTypeEntity type :this.getDoctorsTypeEntities()){
+            if(i==0){
+                doctorTypeString += type.getType();
+            }else {
+                doctorTypeString += ", "+type.getType();
+            }
+            i++;
+        }
+        return doctorTypeString;
+    }
+
+//    public void setDoctorTypeString(String doctorTypeString) {
+//        this.doctorTypeString = doctorTypeString;
+//    }
 //    private Collection<DoctorsFeaturesTypesEntity> doctorsFeaturesTypesById;
 
 
@@ -162,4 +186,33 @@ public class DoctorsFeaturesEntity {
 //    public void setDoctorsFeaturesTypesById(Collection<DoctorsFeaturesTypesEntity> doctorsFeaturesTypesById) {
 //        this.doctorsFeaturesTypesById = doctorsFeaturesTypesById;
 //    }
+
+
+    public String getPhoto() {
+        return photo;
+    }
+
+    public void setPhoto(String photo) {
+        this.photo = photo;
+    }
+
+    public Collection<QueueEntity> getQueueEntities() {
+        return queueEntities;
+    }
+
+    public void setQueueEntities(Collection<QueueEntity> queueEntities) {
+        this.queueEntities = queueEntities;
+    }
+
+    @Override
+    public String toString() {
+        return "DoctorsFeaturesEntity{" +
+                "id=" + id +
+                ", doctorId=" + doctorId +
+                ", startTime=" + startTime +
+                ", endTime=" + endTime +
+                ", intervalId=" + intervalId +
+                ", info='" + info + '\'' +
+                '}';
+    }
 }

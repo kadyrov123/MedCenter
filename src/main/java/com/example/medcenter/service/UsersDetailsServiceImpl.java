@@ -9,6 +9,7 @@ import com.example.medcenter.repoitory.UsersRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -39,45 +40,70 @@ public class UsersDetailsServiceImpl implements UsersDetailsService {
         user.setUsername(registration.getUsername());
         user.setEmail(registration.getEmail());
         user.setPassword(passwordEncoder.encode(registration.getPassword()));
-//        user.setRoles(Arrays.asList(new RoleEntity("ROLE_USER")));
+        user.setRoles(Arrays.asList(roleRepository.getRoleEntityByRole("ROLE_USER")));
+        return userRepository.save(user);
+    }
+
+    public UsersEntity saveDoctor(UserRegistrationDTO registration){
+        UsersEntity user = new UsersEntity();
+        user.setName(registration.getFirstName());
+        user.setSurname(registration.getLastName());
+        user.setUsername(registration.getUsername());
+        user.setEmail(registration.getEmail());
+        user.setPassword(passwordEncoder.encode(registration.getPassword()));
+        user.setRoles(Arrays.asList(roleRepository.getRoleEntityByRole("ROLE_DOCTOR")));
         return userRepository.save(user);
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        UsersEntity user = userRepository.findUsersEntityByUsername(username);
-        if (user == null){
-            throw new UsernameNotFoundException("Invalid username or password.");
+    public boolean changePassword(String currentPassword , String newPassword, UsersEntity usersEntity){
+        if(passwordEncoder.matches(currentPassword , usersEntity.getPassword())){
+            usersEntity.setPassword(passwordEncoder.encode(newPassword));
+            userRepository.save(usersEntity);
+            return true;
+        }
+        return false;
+    }
+
+
+    public boolean setPassword(UsersEntity usersEntity , String password ){
+        usersEntity.setPassword(passwordEncoder.encode(password));
+        userRepository.save(usersEntity);
+        return true;
+    }
+
+
+
+    @Override
+    public UserDetails loadUserByUsername(String userName) throws UsernameNotFoundException {
+        UsersEntity user = this.userRepository.findUsersEntityByUsername(userName);
+
+        if (user == null) {
+            System.out.println("User not found! " + userName);
+            throw new UsernameNotFoundException("User " + userName + " was not found in the database");
         }
 
-//        Collection<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
-//        if (user.getRoleById() != null) {
-//            // ROLE_USER, ROLE_ADMIN,..
-//            GrantedAuthority authority = new SimpleGrantedAuthority(user.getRoleById().getRole());
-//            grantList.add(authority);
-//
-//        }
+//        System.out.println("Found User: " + user);
 
-        Collection<RoleEntity> roles = new ArrayList<>();
-        roles.add(new RoleEntity());
-//        roles.add(user.getRoles());
+        // [ROLE_USER, ROLE_ADMIN,..]
+//        List<String> roleNames = this.roleDao.getRoleNames(((com.app.pharmacy.apteka.model.User) user).getId());
 
-//        UserDetails userDetails =  new UserDetails(user.getUsername(), //
-//                user.getPassword(), grantList);
-//        UserDetails userDetails =  new UserDetails();
+//        List<RoleEntity> userRoles = userRoleRepository.findAllByUser(((law.advisor.model.User) user));
+        List<RoleEntity> userRoles =(List<RoleEntity>) user.getRoles();
 
-//        return  userDetails;
-//        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-//                user.getPassword(),
-//                mapRolesToAuthorities((Collection<RoleEntity>) roles));
-        return new org.springframework.security.core.userdetails.User(user.getUsername(),
-                user.getPassword(),
-                mapRolesToAuthorities(user.getRoles()));
+        List<GrantedAuthority> grantList = new ArrayList<GrantedAuthority>();
+        if (userRoles != null) {
+            for (RoleEntity userRole : userRoles) {
+                // ROLE_USER, ROLE_ADMIN,..
+                GrantedAuthority authority = new SimpleGrantedAuthority(userRole.getRole());
+                grantList.add(authority);
+            }
+        }
+
+        UserDetails userDetails = (UserDetails) new User(user.getUsername(), //
+                user.getPassword(), grantList);
+
+        return userDetails;
     }
 
-    private Collection<? extends GrantedAuthority> mapRolesToAuthorities(Collection<RoleEntity> roles){
-        return roles.stream()
-                .map(role -> new SimpleGrantedAuthority(role.getRole()))
-                .collect(Collectors.toList());
-    }
 }

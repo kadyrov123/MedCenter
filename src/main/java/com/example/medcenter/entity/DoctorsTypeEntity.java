@@ -64,7 +64,12 @@ public class DoctorsTypeEntity {
         return Objects.hash(id, type);
     }
 
-//    @OneToMany(mappedBy = "doctorsTypeByTypeId")
+    @Override
+    public String toString() {
+        return  type;
+    }
+
+    //    @OneToMany(mappedBy = "doctorsTypeByTypeId")
 //    public Collection<DoctorsFeaturesTypesEntity> getDoctorsFeaturesTypesById() {
 //        return doctorsFeaturesTypesById;
 //    }

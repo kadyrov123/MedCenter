@@ -1,60 +1,55 @@
-//package com.example.medcenter;
+package com.example.medcenter;
+
+import com.example.medcenter.service.StatService;
+import com.example.medcenter.service.StatServiceImpl;
+import sun.rmi.server.LoaderHandler;
+
+import java.sql.*;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.List;
+
+public class Test {
+    public static void main(String[] args) {
+
+//        LocalDate now = LocalDate.now(); // 2015-11-24
+//        LocalDate earlier = now.minusMonths(1);
+////        System.out.println(earlier.getMonth()); // java.time.Month = OCTOBER
+////        System.out.println(earlier.getMonth().getValue()); // 10
+////        System.out.println(earlier.getYear()); // 2015
 //
-//import sun.rmi.server.LoaderHandler;
+//        List months = new ArrayList();
 //
-//import java.sql.*;
-//import java.text.SimpleDateFormat;
-//import java.time.LocalDate;
-//import java.time.LocalTime;
-//import java.util.ArrayList;
-//import java.util.Calendar;
-//import java.util.List;
-//
-//public class Test {
-//    public static void main(String[] args) {
-//        LocalDate date  = LocalDate.now();
-//        java.util.Date today =  Calendar.getInstance().getTime();
-////        System.out.println(today);
-//        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("dd-MM-yyyy");
-////        Time startTime = new Time(8,0,0);
-////        System.out.println(startTime);
-////        System.out.println(date);
-//
-//        date.atStartOfDay();
-//
-//        date.atTime(8,0,0);
-//
-//        System.out.println(date);
-//
-//        Calendar calendar = Calendar.getInstance();
-////        calendar.setTime(new Date("01.01.2010"));
-//
-//        Time start = new Time(8,0,0);
-//        Time end = new Time(17,0,0);
-//        List<LocalTime> times = new ArrayList<>();
-//        LocalTime startTime = LocalTime.parse("08:00:00");
-//        LocalTime endTime  = LocalTime.parse("12:12:00");
-////        System.out.println(startTime);
-////        System.out.println(startTime.plusMinutes(10));
-//
-//
-//
-//        LocalTime localTime = startTime;
-//        while(0 < (endTime.compareTo(localTime))){
-//            times.add(localTime);
-//            localTime = localTime.plusMinutes(20);
-//
+////        LocalDate now = LocalDate.now(); // 2015-11-24
+////        LocalDate earlier = now.minusMonths(1); // 2015-10-24
+//        for(int i=0 ; i<6 ; i++){
+//            months.add(now.minusMonths(i).getMonthValue());
 //        }
-//
-//
-////        for(LocalTime l: times){
-////            System.out.println(l);
-////        }
-//        for (int i=0 ; i<times.size() ; i++){
-//            if(i!=times.size()-1){
-//                System.out.println(times.get(i)+" - "+times.get(i+1));
-//            }
+//        for(int j = 0 ; j <months.size() ; j++){
+//            System.out.println(months.get(j));
 //        }
-//
-//    }
-//}
+
+        StatService stat = new StatServiceImpl();
+
+        List<List<Object>> s = null;
+//        try {
+//            s = stat.getNumberOfVisitsByMonths();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+//        try {
+            s = stat.getNumberOfVisitsByMonths();
+//        } catch (ParseException e) {
+//            e.printStackTrace();
+//        }
+
+//        for(List t : s){
+//            System.out.println(t.get(0) +" - "+ t.get(1));
+//        }
+
+    }
+}

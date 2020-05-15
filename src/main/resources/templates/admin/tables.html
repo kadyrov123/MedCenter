@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity5">
+
+<head>
+  <th:block th:insert="admin/fragments/layout :: head"></th:block>
+  <!--===============================================================================================-->
+  <link rel="icon" type="image/png" th:href="@{/images/icons/timetable-favicon.ico}"/>
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" th:href="@{/vendor/animate/animate.css}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" th:href="@{/vendor/select2/select2.min.css}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" th:href="@{/vendor/perfect-scrollbar/perfect-scrollbar.css}">
+  <!--===============================================================================================-->
+  <link rel="stylesheet" type="text/css" th:href="@{/css/timetable-util.css}">
+  <link rel="stylesheet" type="text/css" th:href="@{/css/timetable-main.css}">
+  <!--===============================================================================================-->
+
+
+
+  <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+  <!--    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
+  <!--
+  CSS
+  ============================================= -->
+  <link rel="stylesheet" th:href="@{/css/linearicons.css}">
+  <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+  <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+  <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+  <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+  <link rel="stylesheet" th:href="@{/css/nice-select.css}">
+  <link rel="stylesheet" th:href="@{/css/animate.min.css}">
+  <link rel="stylesheet" th:href="@{/css/owl.carousel.css}">
+  <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+  <link rel="stylesheet" th:href="@{/css/main.css}">
+
+
+  <script th:inline="javascript">
+    /*<![CDATA[*/
+
+    var timetable = [[${timetable}]];
+    console.log(timetable);
+
+
+    var queue = {"doctorId":-1 , "userUsername":"" , "date":"" , "order":-1 , "time":"" };
+    var selectedTimeList = [];
+    // var timetable ;
+    function toggleTimetableModal() {
+      // alert("clicked");
+      $('#exampleModalCenter').modal('toggle');
+      return false;
+    }
+
+    $( document ).ready(function() {
+
+
+
+
+      // timetable  = [[${timetable}]];
+      // alert(username.timeList);
+      // console.log(timetable);
+      // console.log(timetable[0].timeList.length);
+      // console.log(timetable[0].dateString);
+
+      // window.onload = fillTimetable();
+      fillTimetable();
+      function fillTimetable() {
+        console.log(timetable);
+
+        $("#timetableThead .cell100Header").remove();
+        $("#timetableTbody .row100").remove();
+
+        console.log("fiiling timtable");
+        // var table = document.getElementById("timetable");
+        var theadTR = document.createElement("tr");
+        theadTR.setAttribute("class","row100 head");
+        document.getElementById("timetableThead").appendChild(theadTR);
+        for(var i=0 ; i<7 ; i++){
+          if(i==0){
+            var th = document.createElement("th");
+            th.setAttribute("class", "cell100 cell100Header indexColumn");
+            th.appendChild(document.createTextNode("#"));
+          }
+          else {
+            var th = document.createElement("th");
+            th.setAttribute("class", "cell100 cell100Header dateCell");
+            th.appendChild(document.createTextNode(timetable[i-1].dateString));
+          }
+          theadTR.appendChild(th);
+        }
+        // var tableHeader = document.getElementById("timetableThead");
+        // tableHeader.appendChild(theadTR);
+
+        var index=1;
+        var tbody = document.getElementById("timetableTbody");
+        for(var j=0 ; j<timetable[0].timeList.length ; j++){
+          var tr = document.createElement("tr");
+          tr.setAttribute("class","row100 body");
+          for(var i=0 ; i<7 ; i++) {
+            if(i==0){
+              var td = document.createElement("td");
+              td.setAttribute("class" , "cell100 indexColumn");
+              td.appendChild(document.createTextNode(j+1));
+            }
+            else{
+              var td = document.createElement("td");
+              var label = document.createElement("label");
+              if(timetable[i-1].timeList[j].status == 0) {
+                label.setAttribute("class" , "timeLabel");
+                label.setAttribute("data-date" , timetable[i-1].dateString);
+                label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
+                label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
+                label.setAttribute("onclick" , "timeLabelClick(this)");
+              }
+              if(timetable[i-1].timeList[j].status == 1 || timetable[i-1].timeList[j].status == 3) {
+                label.setAttribute("class", "timeLabelOrderedBwyUser timeLabel");
+                label.setAttribute("style", "background-color: #f15151; color:white;");
+              }
+              if(timetable[i-1].timeList[j].status == 2) {
+                label.setAttribute("class", "timeLabelOrderedByDoctor timeLabel");
+                label.setAttribute("data-date" , timetable[i-1].dateString);
+                label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
+                label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
+                label.setAttribute("onclick" , "timeLabelClick(this)");
+                // label.setAttribute("style", "background-color: #479ea3; color:white;");
+              }
+              if(timetable[i-1].timeList[j].status == 4) {
+                label.setAttribute("class", "timeLabelLunchTime timeLabel");
+                label.setAttribute("style", "background-color: #a0a204; color:white;");
+              }
+
+
+              // label.setAttribute("data-date" , timetable[i-1].dateString);
+              // label.setAttribute("data-order" , timetable[i-1].timeList[j].order);
+              // label.setAttribute("data-doctorid" , timetable[i-1].doctorId);
+              // label.setAttribute("class" , "timeLabel");
+
+              td.setAttribute("class" , "cell100 timeCell");
+              label.appendChild(document.createTextNode(timetable[i-1].timeList[j].time));
+              td.appendChild(label);
+            }
+            tr.appendChild(td);
+          }
+          tbody.appendChild(tr);
+        }
+      }
+
+      // $("#selectDoctor").on("change" , function (){
+      //     sendDoctorId();
+      // });
+      // sendDoctorId();
+      //
+      // function sendDoctorId() {
+      //     var e = document.getElementById("selectDoctor");
+      //     var doctorId = e.options[e.selectedIndex].value;
+      //     var doctorFullname = e.options[e.selectedIndex].text;
+      //
+      //     $.ajax({
+      //         url : 'getTimetableByDoctorId',
+      //         type: 'GET',
+      //         dataType: 'json',
+      //         contentType: 'application/json',
+      //         mimeType: 'application/json',
+      //         data : ({
+      //             doctorId: doctorId
+      //         }),
+      //         success: function (data) {
+      //             // alert("success");
+      //
+      //             timetable = data;
+      //
+      //             console.log(timetable);
+      //
+      //             fillTimetable();
+      //
+      //         }
+      //     });
+      // }
+
+
+      $("#saveToQueue").on("click" , function () {
+        saveToQueue();
+        // createConsumer();
+      });
+
+      // function createConsumer(){
+      //     var arr = [{dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"},{dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"}];
+      //     $.ajax({
+      //         contentType : 'application/json; charset=utf-8',
+      //         type: "POST",
+      //         url: "/doctor/save/queue",
+      //         dataType : "json",
+      //         data: JSON.stringify( arr)
+      //     });
+      // }
+
+
+      function saveToQueue() {
+        var arr = [{dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"},{dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"}];
+        console.log(selectedTimeList);
+        if(selectedTimeList.length > 0){
+          arr = [{dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"},{dateStr: "2020-02-17", order: 10, time: "16:00 - 16:50"}];
+          $.ajax({
+            contentType : 'application/json; charset=utf-8',
+            type: "POST",
+            url: "/doctor/save/queue",
+            dataType : "json",
+            data: JSON.stringify(selectedTimeList),
+            success:function (data) {
+              alert("success");
+            },
+            error:function (response) {
+              if(response.status == 200){
+                console.log(response.status);
+                // timetable = [[${timetable}]];
+                // if(timetable != null){
+                //     fillTimetable();
+                // }
+                document.location.reload();
+              }else{
+                console.log("Error in timeList sending form");
+              }
+            }
+          });
+        }
+        else{
+          alert("Выберите время");
+        }
+      }
+
+
+
+      // alert(timetable);
+      // if(timetable == null){
+      //     fillTimetable();
+      // }
+
+      // function timeLabelClick(){
+      // 	alert("sdfsdfs");
+      //   $(".timeLabel").removeClass("selectedTimeLabel");
+      //   $(this).addClass("selectedTimeLabel");
+      // }
+
+      $("#timetableModalSaveButton").click( function(){
+        // alert(queue["order"]);
+        if(queue["order"] != undefined){
+          $("#isTimeSelectedIcon").css("display", "inline-block");
+        }
+      });
+      $("#timetableModalCloseButton").click( function(){
+        $("#isTimeSelectedIcon").css("display", "none");
+        queue = {"doctorId":-1 , "userUsername":"" , "date":"" , "order":-1 , "time":"" };
+      });
+
+
+      // $(".timeLabel").click( function(){
+      //     // $(".timeLabel").removeClass("selectedTimeLabel");
+      //     $(this).addClass("selectedTimeLabel");
+      // });
+
+      $(".unableTimeLabel").click( function(){
+// $(".timeLabel").removeClass("selectedTimeLabel");
+// $(this).addClass("selectedTimeLabel");
+        alert("Obed");
+      });
+
+
+    });
+
+
+
+
+    function timeLabelClick(label){
+      var queue = {"dateStr":"" , "order":-1 , "time":"" };
+
+      if($(label).hasClass("selectedTimeLabel")){
+        var unselectedTimeOrder = $(label).data("order");
+        var unselectedTimeDate = $(label).data("date");
+        for (var i = 0; i < selectedTimeList.length; i++) {
+          if (selectedTimeList[i]["dateStr"] == unselectedTimeDate && selectedTimeList[i]["order"] == unselectedTimeOrder) {
+            selectedTimeList.splice(i, 1);
+          }
+        }
+        $(label).removeClass("selectedTimeLabel");
+
+      }else{
+        $(label).addClass("selectedTimeLabel");
+        queue["time"] = $(label).text();
+        queue["order"] = $(label).data("order");
+        queue["dateStr"] = $(label).data("date");
+        selectedTimeList.push(queue);
+      }
+      // $(label).addClass("selectedTimeLabel");
+      console.log(selectedTimeList);
+    }
+
+    /*]]>*/
+  </script>
+
+
+  <style>
+    #user-profile-info{
+      width: 80%;
+      margin-left: 10%;
+      padding: 20px;
+    }
+    #user-profile-info > .card{
+      padding: 10px;
+    }
+    #secondInfoCard .card-body{
+      padding: 0.25rem !important;
+    }
+
+    .header-top .align-items-center{
+      color: grey;
+    }
+
+    table th{
+      /*padding: 10px;*/
+      text-align: center;
+
+    }
+    .table100-body{
+      max-height: 300px;
+    }
+
+
+
+    .cell100{
+      width: 10% !important;
+      padding: 0px 0px !important;
+      text-align: center;
+    }
+
+    .indexColumn{
+      width: 3% !important;
+    }
+
+    .timeLabel:hover{
+      background-color: #00ad5f;
+      color: white;
+      padding :10px;
+      border-radius: 20px;
+
+    }
+    .timeLabel{
+      padding :10px;
+      border-radius: 20px;
+      display: inline-block;
+      text-align: center;
+      /*margin-left: 10%;*/
+    }
+
+    @media (max-width: 900px) {
+      .timeLabel{
+        margin-left: 10%;
+      }
+    }
+
+    .cell100Header{
+      padding: 10px !important;
+      text-align: center;
+    }
+    .table100-body td{
+      padding-top: 0px;
+      padding-bottom: 0px;
+    }
+
+    .table100 {
+      padding-top:10px !important;
+    }
+
+    .cell100ID{
+      text-align: center;
+    }
+    #submitTime{
+      float: right;
+      padding: 10px 50px;
+      background-color: #00ad5f;
+      color: white;
+      margin-right: 10px;
+      border-radius: 10px;
+    }
+    .m-b-110{
+      margin-bottom: 10px;
+    }
+    .wrap-table100{
+      width: 90%;
+    }
+    .unableTimeLabel{
+      background-color: orange;
+      color: white;
+    }
+    .unableTimeLabel:hover{
+      background-color: orange;
+      color: white;
+    }
+
+    .timeCell{
+      margin-left: -20px !important;
+    }
+
+    .timeLabelOrderedByDoctor{
+      background-color: #479ea3;
+      color: white;
+    }
+    .selectedTimeLabel{
+      background-color: #00ad5f !important;
+      color: white;
+      padding :10px;
+      border-radius: 20px;
+    }
+
+  /*  ================   Timetable responsiveness and scrolling */
+    .table-master {
+      overflow-x: auto;
+    }
+
+    table.scroll {
+      /* width: 100%; */
+      /* Optional */
+      /* border-collapse: collapse; */
+      border-spacing: 0;
+    }
+
+    table.scroll tbody,
+    table.scroll thead {
+      display: block;
+    }
+
+    thead tr th {
+      height: 30px;
+      line-height: 30px;
+      /* text-align: left; */
+    }
+
+    table.scroll tbody {
+      height: 300px;
+      overflow-y: auto;
+      overflow-x: hidden;
+    }
+
+    tbody td:last-child,
+    thead th:last-child {
+      border-right: none;
+    }
+
+    ::-webkit-scrollbar {
+      width: 8px;
+      height: 8px;
+    }
+
+    /* Track */
+    ::-webkit-scrollbar-track {
+      box-shadow: inset 0 0 5px grey;
+      border-radius: 10px;
+    }
+
+    /* Handle */
+    ::-webkit-scrollbar-thumb {
+      background: #00ad5f;
+      border-radius: 10px;
+    }
+
+    /* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+      background: #00ad5f;
+    }
+  /*  ============================*/
+
+  </style>
+
+</head>
+
+<body>
+  <!-- Sidenav -->
+  <th:block th:insert="admin/fragments/layout :: sidebar_fragment"></th:block>
+
+  <!-- Main content -->
+  <div class="main-content" id="panel">
+    <!-- Topnav -->
+    <th:block th:insert="admin/fragments/layout :: header_fragment"></th:block>
+    <!-- Header -->
+
+
+    <!-- Page content -->
+    <div class="container-fluid mt--6" style="margin-top: 1.5rem !important;">
+      <div class="row">
+        <div class="col">
+          <div id="secondInfoCardBody1" class="card table-responsive" style="border-radius: 2%;max-width: 1000px;">
+            <div class="table100 ver3 m-b-110 table-responsive">
+
+              <div class=" table-master" style="display: block;overflow-x: auto;white-space: nowrap;padding-top: 10px;">
+              <table class="scroll">
+                <thead id="timetableThead">
+
+                </thead>
+                <tbody id="timetableTbody" >
+
+                </tbody>
+              </table>
+            </div>
+              <!--                 <button id="submitTime">Submit</button>-->
+            </div>
+            <div class="card-footer" style="height: 70px;">
+              <button id="saveToQueue"  style="float: right;" type="submit" class="btn-success btn">Сохранить</button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+
+
+
+  <script>
+
+
+    $(document).ready(function(){
+
+      $("#userInfoFormSaveButton").on("click" , function(){
+        $("#firstInfoCard2").css("display","none");
+        $("#firstInfoCard").css("display","block");
+      });
+      $("#userInfoFormCancelButton").on("click" , function(){
+        $("#firstInfoCard2").css("display","none");
+        $("#firstInfoCard").css("display","block");
+      });
+      $("#userInfoChangeButton").on("click" , function(){
+        $("#firstInfoCard").css("display","none");
+        $("#firstInfoCard2").css("display","block");
+      });
+
+      // infoCardNavBarHeader1
+
+      $("#infoCardNavBarHeader1").on("click" , function(){
+        $("#infoCardNavBarHeader2").removeClass("active");
+        $("#infoCardNavBarHeader1").addClass("active");
+        $("#secondInfoCardBody2").css("display","none");
+        $("#secondInfoCardBody1").css("display","block");
+      });
+      $("#infoCardNavBarHeader2").on("click" , function(){
+        $("#infoCardNavBarHeader1").removeClass("active");
+        $("#infoCardNavBarHeader2").addClass("active");
+        $("#secondInfoCardBody1").css("display","none");
+        $("#secondInfoCardBody2").css("display","block");
+      });
+
+      // $(".diseaseHistoryCardBody2SaveButton").on("click" , function(){
+      //     $(".diseaseHistoryCardBody2").css("display","none");
+      //     $(".diseaseHistoryCardBody1").css("display","block");
+      // });
+      //
+      // $(".diseaseHistoryChangeButton").on("click" , function(){
+      //     $(".diseaseHistoryCardBody1").css("display","none");
+      //     $(".diseaseHistoryCardBody2").css("display","block");
+      // });
+
+
+
+    });
+
+  </script>
+
+  <script>
+    var $table = $('table.scroll'),
+            $bodyCells = $table.find('tbody tr:first').children(),
+            colWidth;
+
+    // Adjust the width of thead cells when window resizes
+    $(window).resize(function() {
+      // Get the tbody columns width array
+      colWidth = $bodyCells.map(function() {
+        return $(this).width();
+      }).get();
+
+      // Set the width of thead columns
+      $table.find('thead tr').children().each(function(i, v) {
+        $(v).width(colWidth[i]);
+      });
+    }).resize(); // Trigger resize handler
+  </script>
+
+  <!--===============================================================================================-->
+  <script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+  <!--===============================================================================================-->
+  <script th:src="@{/vendor/bootstrap/js/popper.js}"></script>
+  <script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+  <!--===============================================================================================-->
+  <script th:src="@{/vendor/select2/select2.min.js}"></script>
+  <!--===============================================================================================-->
+  <script th:src="@{/vendor/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+  <script>
+    $('.js-pscroll').each(function(){
+      var ps = new PerfectScrollbar(this);
+
+      $(window).on('resize', function(){
+        ps.update();
+      })
+    });
+
+
+  </script>
+  <!--===============================================================================================-->
+  <script th:src="@{/js/timetable-main.js}"></script>
+  <!--===============================================================================================-->
+
+  <!-- Argon Scripts -->
+  <th:block th:insert="admin/fragments/layout :: footer_scripts"></th:block>
+</body>
+
+</html>

@@ -189,4 +189,19 @@ public class UsersEntity {
 //    public void setRoleById(RoleEntity roleById) {
 //        this.roleById = roleById;
 //    }
+
+
+    @Override
+    public String toString() {
+        return "UsersEntity{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", username='" + username + '\'' +
+                ", password='" + password + '\'' +
+                ", email='" + email + '\'' +
+                ", pin=" + pin +
+
+                '}';
+    }
 }

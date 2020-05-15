@@ -29,9 +29,14 @@ public class DiseaseEntity {
     @Column(name = "recipe")
     private String recipe;
 
+
     @Basic
     @Column(name = "doctor_id")
     private int doctorId;
+
+    @Basic
+    @Column(name = "file")
+    private String file;
 
     @ManyToOne
     @JoinColumn(name = "patient_id", referencedColumnName = "id")
@@ -116,5 +121,27 @@ public class DiseaseEntity {
 
     public void setUsersByPatientId(UsersEntity usersByPatientId) {
         this.usersByPatientId = usersByPatientId;
+    }
+
+    public String getFile() {
+        return file;
+    }
+
+    public void setFile(String file) {
+        this.file = file;
+    }
+
+    @Override
+    public String toString() {
+        return "DiseaseEntity{" +
+                "id=" + id +
+                ", patientId=" + patientId +
+                ", date=" + date +
+                ", diagnosis='" + diagnosis + '\'' +
+                ", recipe='" + recipe + '\'' +
+                ", doctorId=" + doctorId +
+                ", file='" + file + '\'' +
+                ", usersByPatientId=" + usersByPatientId +
+                '}';
     }
 }

@@ -9,12 +9,17 @@ import com.example.medcenter.repoitory.DoctorsFeaturesRepository;
 import com.example.medcenter.repoitory.QueueRepository;
 import com.example.medcenter.repoitory.UsersRepository;
 import com.example.medcenter.service.DoctorsService;
+import com.example.medcenter.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
 
 import java.sql.Date;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Queue;
 
@@ -30,6 +35,8 @@ public class QueueController {
     QueueRepository queueRepository;
     @Autowired
     UsersRepository usersRepository;
+    @Autowired
+    UserService userService;
 
 
 //    @RequestMapping("/queue")
@@ -40,36 +47,48 @@ public class QueueController {
 //        return "timetable";
 //    }
 
+    @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/queue/save", method = RequestMethod.GET , consumes = "application/json")
-    public String saveQueue(@RequestParam int doctorId, @RequestParam String userUsername ,@RequestParam String date ,@RequestParam String time , @RequestParam int order ){
-
-        UsersEntity usersEntity = usersRepository.findUsersEntityByUsername(userUsername);
+    public String saveQueue(@RequestParam int doctorId ,@RequestParam String date ,@RequestParam String time , @RequestParam int order ){
+        UsersEntity usersEntity = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         DoctorsFeaturesEntity doctorsFeaturesEntity = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctorId);
+        if(!userService.haveQueueOrder(Date.valueOf(date),usersEntity.getId(), doctorId)) {
+            System.out.println(true);
+            QueueEntity queue = new QueueEntity();
+            queue.setDate(Date.valueOf(date));
+            queue.setDoctorFeaturesByDoctorId(doctorsFeaturesEntity);
+            queue.setUserId(usersEntity.getId());
+            queue.setTime(time);
+            queue.setOrder(order);
+            queue.setIntervalId(doctorsFeaturesEntity.getIntervalId());
+            queue.setIntervalByIntervalId(doctorsFeaturesEntity.getIntervalByIntervalId());
+            queue.setStatus(1);
 
-        QueueEntity queue = new QueueEntity();
-        queue.setDate(Date.valueOf(date));
-        queue.setDoctorId(doctorsFeaturesEntity.getId());
-        queue.setDoctorFeaturesByDoctorId(doctorsFeaturesEntity);
-        queue.setUserId((long)usersEntity.getId());
-        queue.setTime(time);
-        queue.setOrder(order);
-        queue.setIntervalId(doctorsFeaturesEntity.getIntervalId());
-        queue.setIntervalByIntervalId(doctorsFeaturesEntity.getIntervalByIntervalId());
-        queue.setStatus(1);
+            queueRepository.save(queue);
+        }
 
-        queueRepository.save(queue);
+        return "redirect:/";
+    }
 
-        return "index";
+    @GetMapping("/user/queue/{id}/cancel")
+    public String cancelQueueOrder(@PathVariable(value="id") Long queueId) {
+        UsersEntity authorisedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
+        QueueEntity queue = queueRepository.getOne(queueId);
+        if(queue.getUserId() == authorisedUser.getId()){
+            queueRepository.delete(queue);
+        }
+        return "redirect:/user/profile";
     }
 
     @RequestMapping(value = "/getTimetableByDoctorId", method = RequestMethod.GET)
     public @ResponseBody List<TimetableDTO> getTimetableByDoctorId(@RequestParam int  doctorId){
-
-//        System.out.println("========================================== doctorId ="+doctorId);
         List<TimetableDTO> timetables = doctorsService.getTimetableByDoctorFeaturesId(doctorId);
-
         return timetables;
     }
+
+
+
+
 
 
 

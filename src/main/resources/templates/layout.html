@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en" class="fixed" xmlns="http://www.w3.org/1999/xhtml" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security4">
+<head>
+    <th:block th:fragment="head">
+        <!-- Mobile Specific Meta -->
+        <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+        <!-- Favicon-->
+        <link rel="shortcut icon" th:href="@{img/fav.png}">
+        <!-- Author Meta -->
+        <meta name="author" content="colorlib">
+        <!-- Meta Description -->
+        <meta name="description" content="">
+        <!-- Meta Keyword -->
+        <meta name="keywords" content="">
+        <!-- meta character set -->
+        <meta charset="UTF-8">
+
+
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <!-- Site Title -->
+        <title>Medical</title>
+
+        <th:block th:insert="admin/fragments/layout :: head"></th:block>
+
+        <link href="https://fonts.googleapis.com/css?family=Poppins:100,200,400,300,500,600,700" rel="stylesheet">
+        <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+        <!--
+        CSS
+        ============================================= -->
+        <link rel="stylesheet" th:href="@{/css/linearicons.css}">
+        <link rel="stylesheet" th:href="@{/css/font-awesome.min.css}">
+        <link rel="stylesheet" th:href="@{/css/bootstrap.css}">
+        <link rel="stylesheet" th:href="@{/css/magnific-popup.css}">
+        <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+        <link rel="stylesheet" th:href="@{/css/nice-select.css}">
+        <link rel="stylesheet" th:href="@{/css/animate.min.css}">
+        <link rel="stylesheet" th:href="@{/css/owl.carousel.css}">
+        <link rel="stylesheet" th:href="@{/css/jquery-ui.css}">
+        <link rel="stylesheet" th:href="@{/css/main.css}">
+
+        <script th:src="@{https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js}"></script>
+        <!--    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
+
+        <!--===============================================================================================-->
+        <link rel="icon" type="image/png" th:href="@{/images/icons/timetable-favicon.ico}"/>
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" th:href="@{/fonts/font-awesome-4.7.0/css/font-awesome.min.css}">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" th:href="@{/vendor/animate/animate.css}">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" th:href="@{/vendor/select2/select2.min.css}">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" th:href="@{/vendor/perfect-scrollbar/perfect-scrollbar.css}">
+        <!--===============================================================================================-->
+        <link rel="stylesheet" type="text/css" th:href="@{/css/timetable-util.css}">
+        <link rel="stylesheet" type="text/css" th:href="@{/css/timetable-main.css}">
+        <!--===============================================================================================-->
+
+        <style>
+            #profileDropdown a{
+                color:black !important;
+            }
+            #profileDropdown a:hover{
+                color: #85cf00 !important;
+            }
+            #mobile-nav-toggle{
+                margin-top: -25px !important;
+            }
+            footer > h1, footer>h2, footer>h3, footer>h4, footer>h5, footer>h6  {
+               color : white !important;
+            }
+        </style>
+    </th:block>
+
+
+</head>
+<body>
+
+
+<header th:fragment="header_fragment" id="header">
+    <div class="header-top">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-sm-6 col-4 header-top-left">
+<!--                    <a ><span class="lnr lnr-phone-handset"></span> <span class="text"><span class="text">+953 012 3654 896</span></span></a>-->
+<!--                    <a ><span class="lnr lnr-envelope"></span> <span class="text"><span class="text">support@colorlib.com</span></span></a>-->
+                </div>
+                <div sec:authorize="isAnonymous()" class="col-lg-6 col-sm-6 col-8 header-top-right">
+                    <a th:href="@{/login}" class="primary-btn text-uppercase">Войти</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="container main-menu">
+        <div class="row align-items-center justify-content-between d-flex">
+            <div id="logo">
+                <a id="logoLink" th:href="@{/}"><img th:src="@{/img/logo.png}" alt="" title="" /></a>
+            </div>
+            <nav id="nav-menu-container" style="padding-top: 10px;">
+                <ul class="nav-menu">
+                    <li><a th:href="@{/}">Главная</a></li>
+<!--                    <li><a th:href="@{/about}">About</a></li>-->
+                    <li><a th:href="@{/services}">Услуги</a></li>
+                    <li><a th:href="@{/about}">О Нас</a></li>
+<!--                    <li><a th:href="@{/features}">Features</a></li>-->
+                    <li><a th:href="@{/doctors}">Специалисты</a></li>
+<!--                    <li><a th:href="@{/departments}">Departments</a></li>-->
+<!--                    <li class="menu-has-children"><a href="">Blog</a>-->
+<!--                        <ul>-->
+<!--                            <li><a th:href="@{/blog}">Blog Home</a></li>-->
+<!--                            <li><a th:href="@{/blog-single}">Blog Single</a></li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+<!--                    <li class="menu-has-children"><a href="">Pages</a>-->
+<!--                        <ul>-->
+<!--                            <li><a th:href="@{/elements}">Elements</a></li>-->
+<!--                            <li><a href="#">Item One</a></li>-->
+<!--                            <li><a href="#">Item Two</a></li>-->
+<!--                            <li class="menu-has-children"><a href="">Level 2 </a>-->
+<!--                                <ul>-->
+<!--                                    <li><a href="#">Item One</a></li>-->
+<!--                                    <li><a href="#">Item Two</a></li>-->
+<!--                                </ul>-->
+<!--                            </li>-->
+<!--                        </ul>-->
+<!--                    </li>-->
+                    <li><a th:href="@{/contact}">Контакты</a></li>
+                    <li sec:authorize="isAuthenticated()" class="nav-item dropdown" style="margin-top: -8px;">
+                        <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            <div class="media align-items-center">
+                                  <span class="avatar avatar-sm rounded-circle">
+                                    <img alt="Image placeholder" th:src="@{/assets/img/theme/team-4.jpg}">
+                                  </span>
+                                <div class="media-body  ml-2  d-none d-lg-block">
+                                    <span class="mb-0 text-sm  font-weight-bold" th:text="${#authentication.getPrincipal().getUsername()}">John Snow</span>
+                                </div>
+                            </div>
+                        </a>
+                        <div class="dropdown-menu  dropdown-menu-right " id="profileDropdown">
+                            <div class="dropdown-header noti-title">
+                                <h6 class="text-overflow m-0"></h6>
+                            </div>
+                            <a sec:authorize="hasRole('ROLE_ADMIN')" th:href="@{/admin/profile}" class="dropdown-item">
+                                <i class="ni ni-single-02"></i>
+                                <span>Мой профиль</span>
+                            </a>
+                            <a sec:authorize="hasRole('ROLE_DOCTOR')" th:href="@{/doctor/profile}" class="dropdown-item">
+                                <i class="ni ni-single-02"></i>
+                                <span>Мой профиль</span>
+                            </a>
+                            <a sec:authorize="hasRole('ROLE_REGISTRATOR')" th:href="@{/registrator/profile}" class="dropdown-item">
+                                <i class="ni ni-single-02"></i>
+                                <span>Мой профиль</span>
+                            </a>
+                            <a sec:authorize="hasRole('ROLE_USER')" th:href="@{/user/profile}" class="dropdown-item">
+                                <i class="ni ni-single-02"></i>
+                                <span>Мой профиль</span>
+                            </a>
+
+                            <div class="dropdown-divider"></div>
+                            <a th:href="@{/logout}" class="dropdown-item">
+                                <i class="ni ni-user-run"></i>
+                                <span>Выйти</span>
+                            </a>
+                        </div>
+                    </li>
+
+                </ul>
+            </nav><!-- #nav-menu-container -->
+        </div>
+    </div>
+</header><!-- #header -->
+
+
+
+<!-- start banner Area -->
+<section th:fragment="main_banner_fragment" class="banner-area relative" id="home">
+    <div class="overlay overlay-bg"></div>
+    <div class="container">
+        <div class="row fullscreen d-flex align-items-center justify-content-center">
+            <div class="banner-content col-lg-8 col-md-12">
+                <h1 style="font-size: 40px;">Медицинская клиника "Ай-Нуру"</h1>
+                <p class="pt-10 pb-10 text-white" style="font-size: 25px;">
+                    Ваш надёжный партнёр в сфере здравоохранения
+                </p>
+                <a sec:authorize="isAnonymous()" th:href="@{/login}" class="primary-btn text-uppercase" style="margin-top: 50px;">Записаться на прием</a>
+                <a sec:authorize="hasRole('ROLE_USER')"  href="#queueSaveFormDiv" class="primary-btn text-uppercase" style="margin-top: 50px;">Записаться на прием</a>
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End banner Area -->
+
+<!-- start banner Area -->
+<section th:fragment="banner_fragment" class="banner-area relative" id="defaultBanner" style="height: 250px;">
+    <div class="overlay overlay-bg"></div>
+    <div class="container">
+        <div class="row fullscreen d-flex align-items-center justify-content-center">
+            <div class="banner-content col-lg-8 col-md-12">
+<!--                <h1 style="font-size: 40px;">Медицинская клиника "Ай-Нуру"</h1>-->
+<!--                <p class="pt-10 pb-10 text-white" style="font-size: 25px;">-->
+<!--                    Ваш надёжный партнёр в сфере здравоохранения-->
+<!--                </p>-->
+<!--                <a sec:authorize="isAnonymous()" th:href="@{/login}" class="primary-btn text-uppercase" style="margin-top: 50px;">Записаться на прием</a>-->
+<!--                <a sec:authorize="hasRole('ROLE_USER')"  href="#queueSaveFormDiv" class="primary-btn text-uppercase" style="margin-top: 50px;">Записаться на прием</a>-->
+            </div>
+        </div>
+    </div>
+</section>
+<!-- End banner Area -->
+
+
+<!-- start footer Area -->
+<footer th:fragment="footer_fragment" class="footer-area section-gap" style="color: white;height: 250px;padding: 50px;">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-4  col-md-6 appointment-left" style="margin: auto;">
+                <ul class="time-list">
+                    <li class="d-flex justify-content-between">
+                        <span>Понедельник – Пятница </span>
+                        <span>09.00 - 17.00</span>
+                    </li>
+                    <br/>
+                    <li class="d-flex justify-content-between">
+                        <span>Суббота</span>
+                        <span>09.00 - 15.00</span>
+                    </li>
+                    <br/>
+                    <li class="d-flex justify-content-between">
+                        <span>Обед</span>
+                        <span>12.00 - 13.00</span>
+                    </li>
+                </ul>
+            </div>
+            <div  class="col-lg-4 col-md-6 d-flex flex-column address-wrap" style="margin: auto;" >
+                <div class="single-contact-address d-flex flex-row">
+                    <div class="icon">
+                        <span class="lnr lnr-home"></span>
+                    </div>
+                    <div class="contact-details">
+                        <h5>Ош обл. Араван рн. </h5>
+                        <p>
+                            ул Ленина 54
+                        </p>
+                    </div>
+                </div>
+                <div class="single-contact-address d-flex flex-row">
+                    <div class="icon">
+                        <span class="lnr lnr-phone-handset"></span>
+                    </div>
+                    <div class="contact-details">
+                        <h5>+ 996 556 55 66 55</h5>
+                        <!--									<p>Mon to Fri 9am to 6 pm</p>-->
+                    </div>
+                </div>
+                <div class="single-contact-address d-flex flex-row">
+                    <div class="icon">
+                        <span class="lnr lnr-envelope"></span>
+                    </div>
+                    <div class="contact-details">
+                        <h5>ainuru@gmail.com</h5>
+                        <!--									<p>Send us your query anytime!</p>-->
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+<!-- End footer Area -->
+
+
+<th:block th:fragment="footer_scripts">
+    <!--===============================================================================================-->
+    <script th:src="@{/vendor/jquery/jquery-3.2.1.min.js}"></script>
+    <!--===============================================================================================-->
+    <script th:src="@{/vendor/bootstrap/js/popper.js}"></script>
+    <script th:src="@{/vendor/bootstrap/js/bootstrap.min.js}"></script>
+    <!--===============================================================================================-->
+    <script th:src="@{/vendor/select2/select2.min.js}"></script>
+    <!--===============================================================================================-->
+    <script th:src="@{/vendor/perfect-scrollbar/perfect-scrollbar.min.js}"></script>
+    <script>
+        $('.js-pscroll').each(function(){
+            var ps = new PerfectScrollbar(this);
+
+            $(window).on('resize', function(){
+                ps.update();
+            })
+        });
+
+
+    </script>
+    <!--===============================================================================================-->
+    <script th:src="@{/js/timetable-main.js}"></script>
+    <!--===============================================================================================-->
+
+    <th:block th:insert="admin/fragments/layout :: footer_scripts"></th:block>
+
+    <script th:src="@{/js/vendor/jquery-2.2.4.min.js}"></script>
+    <script th:src="@{/js/popper.min.js}"></script>
+    <script th:src="@{/js/vendor/bootstrap.min.js}"></script>
+    <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBhOdIF3Y9382fqJYt5I_sswSrEw5eihAA"></script>
+    <script th:src="@{/js/jquery-ui.js}"></script>
+    <script th:src="@{/js/easing.min.js}"></script>
+    <script th:src="@{/js/hoverIntent.js}"></script>
+    <script th:src="@{/js/superfish.min.js}"></script>
+    <script th:src="@{/js/jquery.ajaxchimp.min.js}"></script>
+    <script th:src="@{/js/jquery.magnific-popup.min.js}"></script>
+    <script th:src="@{/js/jquery.tabs.min.js}"></script>
+    <script th:src="@{/js/jquery.nice-select.min.js}"></script>
+    <script th:src="@{/js/owl.carousel.min.js}"></script>
+    <script th:src="@{/js/mail-script.js}"></script>
+    <script th:src="@{/js/main.js}"></script>
+</th:block>
+
+
+</body>
+</html>

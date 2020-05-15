@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -43,8 +44,20 @@ public class MainController {
     }
 
     @RequestMapping("/doctors")
-    public String  doctorsPage(){
+    public String  doctorsPage(ModelMap model){
+        model.addAttribute("doctors",doctorsFeaturesRepository.findAll());
         return "doctors";
+    }
+
+    @RequestMapping("/guest/doctor/{id}/profile")
+    public String  doctorProfile(@PathVariable int id, ModelMap model){
+        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getOne(id);
+        UsersEntity user = doctor.getUsersByDoctorId();
+        model.addAttribute("doctor",doctor);
+        model.addAttribute("user",user);
+        model.addAttribute("timetable",doctorsService.getTimetableByDoctorFeaturesId(doctor.getId()));
+        model.addAttribute("canBeEdited",false);
+        return "user/profile";
     }
 
 
@@ -53,9 +66,19 @@ public class MainController {
         return "about";
     }
 
+    @RequestMapping("/layout")
+    public String  aboutPage2(){
+        return "layout";
+    }
+
     @RequestMapping("/departments")
     public String  departmentPage(){
         return "departments";
+    }
+
+    @RequestMapping("/services")
+    public String  servicePage(){
+        return "services";
     }
 
 
@@ -100,6 +123,11 @@ public class MainController {
     public String login(Model model) {
         return "login";
     }
+
+
+
+
+
 
 
 }
