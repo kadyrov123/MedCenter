@@ -36,7 +36,7 @@
 		            <div class="row justify-content-center d-flex align-items-center">
 		                <div class="col-lg-3 col-md-6 single-team my-clickable-row" th:each="doctor : ${doctors}" th:data-doctorid="${doctor.id}" style="width: 285px;height: 302px;">
 		                    <div class="thumb">
-		                        <img th:if="${doctor.photo} == null" class="img-fluid doctorsPhoto" src="img/t1.jpg" alt="" >
+		                        <img th:if="${doctor.photo} == null" class="img-fluid doctorsPhoto" th:src="@{/images/default-doctor.jpg}"  alt="" >
 		                        <img th:if="${doctor.photo} != null" class="img-fluid doctorsPhoto" th:src="@{/uploads/photos/__${doctor.photo}__}" alt="">
 		                        <div class="align-items-end justify-content-center d-flex">
 		                            <p th:text="${doctor.getDoctorTypeString()}"></p>

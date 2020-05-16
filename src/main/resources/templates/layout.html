@@ -6,7 +6,7 @@
         <!-- Mobile Specific Meta -->
         <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
         <!-- Favicon-->
-        <link rel="shortcut icon" th:href="@{img/fav.png}">
+        <link rel="shortcut icon" th:href="@{images/logo/favicon.png}">
         <!-- Author Meta -->
         <meta name="author" content="colorlib">
         <!-- Meta Description -->
@@ -20,7 +20,7 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <!-- Site Title -->
-        <title>Medical</title>
+        <title>Ai-Nuru</title>
 
         <th:block th:insert="admin/fragments/layout :: head"></th:block>
 
@@ -44,7 +44,7 @@
         <!--    <script type="text/javascript" src="http://code.jquery.com/jquery-1.10.1.min.js"></script>-->
 
         <!--===============================================================================================-->
-        <link rel="icon" type="image/png" th:href="@{/images/icons/timetable-favicon.ico}"/>
+        <link rel="icon" type="image/png" th:href="@{/images/logo/favicon.png}"/>
         <!--===============================================================================================-->
         <link rel="stylesheet" type="text/css" th:href="@{/vendor/bootstrap/css/bootstrap.min.css}">
         <!--===============================================================================================-->
@@ -70,7 +70,7 @@
             #mobile-nav-toggle{
                 margin-top: -25px !important;
             }
-            footer > h1, footer>h2, footer>h3, footer>h4, footer>h5, footer>h6  {
+            footer > h1, footer>h2, footer>h3, footer>h4, footer>h5, footer>h6 , footer>a ,footer>p {
                color : white !important;
             }
         </style>
@@ -98,7 +98,7 @@
     <div class="container main-menu">
         <div class="row align-items-center justify-content-between d-flex">
             <div id="logo">
-                <a id="logoLink" th:href="@{/}"><img th:src="@{/img/logo.png}" alt="" title="" /></a>
+                <a id="logoLink" th:href="@{/}"><img th:src="@{/images/logo/logo4.png}" style="width: 150px;" /></a>
             </div>
             <nav id="nav-menu-container" style="padding-top: 10px;">
                 <ul class="nav-menu">
@@ -133,7 +133,7 @@
                         <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                             <div class="media align-items-center">
                                   <span class="avatar avatar-sm rounded-circle">
-                                    <img alt="Image placeholder" th:src="@{/assets/img/theme/team-4.jpg}">
+                                    <img alt="Image placeholder" th:src="@{/images/default-profile.png}">
                                   </span>
                                 <div class="media-body  ml-2  d-none d-lg-block">
                                     <span class="mb-0 text-sm  font-weight-bold" th:text="${#authentication.getPrincipal().getUsername()}">John Snow</span>

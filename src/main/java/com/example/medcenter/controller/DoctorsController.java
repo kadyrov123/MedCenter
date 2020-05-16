@@ -117,6 +117,8 @@ public class DoctorsController {
     public String doctorPatients(Model model) {
         UsersEntity user = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getDoctorsFeaturesEntityByDoctorId(user.getId());
+        System.out.println(user.getId());
+        System.out.println(doctor.getId());
         model.addAttribute("patient_list", doctorsService.getTodayPatientListByDoctorId(doctor.getId()));
         model.addAttribute("doctor", doctor);
         return "admin/patients";
