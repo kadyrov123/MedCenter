@@ -482,7 +482,9 @@
     <style>
         .doctorsPhoto{
             width: 373px !important;
-            height: 372px !important;
+            height: auto;
+            max-width: 100%;
+            max-height: 100%;
         }
         #profileDropdown a{
             color:black !important;
@@ -492,7 +494,7 @@
             color: #85cf00 !important;
         }
         #mobile-nav-toggle{
-            margin-top: -25px !important;
+            margin-top: 5px !important;
         }
     </style>
 </head>
@@ -516,7 +518,7 @@
             <div class="col-8" th:if="${doctor} != null">
                 <h3 class="mb-0">Профиль врача</h3>
             </div>
-            <div class="col-4 text-right" th:if="${doctor}">
+            <div class="col-4 text-right" th:if="${doctor}" style="max-width: 100%;">
                 <a type="button" onclick="toggleTimetableModal()" id="selectDateTime"  class="btn btn-sm btn-primary" style="color: white;">Записаться на прием</a>
             </div>
         </div>
@@ -622,7 +624,7 @@
 
             <div class="col-4">
                 <div th:if="${doctor} != null" class="card img-fluid" >
-                    <img th:if="${doctor.photo} == null" class="card-img-top doctorsPhoto" th:src="@{/images/default_avatar.png}" >
+                    <img th:if="${doctor.photo} == null" class="card-img-top doctorsPhoto" th:src="@{/images/default-doctor.jpg}" >
                     <img th:if="${doctor.photo} != null" class="card-img-top doctorsPhoto" th:src="@{/uploads/photos/__${doctor.photo}__}" >
                 </div>
                 <div th:if="${doctor} == null" class="card img-fluid" >
@@ -820,7 +822,8 @@
 
 
 <!-- start footer Area -->
-<th:block th:insert="layout :: footer_fragment"></th:block>
+<footer class="footer-area section-gap" style="color: white;height: 90px;padding: 0px 0px;">
+</footer>
 <!-- End footer Area -->
 
 
