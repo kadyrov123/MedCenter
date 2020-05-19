@@ -7,6 +7,10 @@ import com.example.medcenter.dto.TimetableDTO;
 import com.example.medcenter.entity.*;
 import com.example.medcenter.repoitory.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
+import org.springframework.mail.SimpleMailMessage;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 import javax.persistence.EntityManager;
@@ -31,6 +35,8 @@ public class DoctorsServiceImpl implements DoctorsService {
     QueueRepository queueRepository;
     @Autowired
     DoctorsTypeRepository doctorsTypeRepository;
+    @Autowired
+    public JavaMailSender emailSender;
 
     @PersistenceContext
     EntityManager entityManager;
@@ -85,7 +91,7 @@ public class DoctorsServiceImpl implements DoctorsService {
         DoctorsFeaturesEntity doctorsFeatures = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctorId);
         LocalTime lunchTimeStart = LocalTime.parse("12:00:00");
         LocalTime lunchTimeEnd = LocalTime.parse("13:00:00");
-        LocalTime saturdayEndTime = LocalTime.parse("14:30:00");
+        LocalTime saturdayEndTime = LocalTime.parse("15:00:00");
 
         LocalTime startTime = doctorsFeatures.getStartTime().toLocalTime();
         LocalTime endTime = doctorsFeatures.getEndTime().toLocalTime();
@@ -95,8 +101,9 @@ public class DoctorsServiceImpl implements DoctorsService {
         List<LocalTime> possibleTimes = new ArrayList<>();
         int interval = doctorsFeatures.getIntervalByIntervalId().getInterval();
         while(0 <= (endTime.compareTo(localTime))){
-            if(0 >= (lunchTimeStart.compareTo(localTime)) && 0 <= (lunchTimeEnd.compareTo(localTime.plusMinutes(interval)))){
+            if(0 >= (lunchTimeStart.compareTo(localTime.plusMinutes(interval))) && 0 <= (lunchTimeEnd.compareTo(localTime.plusMinutes(interval)))){
                 System.out.println(localTime+" - " +localTime.plusMinutes(interval));
+                possibleTimes.add(localTime);
                 possibleTimes.add(lunchTimeStart);
                 localTime = lunchTimeEnd;
             }
@@ -113,7 +120,7 @@ public class DoctorsServiceImpl implements DoctorsService {
         int order = 1;
         for(int i=0; i<possibleTimes.size()-1 ; i++){
 //            if(0 <= (lunchTimeStart.compareTo(possibleTimes.get(i).plusMinutes(interval)))  || 0 >= (lunchTimeEnd.compareTo(possibleTimes.get(i).plusMinutes(interval))) ) {
-            if(0 !=  lunchTimeStart.compareTo(possibleTimes.get(i+1))) {
+            if(0 != lunchTimeStart.compareTo(possibleTimes.get(i+1))) {
                 TimeDTO timeDTO = new TimeDTO();
                 timeDTO.setOrder(order);
                 timeDTO.setTime(possibleTimes.get(i) + " - " + possibleTimes.get(i + 1));
@@ -132,6 +139,16 @@ public class DoctorsServiceImpl implements DoctorsService {
                 }
                 order++;
                 timeList.add(timeDTO);
+            }else{
+                if(0 == lunchTimeStart.compareTo(possibleTimes.get(i).plusMinutes(interval))){
+                    TimeDTO timeDTO = new TimeDTO();
+                    timeDTO.setOrder(order);
+                    timeDTO.setTime(possibleTimes.get(i) + " - " + possibleTimes.get(i + 1));
+                    timeDTO.setFree(true);
+                    timeDTO.setStatus(0);
+                    order++;
+                    timeList.add(timeDTO);
+                }
             }
         }
 
@@ -214,9 +231,29 @@ public class DoctorsServiceImpl implements DoctorsService {
         return getPatientListByDoctorIdAndDate(doctorId , today);
     }
 
-//    @Override
-//    public  void saveDoctor(DoctorDTO doctorDTO){
-//
-//
-//    }
+
+    @Override
+    public void changeDoctorWorkingCredentials(int doctorId) {
+        List<QueueEntity> queueEntities = queueRepository.findQueueEntitiesByDateAfterAndDoctorId(new Date(), doctorId);
+        System.out.println(queueEntities.size());
+        String subject = "Ваша запись на прием отменяется.";
+        String  text = "В связи с тем что Врач на которого вы записались, изменил время работы, Ваша запись на прием отменяется." +
+                " Пожалуйста запишитесь на прием повторно в удобное время.";
+        for(QueueEntity q : queueEntities){
+            UsersEntity patient = usersRepository.getOne(q.getUserId());
+            sendEmail(patient.getEmail(), subject, text);
+            queueRepository.delete(q);
+        }
+    }
+
+    public void sendEmail(String to ,String subject, String text){
+        SimpleMailMessage message = new SimpleMailMessage();
+        message.setTo(to);
+        message.setSubject(subject);
+        message.setText(text);
+        emailSender.send(message);
+    }
+
+
+
 }
