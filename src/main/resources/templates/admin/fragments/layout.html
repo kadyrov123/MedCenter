@@ -22,6 +22,16 @@
         <!-- Argon CSS -->
         <link rel="stylesheet"  th:href="@{/assets/css/argon.css?v=1.2.0}" type="text/css">
     </th:block>
+
+    <style>
+        #customAlertMesaages{
+            max-width: 100%;
+            width: 60%;
+            margin-left: 10%;
+            position: absolute;
+            text-align: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -149,6 +159,22 @@
                     </script>
                 </ul>
             </div>
+
+           <div th:if="${message}" id="customAlertMesaages" class="alert alert-dismissable fade show" th:classappend="'alert-' + ${type}">
+                <span th:text="${message}">Test</span>
+            </div>
+            <script type="text/javascript">
+                $(document).ready(function () {
+                    if($("#customAlertMesaages").css("display") == "block"){
+                        // hideAlert();
+                        setTimeout(hideAlert, 4000);
+                    }
+
+                    function hideAlert(){
+                        $("#customAlertMesaages").hide();
+                    }
+                });
+            </script>
         </div>
     </nav>
     <!-- Header -->

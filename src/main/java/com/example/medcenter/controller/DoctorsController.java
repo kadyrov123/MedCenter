@@ -127,7 +127,7 @@ public class DoctorsController {
     }
 
     @PostMapping("/doctor/save/profile")
-    public String updateUserInfo(DoctorsFeaturesEntity updatedDoctor ,UsersEntity user, @RequestParam("doctorsPhoto") MultipartFile photo){
+    public String updateUserInfo(DoctorsFeaturesEntity updatedDoctor ,UsersEntity user, @RequestParam("doctorsPhoto") MultipartFile photo, RedirectAttributes redirectAttributes){
         UsersEntity authorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         user.setRoles(authorizedUser.getRoles());
@@ -136,25 +136,31 @@ public class DoctorsController {
         usersRepository.save(user);
 
         DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getOne(updatedDoctor.getId());
-        updatedDoctor.setUsersByDoctorId(user);
+//        updatedDoctor.setUsersByDoctorId(user);
+//        doctor.setUsersByDoctorId(user);
 
-        System.out.println(0 < LocalTime.now() .compareTo(doctor.getEndTime().toLocalTime()));
-        if (0 < LocalTime.now() .compareTo(doctor.getEndTime().toLocalTime())) {
-            if (doctor.getStartTime().compareTo(updatedDoctor.getStartTime()) != 0
+//        System.out.println(0 < LocalTime.now() .compareTo(doctor.getEndTime().toLocalTime()));
+        boolean workingTimeCannotBeCanged = false;
+        if (doctor.getStartTime().compareTo(updatedDoctor.getStartTime()) != 0
                     || doctor.getEndTime().compareTo(updatedDoctor.getEndTime()) != 0
                     || doctor.getIntervalByIntervalId().getId() != updatedDoctor.getIntervalByIntervalId().getId()) {
 
-                System.out.println("credentials changes");
-
+            if (0 < LocalTime.now() .compareTo(doctor.getEndTime().toLocalTime())) {
+//                System.out.println("credentials changes");
                 IntervalEntity doctorInterval = intervalRepository.getOne(updatedDoctor.getIntervalByIntervalId().getId());
 
                 Set<DoctorsTypeEntity> doctorsTypes = doctorsFeaturesRepository.getOne(updatedDoctor.getId()).getDoctorsTypeEntities();
 
-                updatedDoctor.setUsersByDoctorId(updatedDoctor.getUsersByDoctorId());
-                updatedDoctor.setIntervalByIntervalId(doctorInterval);
-                updatedDoctor.setDoctorsTypeEntities(doctorsTypes);
+//                doctor.setUsersByDoctorId(updatedDoctor.getUsersByDoctorId());
+                doctor.setIntervalByIntervalId(doctorInterval);
+//                doctor.setDoctorsTypeEntities(doctorsTypes);
+                doctor.setStartTime(updatedDoctor.getStartTime());
+                doctor.setEndTime(updatedDoctor.getEndTime());
 
                 doctorsService.changeDoctorWorkingCredentials(doctor.getId());
+            }
+            else{
+                workingTimeCannotBeCanged = true;
             }
         }
 
@@ -174,13 +180,20 @@ public class DoctorsController {
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            updatedDoctor.setPhoto(fileName);
+            doctor.setPhoto(fileName);
         } else {
-            updatedDoctor.setPhoto(doctor.getPhoto());
+//            updatedDoctor.setPhoto(doctor.getPhoto());
         }
 
+        if(workingTimeCannotBeCanged){
+            redirectAttributes.addFlashAttribute("message", "Вы можете поменять время работы только после оканчания рабочего времени !!!");
+            redirectAttributes.addFlashAttribute("type", "danger");
+        }else {
+            redirectAttributes.addFlashAttribute("message", "Вы успешно сохранили");
+            redirectAttributes.addFlashAttribute("type", "success");
+        }
 
-        doctorsFeaturesRepository.save(updatedDoctor);
+        doctorsFeaturesRepository.save(doctor);
         return "redirect:/doctor/profile";
     }
 

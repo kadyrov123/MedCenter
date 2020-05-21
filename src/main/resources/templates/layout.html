@@ -73,6 +73,13 @@
             footer > h1, footer>h2, footer>h3, footer>h4, footer>h5, footer>h6 , footer>a ,footer>p {
                color : white !important;
             }
+            #customAlertMesaages{
+                max-width: 100%;
+                width: 60%;
+                margin-left: 10%;
+                position: absolute;
+                text-align: center;
+            }
         </style>
     </th:block>
 
@@ -108,26 +115,6 @@
                     <li><a th:href="@{/about}">О Нас</a></li>
 <!--                    <li><a th:href="@{/features}">Features</a></li>-->
                     <li><a th:href="@{/doctors}">Специалисты</a></li>
-<!--                    <li><a th:href="@{/departments}">Departments</a></li>-->
-<!--                    <li class="menu-has-children"><a href="">Blog</a>-->
-<!--                        <ul>-->
-<!--                            <li><a th:href="@{/blog}">Blog Home</a></li>-->
-<!--                            <li><a th:href="@{/blog-single}">Blog Single</a></li>-->
-<!--                        </ul>-->
-<!--                    </li>-->
-<!--                    <li class="menu-has-children"><a href="">Pages</a>-->
-<!--                        <ul>-->
-<!--                            <li><a th:href="@{/elements}">Elements</a></li>-->
-<!--                            <li><a href="#">Item One</a></li>-->
-<!--                            <li><a href="#">Item Two</a></li>-->
-<!--                            <li class="menu-has-children"><a href="">Level 2 </a>-->
-<!--                                <ul>-->
-<!--                                    <li><a href="#">Item One</a></li>-->
-<!--                                    <li><a href="#">Item Two</a></li>-->
-<!--                                </ul>-->
-<!--                            </li>-->
-<!--                        </ul>-->
-<!--                    </li>-->
                     <li><a th:href="@{/contact}">Контакты</a></li>
                     <li sec:authorize="isAuthenticated()" class="nav-item dropdown" style="margin-top: -8px;">
                         <a class="nav-link pr-0" href="#" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -172,6 +159,21 @@
                 </ul>
             </nav><!-- #nav-menu-container -->
         </div>
+        <div th:if="${message}" id="customAlertMesaages" class="alert alert-dismissable fade show" th:classappend="'alert-' + ${type}">
+            <span th:text="${message}">Test</span>
+        </div>
+        <script type="text/javascript">
+            $(document).ready(function () {
+                if($("#customAlertMesaages").css("display") == "block"){
+                    // hideAlert();
+                    setTimeout(hideAlert, 4000);
+                }
+
+                function hideAlert(){
+                    $("#customAlertMesaages").hide();
+                }
+            });
+        </script>
     </div>
 </header><!-- #header -->
 
