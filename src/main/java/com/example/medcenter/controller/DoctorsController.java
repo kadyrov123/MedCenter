@@ -149,7 +149,7 @@ public class DoctorsController {
 //                System.out.println("credentials changes");
                 IntervalEntity doctorInterval = intervalRepository.getOne(updatedDoctor.getIntervalByIntervalId().getId());
 
-                Set<DoctorsTypeEntity> doctorsTypes = doctorsFeaturesRepository.getOne(updatedDoctor.getId()).getDoctorsTypeEntities();
+//                Set<DoctorsTypeEntity> doctorsTypes = doctorsFeaturesRepository.getOne(updatedDoctor.getId()).getDoctorsTypeEntities();
 
 //                doctor.setUsersByDoctorId(updatedDoctor.getUsersByDoctorId());
                 doctor.setIntervalByIntervalId(doctorInterval);
