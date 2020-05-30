@@ -33,6 +33,7 @@ import java.nio.file.StandardCopyOption;
 import java.sql.Date;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.time.LocalTime;
 import java.util.*;
 
 import static org.springframework.util.StringUtils.*;
@@ -101,6 +102,7 @@ public class DoctorsController {
         model.addAttribute("doctor" , doctor);
         model.addAttribute("canBeEdited" , true);
         model.addAttribute("visitsList" , false);
+        model.addAttribute("intervals" , intervalRepository.findAll());
         model.addAttribute("role" , "doctor");
         return "admin/profile";
     }
@@ -125,44 +127,71 @@ public class DoctorsController {
     }
 
     @PostMapping("/doctor/save/profile")
-    public String updateUserInfo(DoctorsFeaturesEntity doctor ,UsersEntity user, @RequestParam("doctorsPhoto") MultipartFile photo){
-//    public String updateUserInfo(DoctorsFeaturesEntity doctor, UsersEntity user  ){
+    public String updateUserInfo(DoctorsFeaturesEntity updatedDoctor ,UsersEntity user, @RequestParam("doctorsPhoto") MultipartFile photo, RedirectAttributes redirectAttributes){
         UsersEntity authorizedUser = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
 
         user.setRoles(authorizedUser.getRoles());
         user.setId(authorizedUser.getId());
         user.setPassword(authorizedUser.getPassword());
-
         usersRepository.save(user);
 
-        doctor.setUsersByDoctorId(user);
+        DoctorsFeaturesEntity doctor = doctorsFeaturesRepository.getOne(updatedDoctor.getId());
+//        updatedDoctor.setUsersByDoctorId(user);
+//        doctor.setUsersByDoctorId(user);
 
-        IntervalEntity doctorInterval = intervalRepository.getOne(doctor.getIntervalByIntervalId().getId());
+//        System.out.println(0 < LocalTime.now() .compareTo(doctor.getEndTime().toLocalTime()));
+        boolean workingTimeCannotBeCanged = false;
+        if (doctor.getStartTime().compareTo(updatedDoctor.getStartTime()) != 0
+                    || doctor.getEndTime().compareTo(updatedDoctor.getEndTime()) != 0
+                    || doctor.getIntervalByIntervalId().getId() != updatedDoctor.getIntervalByIntervalId().getId()) {
 
-        Set<DoctorsTypeEntity> doctorsTypes = doctorsFeaturesRepository.getOne(doctor.getId()).getDoctorsTypeEntities();
+            if (0 < LocalTime.now() .compareTo(doctor.getEndTime().toLocalTime())) {
+//                System.out.println("credentials changes");
+                IntervalEntity doctorInterval = intervalRepository.getOne(updatedDoctor.getIntervalByIntervalId().getId());
 
-        doctor.setUsersByDoctorId(doctor.getUsersByDoctorId());
-        doctor.setIntervalByIntervalId(doctorInterval);
-        doctor.setDoctorsTypeEntities(doctorsTypes);
+//                Set<DoctorsTypeEntity> doctorsTypes = doctorsFeaturesRepository.getOne(updatedDoctor.getId()).getDoctorsTypeEntities();
 
-        // normalize the file path
+//                doctor.setUsersByDoctorId(updatedDoctor.getUsersByDoctorId());
+                doctor.setIntervalByIntervalId(doctorInterval);
+//                doctor.setDoctorsTypeEntities(doctorsTypes);
+                doctor.setStartTime(updatedDoctor.getStartTime());
+                doctor.setEndTime(updatedDoctor.getEndTime());
+
+                doctorsService.changeDoctorWorkingCredentials(doctor.getId());
+            }
+            else{
+                workingTimeCannotBeCanged = true;
+            }
+        }
+
+            // normalize the file path
         String fileName = cleanPath(photo.getOriginalFilename());
 
-        // save the file on the local file system
-        try {
-            File oldPhoto = new File(PHOTO_UPLOAD_DIR + doctor.getPhoto());
-//            oldPhoto.delete();
-            System.out.println("sdfsdfsdf==========================");
-            if(oldPhoto.delete())                      //returns Boolean value
-            {
-                System.out.println(oldPhoto.getName() + " deleted");   //getting and printing the file name
+        if (!fileName.equals("")) {
+            // save the file on the local file system
+            try {
+                File oldPhoto = new File(PHOTO_UPLOAD_DIR + doctor.getPhoto());
+                if (oldPhoto.delete())                      //returns Boolean value
+                {
+                    System.out.println(oldPhoto.getName() + " deleted");   //getting and printing the file name
+                }
+                Path path = Paths.get(PHOTO_UPLOAD_DIR + fileName);
+                Files.copy(photo.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
+            } catch (IOException e) {
+                e.printStackTrace();
             }
-            Path path = Paths.get(PHOTO_UPLOAD_DIR + fileName);
-            Files.copy(photo.getInputStream(), path, StandardCopyOption.REPLACE_EXISTING);
-        } catch (IOException e) {
-            e.printStackTrace();
+            doctor.setPhoto(fileName);
+        } else {
+//            updatedDoctor.setPhoto(doctor.getPhoto());
         }
-        doctor.setPhoto(fileName);
+
+        if(workingTimeCannotBeCanged){
+            redirectAttributes.addFlashAttribute("message", "Вы можете поменять время работы только после оканчания рабочего времени !!!");
+            redirectAttributes.addFlashAttribute("type", "danger");
+        }else {
+            redirectAttributes.addFlashAttribute("message", "Вы успешно сохранили");
+            redirectAttributes.addFlashAttribute("type", "success");
+        }
 
         doctorsFeaturesRepository.save(doctor);
         return "redirect:/doctor/profile";

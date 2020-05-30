@@ -138,7 +138,11 @@
                               <div class="col-lg-4">
                                 <div class="form-group">
                                   <label class="form-control-label" for="input-country">Интервал</label>
-                                  <input type="number" id="input-postal-code" class="form-control" th:field="${doctor.intervalByIntervalId.id}"   th:value="${doctor.intervalByIntervalId.interval}">
+<!--                                  <input type="number" id="input-postal-code" class="form-control" th:field="${doctor.intervalByIntervalId.id}"   th:value="${doctor.intervalByIntervalId.interval}">-->
+                                    <select type="text" name="endTime" class="form-control" id="interval" th:field="${doctor.intervalByIntervalId.id}"   >
+<!--                                        <option selected="true" th:field="${doctor.intervalByIntervalId.id}" th:value="${doctor.intervalByIntervalId.interval}" ></option>-->
+                                        <option th:each="interval : ${intervals}" th:value="${interval.id}" th:text="${interval.interval}"></option>
+                                    </select>
                                 </div>
                               </div>
                             </div>

@@ -177,6 +177,19 @@
 			text-align: center;
 		}
 
+		.alert{
+			max-width: 100%;
+			width: 60%;
+			margin-left: 20%;
+			text-align: center;
+			display: none;
+			top: 25%;
+			position: fixed;
+			z-index: 1000;
+			padding: 20px;
+		}
+
+
 
 	</style>
 
@@ -186,10 +199,15 @@
 		<!-- #header -->
 		<th:block th:insert="layout :: header_fragment"></th:block>
 
-
 		<!-- start banner Area -->
 		<th:block th:insert="layout :: main_banner_fragment"></th:block>
 		<!-- End banner Area -->
+		<div id="customSuccessMessage" class="alert alert-dismissable fade show alert-success" style="display: none;">
+			<span >Вы успешно записались на прием.</span>
+		</div>
+		<div id="customDangerMessage" class="alert alert-dismissable fade show alert-danger" style="display: none;">
+			<span >Вы уже записывались на этот день к этому врачу</span>
+		</div>
 
 		<!-- Start appointment Area -->
 		<section class="appointment-area" style="padding: 50px 0px;" >
@@ -388,6 +406,7 @@
 	  <script >
 		  var queue = {"doctorId":-1 , "userUsername":"" , "date":"" , "order":-1 , "time":"" };
 		  var timetable ;
+		  var doctorId ;
 		  function toggleTimetableModal() {
 			  // alert("clicked");
 			  $('#exampleModalCenter').modal('toggle');
@@ -438,6 +457,8 @@
 
 				  var index=1;
 				  var tbody = document.getElementById("timetableTbody");
+				  doctorId = timetable[0].doctorId;
+				  console.log("doctorId = "+doctorId);
 				  for(var j=0 ; j<timetable[0].timeList.length ; j++){
 					  var tr = document.createElement("tr");
 					  tr.setAttribute("class","row100 body");
@@ -551,16 +572,10 @@
 							  order: queue["order"]
 						  }),
 						  success: function (data) {
-							  alert("success");
-							  // console.log(data);
-							  // location.reload();
-							  document.getElementById("logoLink").click();
-
-							  // timetable = data;
-							  //
-							  // console.log(timetable);
-							  //
-							  // fillTimetable();
+						  	console.log(data);
+							  window.location.hash = data;
+							  window.location.reload();
+							  // document.getElementById("logoLink").click();
 
 						  },
 						  error: function (data) {
@@ -602,6 +617,36 @@
 
 		  });
 
+		  // Alert ====>
+		  document.addEventListener("DOMContentLoaded", function(event) {
+			  if(window.location.hash == "#success") {
+				  console.log("window.location.hash = "+window.location.hash);
+				  showAlert("success");
+			  }
+			  if(window.location.hash == "#danger") {
+				  console.log("window.location.hash = "+window.location.hash);
+				  showAlert("danger");
+			  }
+			  window.location.hash = '';
+		  });
+
+		  function showAlert(data){
+			  // document.location.reload();
+			  if(data == "success"){
+				  $("#customSuccessMessage").show();
+				  setTimeout(hideAlert, 2000);
+			  }
+			  if (data == "danger"){
+				  $("#customDangerMessage").show();
+				  setTimeout(hideAlert, 3000);
+			  }
+		  }
+		  function hideAlert(){
+			  $("#customSuccessMessage").hide();
+			  $("#customDangerMessage").hide();
+		  }
+		  //  <======== Alert
+
 
 		  function timeLabelClick(label){
 			  // console.log($("#queueSaveFormUserInfo").val());
@@ -615,6 +660,22 @@
 		  }
 
 	  </script>
+
+<!--		<script type="text/javascript">-->
+<!--			// $(document).ready(function () {-->
+<!--				if($("#customSuccessMessage").css("display") == "block"){-->
+<!--					setTimeout(hideAlert, 5000);-->
+<!--				}-->
+<!--				if($("#customDangerMessage").css("display") == "block"){-->
+<!--					setTimeout(hideAlert, 5000);-->
+<!--				}-->
+
+<!--				function hideAlert(){-->
+<!--					$("#customSuccessMessage").hide();-->
+<!--					$("#customDangerMessage").hide();-->
+<!--				}-->
+<!--			// });-->
+<!--		</script>-->
 
 	  <script>
 		  var $table = $('table.scroll'),

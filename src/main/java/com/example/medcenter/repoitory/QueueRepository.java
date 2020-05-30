@@ -24,6 +24,7 @@ public interface QueueRepository extends JpaRepository<QueueEntity, Long> {
 
     List<QueueEntity> findAllByDateLessThanEqual(Date date);
     List<QueueEntity> findQueueEntitiesByDateBetween(Date start, Date end);
+    List<QueueEntity> findQueueEntitiesByDateAfterAndDoctorId(Date date, int doctorId);
 
 //    @Query(value = "SELECT * FROM queue WHERE date LIKE '%2020-05%'", nativeQuery = true)
     @Query("select q from QueueEntity q where q.date <= : startDate")

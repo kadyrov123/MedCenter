@@ -25,4 +25,6 @@ public interface DoctorsService {
 
     void saveDefaultDoctor(UsersEntity user , int doctorTypeId);
 
+    void changeDoctorWorkingCredentials(int doctorId);
+
 }

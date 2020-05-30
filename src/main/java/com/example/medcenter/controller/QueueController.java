@@ -17,6 +17,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import java.sql.Date;
 import java.util.ArrayList;
@@ -49,7 +50,7 @@ public class QueueController {
 
     @PreAuthorize("isAuthenticated()")
     @RequestMapping(value = "/queue/save", method = RequestMethod.GET , consumes = "application/json")
-    public String saveQueue(@RequestParam int doctorId ,@RequestParam String date ,@RequestParam String time , @RequestParam int order ){
+    public @ResponseBody String saveQueue(@RequestParam int doctorId ,@RequestParam String date ,@RequestParam String time , @RequestParam int order, ModelMap redirectAttributes ){
         UsersEntity usersEntity = usersRepository.findUsersEntityByUsername(SecurityContextHolder.getContext().getAuthentication().getName());
         DoctorsFeaturesEntity doctorsFeaturesEntity = doctorsFeaturesRepository.getDoctorsFeaturesEntityById(doctorId);
         if(!userService.haveQueueOrder(Date.valueOf(date),usersEntity.getId(), doctorId)) {
@@ -65,9 +66,14 @@ public class QueueController {
             queue.setStatus(1);
 
             queueRepository.save(queue);
+//            redirectAttributes.addAttribute("message", "Вы успешно записались на прием.");
+//            redirectAttributes.addAttribute("type", "success");
+            return "success";
+        }else{
+//            redirectAttributes.addAttribute("message", "Вы уже записывались на этот день к этому врачу");
+//            redirectAttributes.addAttribute("type", "danger");
+            return "danger";
         }
-
-        return "redirect:/";
     }
 
     @GetMapping("/user/queue/{id}/cancel")
